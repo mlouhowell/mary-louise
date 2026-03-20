@@ -337,7 +337,26 @@
     }
 
     // ── Fish ─────────────────────────────────────────────
-    const SPECIES = ['oval', 'angel', 'slim', 'discus', 'fancy'];
+    const FISH_SRCS = [
+      'fish_output/fish_02.png','fish_output/fish_03.png','fish_output/fish_04.png',
+      'fish_output/fish_05.png','fish_output/fish_07.png','fish_output/fish_08.png',
+      'fish_output/fish_09.png','fish_output/fish_11.png','fish_output/fish_13.png',
+      'fish_output/fish_15.png','fish_output/fish_16.png','fish_output/fish_20.png',
+      'fish_output/fish_22.png','fish_output/fish_24.png','fish_output/fish_25.png',
+      'fish_output/fish_28.png','fish_output/fish_29.png','fish_output/fish_30.png',
+      'fish_output/fish_32.png','fish_output/fish_33.png','fish_output/fish_35.png',
+      'fish_output/fish_36.png','fish_output/fish_37.png','fish_output/fish_38.png',
+      'fish_output/fish_39.png','fish_output/fish_40.png','fish_output/fish_41.png',
+      'fish_output/fish_43.png','fish_output/fish_44.png',
+    ];
+
+    const fishImages = FISH_SRCS.map(src => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
+
+    const SPECIES = ['oval']; // unused but kept to avoid ref errors
 
     // Rich watercolor palette pairs: [body hue, accent hue offset, sat, light]
     const COLOR_CONFIGS = [
@@ -362,31 +381,10 @@
         this.y         = 70 + Math.random() * (H - 140);
         this.baseSpeed = 0.42 + Math.random() * 0.75;
         this.speed     = this.baseSpeed;
-        this.species   = SPECIES[Math.floor(Math.random() * SPECIES.length)];
-
-        const sizeBase = { oval: 26, angel: 22, slim: 32, discus: 24, fancy: 22 };
-        this.size = sizeBase[this.species] + Math.random() * 18;
-
-        const [h, ao, sat, lit] = COLOR_CONFIGS[Math.floor(Math.random() * COLOR_CONFIGS.length)];
-        this.bodyColor   = `hsl(${h}, ${sat}%, ${lit}%)`;
-        this.bellyColor  = `hsl(${h}, ${sat * 0.55}%, ${Math.min(lit + 32, 92)}%)`;
-        this.finColor    = `hsl(${h}, ${sat * 0.9}%, ${Math.max(lit - 18, 22)}%)`;
-        this.accentColor = `hsl(${(h + ao) % 360}, ${sat * 0.75}%, ${lit * 0.85}%)`;
-        this.stripeAlpha = 0.14 + Math.random() * 0.14;
-
-        const patterns = ['none', 'vstripe', 'vstripe', 'spots', 'hstripe'];
-        this.pattern = patterns[Math.floor(Math.random() * patterns.length)];
-        this.nStripes = 2 + Math.floor(Math.random() * 4);
-        this.spots = Array.from({ length: 6 + Math.floor(Math.random() * 10) }, () => ({
-          x: (Math.random() - 0.5) * 1.5,
-          y: (Math.random() - 0.5) * 0.85,
-          r: 0.05 + Math.random() * 0.13,
-        }));
-
+        this.img       = fishImages[Math.floor(Math.random() * fishImages.length)];
+        this.displayW  = 70 + Math.random() * 70; // 70–140px wide
         this.wobble    = Math.random() * Math.PI * 2;
         this.wSpeed    = 0.015 + Math.random() * 0.015;
-        this.tailWag   = Math.random() * Math.PI * 2;
-        this.tSpeed    = 0.055 + Math.random() * 0.04;
         this.scared    = 0;
         this.vy        = 0;
         this.targetFood = null;
@@ -431,246 +429,17 @@
         if (this.x > W + 200 || this.x < -200) this.reset(false);
       }
 
-      // shared eye
-      eye(ex, ey, er) {
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = 'white';
-        ctx.beginPath(); ctx.arc(ex, ey, er, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#111';
-        ctx.beginPath(); ctx.arc(ex + er * 0.08, ey, er * 0.56, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.beginPath(); ctx.arc(ex + er * 0.22, ey - er * 0.3, er * 0.22, 0, Math.PI * 2); ctx.fill();
-      }
-
-      // shared body fill with watercolor layers + pattern
-      bodyFill(bw, bh) {
-        const bg = ctx.createRadialGradient(-bw * 0.08, -bh * 0.22, 0, bw * 0.05, bh * 0.05, bw * 1.1);
-        bg.addColorStop(0,   this.bellyColor);
-        bg.addColorStop(0.55, this.bodyColor);
-        bg.addColorStop(1,   this.finColor);
-        ctx.fillStyle = bg;
-        ctx.fillRect(-bw * 1.1, -bh * 1.1, bw * 2.2, bh * 2.2);
-
-        // watercolor highlight layer
-        const wc = ctx.createLinearGradient(0, -bh, 0, bh);
-        wc.addColorStop(0,   'rgba(255,255,255,0.28)');
-        wc.addColorStop(0.35,'rgba(255,255,255,0)');
-        wc.addColorStop(1,   'rgba(0,0,0,0.12)');
-        ctx.fillStyle = wc; ctx.globalAlpha = 0.9;
-        ctx.fillRect(-bw * 1.1, -bh * 1.1, bw * 2.2, bh * 2.2);
-        ctx.globalAlpha = 1;
-
-        // pattern
-        if (this.pattern === 'vstripe') {
-          ctx.fillStyle = `rgba(0,0,0,${this.stripeAlpha})`;
-          for (let i = 0; i < this.nStripes; i++) {
-            const sx = -bw * 0.55 + i * (bw * 1.05 / (this.nStripes - 1));
-            ctx.fillRect(sx - bw * 0.055, -bh * 1.1, bw * 0.11, bh * 2.2);
-          }
-        } else if (this.pattern === 'hstripe') {
-          ctx.fillStyle = `rgba(0,0,0,${this.stripeAlpha})`;
-          for (let i = 0; i < this.nStripes; i++) {
-            const sy = -bh * 0.55 + i * (bh * 1.05 / (this.nStripes - 1));
-            ctx.fillRect(-bw * 1.1, sy - bh * 0.055, bw * 2.2, bh * 0.11);
-          }
-        } else if (this.pattern === 'spots') {
-          ctx.fillStyle = this.accentColor;
-          ctx.globalAlpha = 0.52;
-          for (const sp of this.spots) {
-            ctx.beginPath();
-            ctx.arc(sp.x * bw, sp.y * bh, sp.r * bw, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.globalAlpha = 1;
-        }
-      }
-
       draw() {
-        const wy = this.scared > 0 ? 0 : Math.sin(this.wobble) * 2.6;
+        if (!this.img.complete || !this.img.naturalWidth) return;
+        const wy     = this.scared > 0 ? 0 : Math.sin(this.wobble) * 2.5;
+        const aspect = this.img.naturalHeight / this.img.naturalWidth;
+        const w      = this.displayW;
+        const h      = w * aspect;
         ctx.save();
         ctx.translate(this.x, this.y + wy);
         if (this.dir === -1) ctx.scale(-1, 1);
-
-        ctx.shadowBlur  = 10;
-        ctx.shadowColor = this.bodyColor;
-
-        switch (this.species) {
-          case 'oval':   this.drawOval();   break;
-          case 'angel':  this.drawAngel();  break;
-          case 'slim':   this.drawSlim();   break;
-          case 'discus': this.drawDiscus(); break;
-          case 'fancy':  this.drawFancy();  break;
-        }
-
+        ctx.drawImage(this.img, -w / 2, -h / 2, w, h);
         ctx.restore();
-      }
-
-      drawOval() {
-        const s = this.size, tw = Math.sin(this.tailWag);
-        // forked tail
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.82;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.72, 0);
-        ctx.quadraticCurveTo(-s * 1.12, -s * 0.26, -s * 1.6 + tw * s * 0.1, -s * 0.65);
-        ctx.quadraticCurveTo(-s * 1.02, -s * 0.08, -s * 0.72, 0); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.72, 0);
-        ctx.quadraticCurveTo(-s * 1.12,  s * 0.26, -s * 1.6 - tw * s * 0.1,  s * 0.65);
-        ctx.quadraticCurveTo(-s * 1.02,  s * 0.08, -s * 0.72, 0); ctx.fill();
-        ctx.globalAlpha = 1;
-        // body
-        ctx.save();
-        ctx.beginPath(); ctx.ellipse(0, 0, s, s * 0.54, 0, 0, Math.PI * 2); ctx.clip();
-        this.bodyFill(s, s * 0.54); ctx.restore();
-        // dorsal
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.72;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.2, -s * 0.54);
-        ctx.quadraticCurveTo(s * 0.06, -s * 1.05, s * 0.44, -s * 0.54);
-        ctx.closePath(); ctx.fill();
-        // pectoral
-        ctx.beginPath(); ctx.ellipse(s * 0.1, s * 0.22, s * 0.3, s * 0.12, 0.35, 0, Math.PI * 2); ctx.fill();
-        // ventral
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.08, s * 0.54);
-        ctx.quadraticCurveTo(s * 0.1, s * 0.9, s * 0.3, s * 0.54);
-        ctx.closePath(); ctx.fill();
-        ctx.globalAlpha = 1;
-        this.eye(s * 0.5, -s * 0.09, s * 0.16);
-      }
-
-      drawAngel() {
-        const s = this.size, tw = Math.sin(this.tailWag);
-        // long ventral trailing fins
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.48;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.08, s * 0.95);
-        ctx.quadraticCurveTo(0, s * 1.85, -s * 0.42, s * 2.35);
-        ctx.quadraticCurveTo(-s * 0.14, s * 1.65, s * 0.14, s * 0.95);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        // tail
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.6, 0);
-        ctx.quadraticCurveTo(-s * 0.95, -s * 0.22, -s * 1.28 + tw * s * 0.08, -s * 0.52);
-        ctx.quadraticCurveTo(-s * 0.88, -s * 0.06, -s * 0.6, 0); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.6, 0);
-        ctx.quadraticCurveTo(-s * 0.95,  s * 0.22, -s * 1.28 - tw * s * 0.08,  s * 0.52);
-        ctx.quadraticCurveTo(-s * 0.88,  s * 0.06, -s * 0.6, 0); ctx.fill();
-        ctx.globalAlpha = 1;
-        // tall body
-        ctx.save();
-        ctx.scale(0.88, 1.58);
-        ctx.save();
-        ctx.beginPath(); ctx.ellipse(0, 0, s * 0.68, s * 0.5, 0, 0, Math.PI * 2); ctx.clip();
-        this.bodyFill(s * 0.68, s * 0.5); ctx.restore();
-        // tall dorsal
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.68;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.18, -s * 0.5);
-        ctx.quadraticCurveTo(s * 0.05, -s * 1.0, s * 0.42, -s * 0.5);
-        ctx.closePath(); ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.restore();
-        this.eye(s * 0.42, -s * 0.14, s * 0.16);
-      }
-
-      drawSlim() {
-        const s = this.size, tw = Math.sin(this.tailWag);
-        // tail
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.85, 0);
-        ctx.quadraticCurveTo(-s * 1.18, -s * 0.19, -s * 1.65 + tw * s * 0.08, -s * 0.45);
-        ctx.quadraticCurveTo(-s * 1.12, -s * 0.05, -s * 0.85, 0); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.85, 0);
-        ctx.quadraticCurveTo(-s * 1.18,  s * 0.19, -s * 1.65 - tw * s * 0.08,  s * 0.45);
-        ctx.quadraticCurveTo(-s * 1.12,  s * 0.05, -s * 0.85, 0); ctx.fill();
-        ctx.globalAlpha = 1;
-        // slim body
-        ctx.save();
-        ctx.beginPath(); ctx.ellipse(0, 0, s, s * 0.28, 0, 0, Math.PI * 2); ctx.clip();
-        this.bodyFill(s, s * 0.28);
-        // lateral shimmer
-        const ll = ctx.createLinearGradient(-s, 0, s, 0);
-        ll.addColorStop(0, 'rgba(255,255,255,0)');
-        ll.addColorStop(0.5, 'rgba(255,255,255,0.22)');
-        ll.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.fillStyle = ll; ctx.fillRect(-s, -s * 0.06, s * 2, s * 0.12);
-        ctx.restore();
-        // small dorsal
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.62;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.28, -s * 0.28);
-        ctx.quadraticCurveTo(s * 0.0, -s * 0.62, s * 0.36, -s * 0.28);
-        ctx.closePath(); ctx.fill();
-        ctx.globalAlpha = 1;
-        this.eye(s * 0.62, -s * 0.04, s * 0.12);
-      }
-
-      drawDiscus() {
-        const s = this.size, tw = Math.sin(this.tailWag);
-        // small tail
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.75;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.8, 0);
-        ctx.quadraticCurveTo(-s * 1.02, -s * 0.16, -s * 1.22 + tw * s * 0.05, -s * 0.36);
-        ctx.quadraticCurveTo(-s * 0.96, -s * 0.04, -s * 0.8, 0); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.8, 0);
-        ctx.quadraticCurveTo(-s * 1.02,  s * 0.16, -s * 1.22 - tw * s * 0.05,  s * 0.36);
-        ctx.quadraticCurveTo(-s * 0.96,  s * 0.04, -s * 0.8, 0); ctx.fill();
-        ctx.globalAlpha = 1;
-        // circular body
-        ctx.save();
-        ctx.beginPath(); ctx.ellipse(0, 0, s * 0.8, s * 0.76, 0, 0, Math.PI * 2); ctx.clip();
-        this.bodyFill(s * 0.8, s * 0.76);
-        // fine horizontal lines
-        ctx.fillStyle = this.accentColor; ctx.globalAlpha = 0.2;
-        for (let i = -7; i <= 7; i++) {
-          ctx.fillRect(-s, i * s * 0.11 - s * 0.028, s * 2, s * 0.055);
-        }
-        ctx.globalAlpha = 1; ctx.restore();
-        // tall dorsal & anal fins
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.62;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.5, -s * 0.76);
-        ctx.quadraticCurveTo(0, -s * 1.12, s * 0.4, -s * 0.7);
-        ctx.quadraticCurveTo(s * 0.08, -s * 0.76, -s * 0.5, -s * 0.76); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.5,  s * 0.76);
-        ctx.quadraticCurveTo(0,  s * 1.12, s * 0.4,  s * 0.7);
-        ctx.quadraticCurveTo(s * 0.08, s * 0.76, -s * 0.5, s * 0.76); ctx.fill();
-        ctx.globalAlpha = 1;
-        this.eye(s * 0.42, -s * 0.14, s * 0.17);
-      }
-
-      drawFancy() {
-        const s = this.size, tw = Math.sin(this.tailWag);
-        // flowing fan tail
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.48;
-        for (let r = -0.55; r <= 0.55; r += 0.18) {
-          ctx.beginPath();
-          ctx.moveTo(-s * 0.72, 0);
-          ctx.quadraticCurveTo(-s * 1.1, r * s * 0.45, -s * 1.75 + tw * s * 0.07, r * s + Math.sign(r || 1) * s * 0.28);
-          ctx.quadraticCurveTo(-s * 1.06, r * s * 0.28, -s * 0.72, 0); ctx.fill();
-        }
-        ctx.globalAlpha = 1;
-        // round body
-        ctx.save();
-        ctx.beginPath(); ctx.ellipse(s * 0.04, 0, s * 0.7, s * 0.62, 0, 0, Math.PI * 2); ctx.clip();
-        this.bodyFill(s * 0.7, s * 0.62); ctx.restore();
-        // flowing dorsal
-        ctx.fillStyle = this.finColor; ctx.globalAlpha = 0.52;
-        ctx.beginPath();
-        ctx.moveTo(-s * 0.32, -s * 0.62);
-        ctx.quadraticCurveTo(s * 0.06, -s * 1.18, s * 0.5, -s * 0.58);
-        ctx.quadraticCurveTo(s * 0.12, -s * 0.62, -s * 0.32, -s * 0.62); ctx.fill();
-        ctx.globalAlpha = 1;
-        this.eye(s * 0.46, -s * 0.1, s * 0.16);
       }
     }
 
