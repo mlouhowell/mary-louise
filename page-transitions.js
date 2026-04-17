@@ -12,10 +12,10 @@
     const ph   = page.offsetHeight;
     const size = Math.ceil(Math.sqrt(pw * pw + ph * ph));
 
-    this.style.transition = 'width 0.55s ease-in, height 0.55s ease-in';
+    this.style.transition = 'width 0.38s cubic-bezier(0.4, 0, 0.2, 1), height 0.38s cubic-bezier(0.4, 0, 0.2, 1)';
     this.style.width      = size + 'px';
     this.style.height     = size + 'px';
 
-    setTimeout(() => { window.location.href = href; }, 560);
+    setTimeout(() => { window.location.href = href; }, 400);
   });
 })();
