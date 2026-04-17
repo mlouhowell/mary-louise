@@ -12,7 +12,7 @@
       --color-about:        #4E9AC3;
       --color-experiments:  #F1DFC1;
       --color-project-bg:   #FFFFFF;
-      --color-triangle:     #1A0810;
+      --color-triangle:     #C8341A;
 
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
@@ -34,7 +34,7 @@
 
     body {
       font-family: var(--font-body);
-      background-color: var(--color-work);
+      background-color: #010101;
       min-height: 100vh;
       color: #1A1A1A;
       overflow-x: hidden;
@@ -42,13 +42,26 @@
 
     /* ── Page layout ──────────────────────────────────────── */
     .page {
+      position: fixed;
+      top: 40px;
+      bottom: 40px;
+      left: 0;
+      right: 0;
       max-width: 1200px;
       margin: 0 auto;
+      background-color: var(--color-work);
+    }
+
+    .page-inner {
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
       padding: var(--pad-page-v) var(--pad-page-h);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
+
+    .page-inner::-webkit-scrollbar { display: none; }
 
     /* ── Header ───────────────────────────────────────────── */
     .header {
@@ -186,19 +199,34 @@
 
     .footer-links { display: flex; gap: 20px; }
 
-    /* ── Page-turn triangle ───────────────────────────────── */
+    /* ── Page-turn fold ──────────────────────────────────── */
     .page-turn {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 0 var(--triangle-size) var(--triangle-size);
-      border-color: transparent transparent var(--color-triangle) transparent;
-      pointer-events: none;
+      width: var(--triangle-size);
+      height: var(--triangle-size);
+      display: block;
+      cursor: pointer;
       z-index: 100;
+      text-decoration: none;
     }
+    /* Black — bottom layer, lower-right triangle */
+    .page-turn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 50%, #010101 50%);
+    }
+    /* Red — top layer, right angle at top-left */
+    .page-turn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--color-triangle) 50%, transparent 50%);
+      transition: opacity 0.15s;
+    }
+    .page-turn:hover::after { opacity: 0.8; }
 
     /* ── Responsive ───────────────────────────────────────── */
     @media (max-width: 800px) {
@@ -215,9 +243,8 @@
 </head>
 <body>
 
-  <div class="page-turn"></div>
-
   <div class="page">
+    <div class="page-inner">
     <div class="header">
       <h1>Hey, my name is ML.</h1>
       <nav>
@@ -238,12 +265,33 @@
 
         <div class="work-section">
           <div class="section-label">Work</div>
+
           <div class="project-thumb">
-            <!-- Replace src with actual project image -->
             <span class="project-thumb-placeholder">Project image</span>
           </div>
           <div class="project-caption">
-            <a href="/projects/guac-products-2025/">Guac Products</a>
+            <a href="/projects/guac-products-2025/">Guac Products — Mobile ordering tool</a>
+          </div>
+
+          <div class="project-thumb" style="margin-top: 32px;">
+            <span class="project-thumb-placeholder">Project image</span>
+          </div>
+          <div class="project-caption">
+            <a href="#">Afresh — Brand design system</a>
+          </div>
+
+          <div class="project-thumb" style="margin-top: 32px;">
+            <span class="project-thumb-placeholder">Project image</span>
+          </div>
+          <div class="project-caption">
+            <a href="#">Street Cleaning Parking — iOS app</a>
+          </div>
+
+          <div class="project-thumb" style="margin-top: 32px;">
+            <span class="project-thumb-placeholder">Project image</span>
+          </div>
+          <div class="project-caption">
+            <a href="#">Guac — Brand identity</a>
           </div>
         </div>
       </div>
@@ -271,8 +319,11 @@
         <a href="#" target="_blank">Resume</a>
       </div>
     </footer>
+    </div><!-- /.page-inner -->
+    <a href="/about/" class="page-turn" aria-label="Next: About"></a>
   </div>
 
+  <script src="/settings-widget.js"></script>
   <script>
     // Apply saved settings from /settings page
     (function () {

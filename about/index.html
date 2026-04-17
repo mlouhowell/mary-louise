@@ -33,20 +33,33 @@
 
     body {
       font-family: var(--font-body);
-      background-color: var(--color-about);
+      background-color: #010101;
       min-height: 100vh;
       color: #1A1A1A;
       overflow-x: hidden;
     }
 
     .page {
+      position: fixed;
+      top: 40px;
+      bottom: 40px;
+      left: 0;
+      right: 0;
       max-width: 1200px;
       margin: 0 auto;
+      background-color: var(--color-about);
+    }
+
+    .page-inner {
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
       padding: var(--pad-page-v) var(--pad-page-h);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
+
+    .page-inner::-webkit-scrollbar { display: none; }
 
     .header {
       display: flex;
@@ -145,17 +158,30 @@
     .footer-links  { display: flex; gap: 20px; }
 
     .page-turn {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 0 var(--triangle-size) var(--triangle-size);
-      border-color: transparent transparent var(--color-triangle) transparent;
-      pointer-events: none;
+      width: var(--triangle-size);
+      height: var(--triangle-size);
+      display: block;
+      cursor: pointer;
       z-index: 100;
+      text-decoration: none;
     }
+    .page-turn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 50%, #010101 50%);
+    }
+    .page-turn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--color-triangle) 50%, transparent 50%);
+      transition: opacity 0.15s;
+    }
+    .page-turn:hover::after { opacity: 0.8; }
 
     @media (max-width: 800px) {
       :root {
@@ -171,9 +197,8 @@
 </head>
 <body>
 
-  <div class="page-turn"></div>
-
   <div class="page">
+    <div class="page-inner">
     <div class="header">
       <h1>Product design, biking, swimming</h1>
       <nav>
@@ -213,8 +238,11 @@
         <a href="#" target="_blank">Resume</a>
       </div>
     </footer>
+    </div><!-- /.page-inner -->
+    <a href="/experiments/" class="page-turn" aria-label="Next: Experiments"></a>
   </div>
 
+  <script src="/settings-widget.js"></script>
   <script>
     (function () {
       try {
