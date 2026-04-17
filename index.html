@@ -17,11 +17,11 @@
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
 
-      --size-hero:    40px;
-      --size-nav:     20px;
-      --size-label:   20px;
-      --size-body:    20px;
-      --size-meta:    16px;
+      --size-h1:   40px;
+      --size-h2:   20px;
+      --size-h3:   16px;
+      --size-body: 20px;
+      --size-nav:  20px;
 
       --pad-page-h:   80px;
       --pad-page-v:   56px;
@@ -75,10 +75,26 @@
 
     h1 {
       font-family: var(--font-display);
-      font-size: var(--size-hero);
+      font-size: var(--size-h1);
       font-weight: 600;
       letter-spacing: -0.02em;
-      line-height: 44px;
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-family: var(--font-body);
+      font-size: var(--size-h2);
+      font-weight: 600;
+      line-height: 1.2;
+      color: #1A1A1A;
+    }
+
+    h3 {
+      font-family: var(--font-body);
+      font-size: var(--size-h3);
+      font-weight: 600;
+      line-height: 1.3;
+      color: #1A1A1A;
     }
 
     nav {
@@ -110,18 +126,13 @@
       flex: 1;
     }
 
-    .section-label {
-      font-size: var(--size-label);
-      font-weight: 600;
-      color: #1A1A1A;
-      margin-bottom: 16px;
-    }
+    .section-label { margin-bottom: 16px; }
 
     /* ── Bio ──────────────────────────────────────────────── */
     .bio p {
       font-size: var(--size-body);
       font-weight: 600;
-      line-height: 24px;
+      line-height: 1.4;
       color: #1A1A1A;
       margin-bottom: 12px;
     }
@@ -167,13 +178,13 @@
     .quote { margin-bottom: 28px; }
 
     .quote p {
-      font-size: 16px;
-      line-height: 20px;
+      font-size: var(--size-h3);
+      line-height: 1.4;
       margin-bottom: 6px;
     }
 
     .quote cite {
-      font-size: 16px;
+      font-size: var(--size-h3);
       color: #1A1A1A;
       font-style: normal;
     }
@@ -259,14 +270,14 @@
     <div class="content">
 
       <div class="left-col">
-        <div class="section-label">Welcome!</div>
+        <h2 class="section-label">Welcome!</h2>
         <div class="bio">
           <p>I'm currently a product designer and brand design lead at Guac, a YC startup making products for grocery stores. Previously, I was a designer at Afresh.</p>
           <p>I'm interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</p>
         </div>
 
         <div class="work-section">
-          <div class="section-label">Work</div>
+          <h2 class="section-label">Work</h2>
 
           <div class="project-thumb">
             <span class="project-thumb-placeholder">Project image</span>
@@ -299,7 +310,7 @@
       </div>
 
       <div class="right-col">
-        <div class="section-label">Quotes I like</div>
+        <h2 class="section-label">Quotes I like</h2>
         <div class="quote">
           <p>It is important to use your hands, that is what distinguishes you from a cow or a computer operator.</p>
           <cite>— Paul Rand</cite>

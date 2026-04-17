@@ -3,9 +3,11 @@
     '--color-work':        '#CC6FAD',
     '--color-about':       '#4E9AC3',
     '--color-experiments': '#F1DFC1',
-    '--size-hero':         '40px',
-    '--size-body':         '20px',
-    '--size-nav':          '20px',
+    '--size-h1':   '40px',
+    '--size-h2':   '20px',
+    '--size-h3':   '16px',
+    '--size-body': '20px',
+    '--size-nav':  '20px',
     '--pad-page-h':        '80px',
     '--gap-cols':          '80px',
     '--triangle-size':     '440px',
@@ -31,9 +33,10 @@
     {
       label: 'Type',
       items: [
-        { label: 'Hero',  var: '--size-hero',  type: 'range', min: 20, max: 80, step: 1 },
-        { label: 'Body',  var: '--size-body',  type: 'range', min: 12, max: 32, step: 1 },
-        { label: 'Nav',   var: '--size-nav',   type: 'range', min: 12, max: 32, step: 1 },
+        { label: 'H1',   var: '--size-h1',   type: 'range', min: 24, max: 80, step: 1 },
+        { label: 'H2',   var: '--size-h2',   type: 'range', min: 14, max: 40, step: 1 },
+        { label: 'H3',   var: '--size-h3',   type: 'range', min: 12, max: 32, step: 1 },
+        { label: 'Body', var: '--size-body', type: 'range', min: 12, max: 32, step: 1 },
       ],
     },
   ];

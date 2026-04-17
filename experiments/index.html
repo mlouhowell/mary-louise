@@ -16,11 +16,11 @@
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
 
-      --size-hero:    40px;
-      --size-nav:     20px;
-      --size-label:   20px;
-      --size-body:    20px;
-      --size-meta:    16px;
+      --size-h1:   40px;
+      --size-h2:   20px;
+      --size-h3:   16px;
+      --size-body: 20px;
+      --size-nav:  20px;
 
       --pad-page-h:   80px;
       --pad-page-v:   56px;
@@ -72,11 +72,27 @@
 
     h1 {
       font-family: var(--font-display);
-      font-size: var(--size-hero);
+      font-size: var(--size-h1);
       font-weight: 600;
       letter-spacing: -0.02em;
-      line-height: 44px;
+      line-height: 1.1;
       max-width: 640px;
+    }
+
+    h2 {
+      font-family: var(--font-body);
+      font-size: var(--size-h2);
+      font-weight: 600;
+      line-height: 1.2;
+      color: #1A1A1A;
+    }
+
+    h3 {
+      font-family: var(--font-body);
+      font-size: var(--size-h3);
+      font-weight: 600;
+      line-height: 1.3;
+      color: rgba(0,0,0,0.6);
     }
 
     nav {
@@ -133,11 +149,7 @@
       letter-spacing: 0.04em;
     }
 
-    .experiment-label {
-      font-size: var(--size-meta);
-      color: rgba(0,0,0,0.6);
-      line-height: 1.4;
-    }
+    .experiment-label { line-height: 1.4; }
 
     footer {
       display: flex;
@@ -218,7 +230,7 @@
           <!-- Replace with Scribe app screenshot -->
           <span class="experiment-thumb-placeholder">Scribe app</span>
         </div>
-        <div class="experiment-label">Scribe — voice note tool</div>
+        <h3 class="experiment-label">Scribe — voice note tool</h3>
       </div>
 
       <div class="experiment-item">
@@ -226,7 +238,7 @@
           <!-- Replace with hummingbird illustration -->
           <span class="experiment-thumb-placeholder">Hummingbird</span>
         </div>
-        <div class="experiment-label">Image model experiments</div>
+        <h3 class="experiment-label">Image model experiments</h3>
       </div>
 
       <div class="experiment-item">
@@ -234,7 +246,7 @@
           <!-- Replace with CarPlay UI screenshot -->
           <span class="experiment-thumb-placeholder">CarPlay UI</span>
         </div>
-        <div class="experiment-label">CarPlay concept</div>
+        <h3 class="experiment-label">CarPlay concept</h3>
       </div>
 
     </div>
