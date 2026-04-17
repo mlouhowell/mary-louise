@@ -3,16 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML Howell — Work</title>
+  <title>ML Howell — Experiments</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Inter+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ── Design tokens (overridable via /settings) ────────── */
     :root {
       --color-work:         #CC6FAD;
       --color-about:        #4E9AC3;
       --color-experiments:  #F1DFC1;
       --color-project-bg:   #FFFFFF;
-      --color-triangle:     #1A0810;
+      --color-triangle:     #1A1000;
 
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
@@ -26,7 +25,7 @@
       --pad-page-h:   80px;
       --pad-page-v:   56px;
       --gap-section:  48px;
-      --gap-cols:     80px;
+      --gap-cols:     24px;
       --triangle-size: 220px;
     }
 
@@ -34,13 +33,12 @@
 
     body {
       font-family: var(--font-body);
-      background-color: var(--color-work);
+      background-color: var(--color-experiments);
       min-height: 100vh;
       color: #1A1A1A;
       overflow-x: hidden;
     }
 
-    /* ── Page layout ──────────────────────────────────────── */
     .page {
       max-width: 1200px;
       margin: 0 auto;
@@ -50,7 +48,6 @@
       flex-direction: column;
     }
 
-    /* ── Header ───────────────────────────────────────────── */
     .header {
       display: flex;
       justify-content: space-between;
@@ -64,6 +61,7 @@
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 44px;
+      max-width: 640px;
     }
 
     nav {
@@ -71,6 +69,7 @@
       flex-direction: column;
       text-align: right;
       padding-top: 6px;
+      flex-shrink: 0;
     }
 
     nav a {
@@ -87,83 +86,46 @@
     nav a.active { color: #FFFFFF; }
     nav a:hover  { opacity: 0.55; }
 
-    /* ── Two-column body ──────────────────────────────────── */
-    .content {
+    /* 3-column image grid */
+    .grid {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: var(--gap-cols);
       flex: 1;
+      align-content: start;
     }
 
-    .section-label {
-      font-size: var(--size-label);
-      font-weight: 600;
-      color: #1A1A1A;
-      margin-bottom: 16px;
-    }
+    .experiment-item { display: flex; flex-direction: column; gap: 10px; }
 
-    /* ── Bio ──────────────────────────────────────────────── */
-    .bio p {
-      font-size: var(--size-body);
-      font-weight: 600;
-      line-height: 24px;
-      color: #1A1A1A;
-      margin-bottom: 12px;
-    }
-
-    /* ── Work / project preview ───────────────────────────── */
-    .work-section { margin-top: var(--gap-section); }
-
-    .project-thumb {
+    .experiment-thumb {
       width: 100%;
-      aspect-ratio: 16 / 9;
-      background: rgba(0,0,0,0.1);
+      aspect-ratio: 4 / 3;
+      background: rgba(0,0,0,0.08);
       overflow: hidden;
-      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .project-thumb img {
+    .experiment-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .project-thumb-placeholder {
+    .experiment-thumb-placeholder {
       font-size: 13px;
-      color: rgba(0,0,0,0.35);
+      color: rgba(0,0,0,0.3);
       letter-spacing: 0.04em;
     }
 
-    .project-caption a {
-      font-size: var(--size-body);
-      color: #0D0D0D;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      transition: opacity 0.15s;
+    .experiment-label {
+      font-size: var(--size-meta);
+      color: rgba(0,0,0,0.6);
+      line-height: 1.4;
     }
 
-    .project-caption a:hover { opacity: 0.55; }
-
-    /* ── Quotes ───────────────────────────────────────────── */
-    .quote { margin-bottom: 28px; }
-
-    .quote p {
-      font-size: 16px;
-      line-height: 20px;
-      margin-bottom: 6px;
-    }
-
-    .quote cite {
-      font-size: 16px;
-      color: #1A1A1A;
-      font-style: normal;
-    }
-
-    /* ── Footer ───────────────────────────────────────────── */
     footer {
       display: flex;
       justify-content: space-between;
@@ -183,10 +145,8 @@
     }
 
     footer a:hover { color: #1A1A1A; }
+    .footer-links  { display: flex; gap: 20px; }
 
-    .footer-links { display: flex; gap: 20px; }
-
-    /* ── Page-turn triangle ───────────────────────────────── */
     .page-turn {
       position: fixed;
       bottom: 0;
@@ -200,16 +160,14 @@
       z-index: 100;
     }
 
-    /* ── Responsive ───────────────────────────────────────── */
     @media (max-width: 800px) {
       :root {
         --pad-page-h: 24px;
         --size-hero: 28px;
         --size-nav: 16px;
-        --gap-cols: 40px;
         --triangle-size: 140px;
       }
-      .content { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -219,45 +177,38 @@
 
   <div class="page">
     <div class="header">
-      <h1>Hey, my name is ML.</h1>
+      <h1>I like to experiment with image models, build my own apps, and I'm always playing with new tools</h1>
       <nav>
-        <a href="/" class="active">Work</a>
+        <a href="/">Work</a>
         <a href="/about/">About</a>
-        <a href="/experiments/">Experiments</a>
+        <a href="/experiments/" class="active">Experiments</a>
       </nav>
     </div>
 
-    <div class="content">
+    <div class="grid">
 
-      <div class="left-col">
-        <div class="section-label">Welcome!</div>
-        <div class="bio">
-          <p>I'm currently a product designer and brand design lead at Guac, a YC startup making products for grocery stores. Previously, I was a designer at Afresh.</p>
-          <p>I'm interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</p>
+      <div class="experiment-item">
+        <div class="experiment-thumb">
+          <!-- Replace with Scribe app screenshot -->
+          <span class="experiment-thumb-placeholder">Scribe app</span>
         </div>
-
-        <div class="work-section">
-          <div class="section-label">Work</div>
-          <div class="project-thumb">
-            <!-- Replace src with actual project image -->
-            <span class="project-thumb-placeholder">Project image</span>
-          </div>
-          <div class="project-caption">
-            <a href="/projects/guac-products-2025/">Guac Products</a>
-          </div>
-        </div>
+        <div class="experiment-label">Scribe — voice note tool</div>
       </div>
 
-      <div class="right-col">
-        <div class="section-label">Quotes I like</div>
-        <div class="quote">
-          <p>It is important to use your hands, that is what distinguishes you from a cow or a computer operator.</p>
-          <cite>— Paul Rand</cite>
+      <div class="experiment-item">
+        <div class="experiment-thumb">
+          <!-- Replace with hummingbird illustration -->
+          <span class="experiment-thumb-placeholder">Hummingbird</span>
         </div>
-        <div class="quote">
-          <p>Write about what you know. Being honest is what counts. Trying to make the ordinary — extraordinary.</p>
-          <cite>— Ricky Gervais</cite>
+        <div class="experiment-label">Image model experiments</div>
+      </div>
+
+      <div class="experiment-item">
+        <div class="experiment-thumb">
+          <!-- Replace with CarPlay UI screenshot -->
+          <span class="experiment-thumb-placeholder">CarPlay UI</span>
         </div>
+        <div class="experiment-label">CarPlay concept</div>
       </div>
 
     </div>
@@ -274,7 +225,6 @@
   </div>
 
   <script>
-    // Apply saved settings from /settings page
     (function () {
       try {
         const saved = localStorage.getItem('ml-settings');

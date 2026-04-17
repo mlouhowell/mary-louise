@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — ML Howell</title>
+  <!-- Not linked from anywhere — access at /settings/ -->
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #F5F4F2;
+      color: #1A1A1A;
+      min-height: 100vh;
+      padding: 48px 40px;
+    }
+
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: rgba(0,0,0,0.45);
+      margin-bottom: 48px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-heading {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 200px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-size: 14px;
+      color: #1A1A1A;
+    }
+
+    .field input[type="color"] {
+      width: 48px;
+      height: 32px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 4px;
+      padding: 2px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .field input[type="range"] {
+      width: 100%;
+      accent-color: #1A1A1A;
+    }
+
+    .field input[type="text"],
+    .field select {
+      width: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 14px;
+      padding: 6px 10px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 4px;
+      background: #fff;
+      color: #1A1A1A;
+    }
+
+    .field .value-display {
+      font-size: 13px;
+      color: rgba(0,0,0,0.45);
+      min-width: 48px;
+      text-align: right;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    button {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    button:hover { opacity: 0.75; }
+
+    .btn-save {
+      background: #1A1A1A;
+      color: #fff;
+    }
+
+    .btn-reset {
+      background: rgba(0,0,0,0.06);
+      color: #1A1A1A;
+    }
+
+    .btn-preview {
+      background: rgba(0,0,0,0.06);
+      color: #1A1A1A;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: #1A1A1A;
+      color: #fff;
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Live preview strip */
+    .preview-strip {
+      display: flex;
+      gap: 0;
+      height: 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .preview-strip div {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="page-title">Site Settings</div>
+    <div class="page-subtitle">Changes are saved to your browser and applied on every page. Not linked publicly.</div>
+
+    <!-- Live color preview -->
+    <div class="preview-strip">
+      <div id="prev-work" style="background: #CC6FAD;">WORK</div>
+      <div id="prev-about" style="background: #4E9AC3;">ABOUT</div>
+      <div id="prev-experiments" style="background: #F1DFC1;">EXPTS</div>
+      <div id="prev-project" style="background: #FFFFFF;">PROJECT</div>
+    </div>
+
+    <form id="settings-form">
+
+      <!-- Colors -->
+      <div class="section">
+        <div class="section-heading">Colors</div>
+
+        <div class="field">
+          <label for="color-work">Work page</label>
+          <input type="color" id="color-work" data-var="--color-work" value="#CC6FAD">
+          <span class="value-display" id="disp-color-work">#CC6FAD</span>
+        </div>
+        <div class="field">
+          <label for="color-about">About page</label>
+          <input type="color" id="color-about" data-var="--color-about" value="#4E9AC3">
+          <span class="value-display" id="disp-color-about">#4E9AC3</span>
+        </div>
+        <div class="field">
+          <label for="color-experiments">Experiments page</label>
+          <input type="color" id="color-experiments" data-var="--color-experiments" value="#F1DFC1">
+          <span class="value-display" id="disp-color-experiments">#F1DFC1</span>
+        </div>
+        <div class="field">
+          <label for="color-project">Project pages</label>
+          <input type="color" id="color-project" data-var="--color-project-bg" value="#FFFFFF">
+          <span class="value-display" id="disp-color-project">#FFFFFF</span>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="section">
+        <div class="section-heading">Typography</div>
+
+        <div class="field">
+          <label for="size-hero">Hero size</label>
+          <input type="range" id="size-hero" data-var="--size-hero" min="28" max="80" value="48" step="1">
+          <span class="value-display" id="disp-size-hero">48px</span>
+        </div>
+        <div class="field">
+          <label for="size-nav">Nav size</label>
+          <input type="range" id="size-nav" data-var="--size-nav" min="12" max="32" value="20" step="1">
+          <span class="value-display" id="disp-size-nav">20px</span>
+        </div>
+        <div class="field">
+          <label for="size-body">Body size</label>
+          <input type="range" id="size-body" data-var="--size-body" min="12" max="24" value="16" step="1">
+          <span class="value-display" id="disp-size-body">16px</span>
+        </div>
+      </div>
+
+      <!-- Spacing -->
+      <div class="section">
+        <div class="section-heading">Spacing</div>
+
+        <div class="field">
+          <label for="pad-page-h">Page padding (h)</label>
+          <input type="range" id="pad-page-h" data-var="--pad-page-h" min="16" max="160" value="80" step="4">
+          <span class="value-display" id="disp-pad-page-h">80px</span>
+        </div>
+        <div class="field">
+          <label for="pad-page-v">Page padding (v)</label>
+          <input type="range" id="pad-page-v" data-var="--pad-page-v" min="16" max="120" value="56" step="4">
+          <span class="value-display" id="disp-pad-page-v">56px</span>
+        </div>
+        <div class="field">
+          <label for="gap-section">Section gap</label>
+          <input type="range" id="gap-section" data-var="--gap-section" min="16" max="120" value="48" step="4">
+          <span class="value-display" id="disp-gap-section">48px</span>
+        </div>
+        <div class="field">
+          <label for="gap-cols">Column gap</label>
+          <input type="range" id="gap-cols" data-var="--gap-cols" min="16" max="160" value="80" step="4">
+          <span class="value-display" id="disp-gap-cols">80px</span>
+        </div>
+        <div class="field">
+          <label for="triangle-size">Triangle size</label>
+          <input type="range" id="triangle-size" data-var="--triangle-size" min="60" max="400" value="220" step="10">
+          <span class="value-display" id="disp-triangle-size">220px</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-save" id="btn-save">Save settings</button>
+        <button type="button" class="btn-reset" id="btn-reset">Reset to defaults</button>
+        <a href="/" style="margin-left: auto;">
+          <button type="button" class="btn-preview">Go to site ↗</button>
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="toast" id="toast">Settings saved</div>
+
+  <script>
+    const DEFAULTS = {
+      '--color-work':        '#CC6FAD',
+      '--color-about':       '#4E9AC3',
+      '--color-experiments': '#F1DFC1',
+      '--color-project-bg':  '#FFFFFF',
+      '--size-hero':         '48px',
+      '--size-nav':          '20px',
+      '--size-body':         '16px',
+      '--pad-page-h':        '80px',
+      '--pad-page-v':        '56px',
+      '--gap-section':       '48px',
+      '--gap-cols':          '80px',
+      '--triangle-size':     '220px',
+    };
+
+    // Load saved settings
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem('ml-settings');
+        return saved ? JSON.parse(saved) : {};
+      } catch (e) { return {}; }
+    }
+
+    // Apply to page preview
+    function applyToRoot(varName, value) {
+      document.documentElement.style.setProperty(varName, value);
+    }
+
+    // Sync form with saved values
+    const saved = loadSettings();
+    document.querySelectorAll('[data-var]').forEach(el => {
+      const varName = el.dataset.var;
+      const savedVal = saved[varName];
+      if (savedVal) {
+        if (el.type === 'color') {
+          el.value = savedVal;
+        } else if (el.type === 'range') {
+          el.value = parseInt(savedVal);
+        }
+      }
+      // Update display
+      updateDisplay(el);
+    });
+
+    // Update preview strip from saved colors
+    updatePreviewStrip();
+
+    function updateDisplay(el) {
+      const varName = el.dataset.var;
+      const dispId = 'disp-' + el.id;
+      const dispEl = document.getElementById(dispId);
+      if (!dispEl) return;
+      if (el.type === 'range') {
+        dispEl.textContent = el.value + 'px';
+      } else {
+        dispEl.textContent = el.value;
+      }
+    }
+
+    function updatePreviewStrip() {
+      const work  = document.getElementById('color-work')?.value  || DEFAULTS['--color-work'];
+      const about = document.getElementById('color-about')?.value || DEFAULTS['--color-about'];
+      const expts = document.getElementById('color-experiments')?.value || DEFAULTS['--color-experiments'];
+      const proj  = document.getElementById('color-project')?.value || DEFAULTS['--color-project-bg'];
+      document.getElementById('prev-work').style.background        = work;
+      document.getElementById('prev-about').style.background       = about;
+      document.getElementById('prev-experiments').style.background = expts;
+      document.getElementById('prev-project').style.background     = proj;
+    }
+
+    // Live update on input
+    document.querySelectorAll('[data-var]').forEach(el => {
+      el.addEventListener('input', () => {
+        updateDisplay(el);
+        updatePreviewStrip();
+      });
+    });
+
+    // Save
+    document.getElementById('btn-save').addEventListener('click', () => {
+      const settings = {};
+      document.querySelectorAll('[data-var]').forEach(el => {
+        const varName = el.dataset.var;
+        const val = el.type === 'range' ? el.value + 'px' : el.value;
+        settings[varName] = val;
+      });
+      localStorage.setItem('ml-settings', JSON.stringify(settings));
+      showToast('Settings saved');
+    });
+
+    // Reset
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      localStorage.removeItem('ml-settings');
+      document.querySelectorAll('[data-var]').forEach(el => {
+        const varName = el.dataset.var;
+        const def = DEFAULTS[varName];
+        if (!def) return;
+        if (el.type === 'range') {
+          el.value = parseInt(def);
+        } else {
+          el.value = def;
+        }
+        updateDisplay(el);
+      });
+      updatePreviewStrip();
+      showToast('Reset to defaults');
+    });
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+  </script>
+
+</body>
+</html>
