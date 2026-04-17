@@ -475,7 +475,7 @@
 
   /* ── content editing section ─────────────────────── */
 
-  const EDIT_PASSWORD = 'studio';  // ← change this
+  const EDIT_PASSWORD = '1California';
   const CONTENT_KEY   = 'ml-content:' + location.pathname;
   const EDIT_SEL      = '.page-inner h1, .page-inner h2, .page-inner h3, .bio p, .quote p, .quote cite, .experiment-label';
 
