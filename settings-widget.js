@@ -8,7 +8,7 @@
     '--size-nav':          '20px',
     '--pad-page-h':        '80px',
     '--gap-cols':          '80px',
-    '--triangle-size':     '220px',
+    '--triangle-size':     '440px',
   };
 
   const GROUPS = [
