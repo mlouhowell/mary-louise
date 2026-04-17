@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: transparent;
+      width: 240px;
+      height: 300px;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 240px;
+      height: 300px;
+      cursor: pointer;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0; left: 0;
+    }
+
+    .hand {
+      position: absolute;
+      left: 50%;
+      top: -64px;
+      transform: translateX(-50%);
+      font-size: 44px;
+      pointer-events: none;
+      z-index: 10;
+      transition: top 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: none;
+    }
+
+    .hand.feeding {
+      top: 14px;
+    }
+
+    .label {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: system-ui, sans-serif;
+      font-size: 10px;
+      color: rgba(60, 90, 85, 0.45);
+      letter-spacing: 0.07em;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 0.6s ease;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="container">
+  <canvas id="c" width="240" height="300"></canvas>
+  <div class="hand" id="hand">🤚</div>
+  <div class="label" id="label">tap to feed</div>
+</div>
+
+<script>
+  const canvas = document.getElementById('c');
+  const ctx    = canvas.getContext('2d');
+  const W = 240, H = 300;
+
+  // ── Bowl geometry ──────────────────────────────────────
+  const BX = W / 2;       // center x
+  const BY = 168;          // center y
+  const BR = 100;          // bowl radius
+  const NECK_W   = 44;
+  const NECK_TOP = BY - BR - 18;
+  const NECK_BOT = BY - BR + 14;
+  const WATER_TOP = NECK_BOT + 2;
+
+  function clipToBowl() {
+    ctx.beginPath();
+    ctx.arc(BX, BY, BR - 2, 0, Math.PI * 2);
+    ctx.clip();
+  }
+
+  // ── Food crumbs ────────────────────────────────────────
+  const food = [];
+  class Crumb {
+    constructor() {
+      this.x    = BX + (Math.random() - 0.5) * (NECK_W - 10);
+      this.y    = WATER_TOP + 4;
+      this.vx   = (Math.random() - 0.5) * 1.0;
+      this.vy   = 0.4 + Math.random() * 0.5;
+      this.r    = 1.8 + Math.random() * 1.8;
+      this.life = 1;
+      this.eaten = false;
+      this.hue  = 25 + Math.random() * 25;
+    }
+    update() {
+      if (this.eaten) return;
+      this.vy += 0.025;
+      this.x  += this.vx;
+      this.y  += this.vy;
+      this.life -= 0.0025;
+      // Soft wall bounce
+      const dx = this.x - BX, dy = this.y - BY;
+      const d  = Math.hypot(dx, dy);
+      if (d > BR - this.r - 6) {
+        const a = Math.atan2(dy, dx);
+        this.x  = BX + Math.cos(a) * (BR - this.r - 7);
+        this.y  = BY + Math.sin(a) * (BR - this.r - 7);
+        this.vx *= -0.35;
+        this.vy *= -0.35;
+      }
+    }
+    draw() {
+      if (this.eaten || this.life <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = Math.min(this.life * 2.5, 0.92);
+      ctx.fillStyle   = `hsl(${this.hue}, 85%, 60%)`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // ── Bubbles ────────────────────────────────────────────
+  const bubbles = [];
+  class Bubble {
+    constructor(init) {
+      this.init = init;
+      this.reset(init);
+    }
+    reset(init) {
+      const span = (BR - 20) * 0.9;
+      this.x       = BX + (Math.random() - 0.5) * span * 2;
+      this.y       = init ? (BY - BR * 0.1 + Math.random() * BR * 0.8) : (BY + BR * 0.7);
+      this.r       = 1.2 + Math.random() * 3;
+      this.vy      = 0.25 + Math.random() * 0.35;
+      this.wobble  = Math.random() * Math.PI * 2;
+      this.opacity = 0.1 + Math.random() * 0.18;
+    }
+    update() {
+      this.y      -= this.vy;
+      this.wobble += 0.05;
+      this.x      += Math.sin(this.wobble) * 0.22;
+      if (this.y < WATER_TOP + 2) this.reset(false);
+    }
+    draw() {
+      ctx.save();
+      ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
+      ctx.lineWidth   = 0.8;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.stroke();
+      // Tiny shine
+      ctx.fillStyle = `rgba(255,255,255,${this.opacity * 0.5})`;
+      ctx.beginPath();
+      ctx.arc(this.x - this.r * 0.3, this.y - this.r * 0.3, this.r * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  for (let i = 0; i < 10; i++) bubbles.push(new Bubble(true));
+
+  // ── Fish ───────────────────────────────────────────────
+  const PALETTE = [
+    { body: '#ff7043', fin: '#e64a19' },
+    { body: '#29b6f6', fin: '#0288d1' },
+    { body: '#ab47bc', fin: '#7b1fa2' },
+    { body: '#ffca28', fin: '#f9a825' },
+    { body: '#66bb6a', fin: '#2e7d32' },
+  ];
+
+  class Fish {
+    constructor(idx) {
+      const p     = PALETTE[idx % PALETTE.length];
+      this.body   = p.body;
+      this.fin    = p.fin;
+      this.size   = 12 + Math.random() * 9;
+      this.tail   = Math.random() * Math.PI * 2;
+      this.tspd   = 0.09 + Math.random() * 0.06;
+      this.wobble = Math.random() * Math.PI * 2;
+      this.wspd   = 0.013 + Math.random() * 0.01;
+      this.reset(true);
+    }
+
+    reset(init) {
+      this.dir   = Math.random() > 0.5 ? 1 : -1;
+      this.speed = 0.45 + Math.random() * 0.55;
+      this.base  = this.speed;
+      this.vy    = 0;
+      this.target = null;
+      if (init) {
+        this.x = BX + (Math.random() - 0.5) * (BR - 25) * 1.6;
+        this.y = BY + (Math.random() - 0.5) * (BR - 30) * 0.9;
+      } else {
+        this.x = this.dir === 1 ? BX - BR + 10 : BX + BR - 10;
+        this.y = BY + (Math.random() - 0.5) * (BR - 30);
+      }
+    }
+
+    seekFood() {
+      let best = null, bd = 130;
+      for (const f of food) {
+        if (f.eaten || f.life <= 0) continue;
+        const d = Math.hypot(f.x - this.x, f.y - this.y);
+        if (d < bd) { bd = d; best = f; }
+      }
+      this.target = best;
+    }
+
+    update() {
+      this.seekFood();
+      if (this.target) {
+        const fdx = this.target.x - this.x;
+        const fdy = this.target.y - this.y;
+        const fd  = Math.hypot(fdx, fdy);
+        this.dir   = fdx > 0 ? 1 : -1;
+        this.speed = Math.min(this.base * 2.8, fd * 0.09 + 0.5);
+        this.vy   += (fdy / fd) * 0.32;
+        if (fd < 11) { this.target.eaten = true; this.target = null; }
+      }
+
+      this.vy *= 0.88;
+      this.x  += this.speed * this.dir;
+      this.y  += this.vy;
+
+      // Keep inside bowl
+      const dx = this.x - BX, dy = this.y - BY;
+      const d  = Math.hypot(dx, dy);
+      if (d > BR - this.size - 4) {
+        const a = Math.atan2(dy, dx);
+        this.x  = BX + Math.cos(a) * (BR - this.size - 5);
+        this.y  = BY + Math.sin(a) * (BR - this.size - 5);
+        if (Math.abs(Math.cos(a)) > 0.4) this.dir *= -1;
+        this.vy *= -0.4;
+      }
+
+      // Keep above floor, below water
+      this.y = Math.max(WATER_TOP + this.size + 2, Math.min(BY + BR - this.size - 4, this.y));
+
+      this.tail   += this.tspd;
+      this.wobble += this.wspd;
+    }
+
+    draw() {
+      const s  = this.size;
+      const wy = Math.sin(this.wobble) * 1.8;
+      const tw = Math.sin(this.tail) * 0.38;
+
+      ctx.save();
+      ctx.translate(this.x, this.y + wy);
+      if (this.dir === -1) ctx.scale(-1, 1);
+
+      // Tail
+      ctx.save();
+      ctx.rotate(tw);
+      ctx.fillStyle = this.fin;
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.55, 0);
+      ctx.lineTo(-s * 1.35, -s * 0.52);
+      ctx.lineTo(-s * 1.45, 0);
+      ctx.lineTo(-s * 1.35, s * 0.52);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Body
+      ctx.fillStyle = this.body;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, s, s * 0.56, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Dorsal fin
+      ctx.fillStyle = this.fin;
+      ctx.globalAlpha = 0.75;
+      ctx.beginPath();
+      ctx.moveTo(-s * 0.05, -s * 0.38);
+      ctx.lineTo(s * 0.32,  -s * 0.62);
+      ctx.lineTo(s * 0.52,  -s * 0.37);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Eye white
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.beginPath();
+      ctx.arc(s * 0.42, -s * 0.08, s * 0.19, 0, Math.PI * 2);
+      ctx.fill();
+      // Pupil
+      ctx.fillStyle = '#1a1a1a';
+      ctx.beginPath();
+      ctx.arc(s * 0.44, -s * 0.09, s * 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      // Shine
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.beginPath();
+      ctx.arc(s * 0.47, -s * 0.12, s * 0.045, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+  }
+
+  const fishes = Array.from({ length: 5 }, (_, i) => new Fish(i));
+
+  // ── Hand interaction ───────────────────────────────────
+  const handEl  = document.getElementById('hand');
+  const labelEl = document.getElementById('label');
+  let   busy    = false;
+
+  document.getElementById('container').addEventListener('click', () => {
+    if (busy) return;
+    busy = true;
+    labelEl.style.opacity = '0';
+
+    handEl.classList.add('feeding');
+
+    // Drop food when hand reaches bowl
+    setTimeout(() => {
+      for (let i = 0; i < 9; i++) food.push(new Crumb());
+    }, 260);
+
+    // Retract hand
+    setTimeout(() => {
+      handEl.classList.remove('feeding');
+      setTimeout(() => { busy = false; }, 350);
+    }, 680);
+  });
+
+  // ── Draw pass ─────────────────────────────────────────
+  function drawWater() {
+    const g = ctx.createLinearGradient(0, WATER_TOP, 0, BY + BR);
+    g.addColorStop(0,   '#b5d8d2');
+    g.addColorStop(0.45,'#c5e2dc');
+    g.addColorStop(1,   '#9fc8c2');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawRays() {
+    const t = Date.now() * 0.00045;
+    for (let i = 0; i < 4; i++) {
+      const rx = BX - 50 + i * 32 + Math.sin(t + i * 1.3) * 8;
+      const rg = ctx.createLinearGradient(rx, WATER_TOP, rx + 14, BY + 80);
+      rg.addColorStop(0,   'rgba(255,255,255,0.065)');
+      rg.addColorStop(1,   'rgba(255,255,255,0)');
+      ctx.fillStyle = rg;
+      ctx.beginPath();
+      ctx.moveTo(rx,       WATER_TOP);
+      ctx.lineTo(rx + 11,  WATER_TOP);
+      ctx.lineTo(rx + 38,  BY + BR);
+      ctx.lineTo(rx + 22,  BY + BR);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  function drawGlass() {
+    // Outer rim
+    ctx.save();
+    ctx.strokeStyle = 'rgba(155, 200, 193, 0.85)';
+    ctx.lineWidth   = 4;
+    ctx.beginPath();
+    ctx.arc(BX, BY, BR, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Inner rim glow
+    ctx.strokeStyle = 'rgba(200, 230, 226, 0.4)';
+    ctx.lineWidth   = 2;
+    ctx.beginPath();
+    ctx.arc(BX, BY, BR - 4, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Glass highlight arc
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.lineWidth   = 2.5;
+    ctx.lineCap     = 'round';
+    ctx.beginPath();
+    ctx.arc(BX - BR * 0.28, BY - BR * 0.22, BR * 0.52, Math.PI * 1.08, Math.PI * 1.62);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawNeck() {
+    ctx.save();
+    // Neck fill
+    const ng = ctx.createLinearGradient(BX - NECK_W / 2, 0, BX + NECK_W / 2, 0);
+    ng.addColorStop(0,   'rgba(155, 200, 193, 0.55)');
+    ng.addColorStop(0.3, 'rgba(200, 232, 227, 0.45)');
+    ng.addColorStop(0.7, 'rgba(200, 232, 227, 0.45)');
+    ng.addColorStop(1,   'rgba(155, 200, 193, 0.55)');
+    ctx.fillStyle = ng;
+
+    const nw = NECK_W, nh = NECK_BOT - NECK_TOP, r = 5;
+    const nx = BX - nw / 2, ny = NECK_TOP;
+    ctx.beginPath();
+    ctx.moveTo(nx + r, ny);
+    ctx.lineTo(nx + nw - r, ny);
+    ctx.quadraticCurveTo(nx + nw, ny, nx + nw, ny + r);
+    ctx.lineTo(nx + nw, ny + nh);
+    ctx.lineTo(nx, ny + nh);
+    ctx.lineTo(nx, ny + r);
+    ctx.quadraticCurveTo(nx, ny, nx + r, ny);
+    ctx.closePath();
+    ctx.fill();
+
+    // Neck outline
+    ctx.strokeStyle = 'rgba(140, 190, 183, 0.8)';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+
+    // Neck highlight
+    ctx.strokeStyle = 'rgba(255,255,255,0.38)';
+    ctx.lineWidth   = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(nx + r, ny + 2);
+    ctx.lineTo(nx + nw - r, ny + 2);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawSurface() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(BX, BY, BR - 2, 0, Math.PI * 2);
+    ctx.clip();
+
+    const t = Date.now() * 0.0009;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+    ctx.lineWidth   = 1.2;
+    ctx.lineCap     = 'round';
+    for (let i = 0; i < 2; i++) {
+      const ox = Math.sin(t * 0.8 + i * 1.8) * 10;
+      ctx.beginPath();
+      ctx.moveTo(BX - 28 + ox, WATER_TOP + 8);
+      ctx.quadraticCurveTo(BX + ox, WATER_TOP + 4, BX + 28 + ox, WATER_TOP + 9);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ── Loop ──────────────────────────────────────────────
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Everything inside the bowl
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(BX, BY, BR - 2, 0, Math.PI * 2);
+    ctx.clip();
+
+    drawWater();
+    drawRays();
+
+    // Food
+    for (let i = food.length - 1; i >= 0; i--) {
+      food[i].update();
+      food[i].draw();
+      if (food[i].life <= 0 || food[i].eaten) food.splice(i, 1);
+    }
+
+    // Bubbles
+    bubbles.forEach(b => { b.update(); b.draw(); });
+
+    // Fish
+    fishes.forEach(f => { f.update(); f.draw(); });
+
+    ctx.restore();
+
+    // Surface shimmer (re-clips internally)
+    drawSurface();
+
+    // Glass + neck drawn outside clip
+    drawGlass();
+    drawNeck();
+
+    requestAnimationFrame(loop);
+  }
+
+  // Trickle new bubbles in over time
+  setInterval(() => {
+    if (bubbles.length < 14) bubbles.push(new Bubble(false));
+  }, 1800);
+
+  loop();
+</script>
+
+</body>
+</html>
