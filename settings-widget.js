@@ -25,7 +25,7 @@
       items: [
         { label: 'Page padding', var: '--pad-page-h',    type: 'range', min: 16,  max: 160, step: 4  },
         { label: 'Column gap',   var: '--gap-cols',      type: 'range', min: 16,  max: 160, step: 4  },
-        { label: 'Triangle',     var: '--triangle-size', type: 'range', min: 0,   max: 600, step: 10 },
+        { label: 'Triangle',     var: '--triangle-size', type: 'range', min: 0,   max: 800, step: 10 },
       ],
     },
     {
