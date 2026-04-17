@@ -25,7 +25,7 @@
       --pad-page-h:   80px;
       --pad-page-v:   56px;
       --gap-section:  48px;
-      --gap-cols:     24px;
+      --gap-cols:     80px;
       --triangle-size: 220px;
     }
 
@@ -99,10 +99,9 @@
     nav a.active { color: #FFFFFF; }
     nav a:hover  { opacity: 0.55; }
 
-    /* 3-column image grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1.25fr 0.75fr;
       gap: var(--gap-cols);
       flex: 1;
       align-content: start;
@@ -194,6 +193,7 @@
         --triangle-size: 140px;
       }
       .grid { grid-template-columns: 1fr; }
+
     }
   </style>
 </head>
