@@ -118,10 +118,12 @@
     nav a:hover  { color: #C8341A; opacity: 1; }
 
     .content {
-      display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: var(--gap-cols);
       flex: 1;
+    }
+
+    .bio {
+      columns: 2;
+      column-gap: var(--gap-cols);
     }
 
     .bio p {
@@ -130,6 +132,7 @@
       line-height: 24px;
       color: #1A1A1A;
       margin-bottom: 16px;
+      break-inside: avoid;
     }
 
     .photo {
@@ -213,7 +216,7 @@
         --gap-cols: 40px;
         --triangle-size: 140px;
       }
-      .content { grid-template-columns: 1fr; }
+      .bio { columns: 1; }
     }
   </style>
 </head>
@@ -231,8 +234,6 @@
     </div>
 
     <div class="content">
-
-      <div class="left-col">
         <div class="bio">
           <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
           <p>Most recently, I was a product designer and brand design lead at Guac, a startup solving grocery food waste with AI. I've spent the last two years designing solutions for store teams in grocery stores who need to know how many strawberries to order or sandwiches to make. As the first designer on the team, I led the work of new products, features, and have helped to shape the Guac brand.</p>
@@ -240,15 +241,6 @@
           <p>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</p>
           <p>When I'm not working or tinkering I like to be away from my desk running or swimming.</p>
         </div>
-      </div>
-
-      <div class="right-col">
-        <div class="photo">
-          <!-- Replace src with actual photo -->
-          <span class="photo-placeholder">Photo</span>
-        </div>
-      </div>
-
     </div>
 
     <footer>
