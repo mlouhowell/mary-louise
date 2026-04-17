@@ -101,7 +101,7 @@
       width: 280px;
       max-height: 100vh;
       overflow-y: auto;
-      background: #EDE8DC;
+      background: #FFFFFF;
       font-family: 'Inter', system-ui, sans-serif;
       transform: translateY(calc(100% + 4px));
       transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);

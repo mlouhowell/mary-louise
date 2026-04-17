@@ -114,26 +114,22 @@
       transition: opacity 0.15s;
     }
 
-    nav a { opacity: 0.4; }
-    nav a.active { opacity: 1; }
-    nav a:hover  { color: #C8341A; opacity: 1; }
+    nav a.active { text-decoration: underline; text-underline-offset: 3px; }
+    nav a:hover  { color: #C8341A; }
 
     .content {
       flex: 1;
     }
 
     .bio {
-      columns: 2;
-      column-gap: var(--gap-cols);
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: var(--gap-cols);
+      align-items: start;
     }
 
-    .bio p {
-      font-size: var(--size-body);
-      font-weight: 600;
-      line-height: 24px;
-      color: #1A1A1A;
+    .bio h2 {
       margin-bottom: 16px;
-      break-inside: avoid;
     }
 
     .photo {
@@ -217,7 +213,7 @@
         --gap-cols: 40px;
         --triangle-size: 140px;
       }
-      .bio { columns: 1; }
+      .bio { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -236,11 +232,11 @@
 
     <div class="content">
         <div class="bio">
-          <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
-          <p>Most recently, I was a product designer and brand design lead at Guac, a startup solving grocery food waste with AI. I've spent the last two years designing solutions for store teams in grocery stores who need to know how many strawberries to order or sandwiches to make. As the first designer on the team, I led the work of new products, features, and have helped to shape the Guac brand.</p>
-          <p>My boyfriend and I built Street Cleaning Parking in 2024, an iOS app that helps people avoid parking tickets.</p>
-          <p>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</p>
-          <p>When I'm not working or tinkering I like to be away from my desk running or swimming.</p>
+          <h2>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</h2>
+          <h2>Most recently, I was a product designer and brand design lead at Guac, a startup solving grocery food waste with AI. I've spent the last two years designing solutions for store teams in grocery stores who need to know how many strawberries to order or sandwiches to make. As the first designer on the team, I led the work of new products, features, and have helped to shape the Guac brand.</h2>
+          <h2>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</h2>
+          <h2>My boyfriend and I built Street Cleaning Parking in 2024, an iOS app that helps people avoid parking tickets.</h2>
+          <h2>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</h2>
         </div>
     </div>
 

@@ -116,9 +116,8 @@
       transition: opacity 0.15s;
     }
 
-    nav a { opacity: 0.4; }
-    nav a.active { opacity: 1; }
-    nav a:hover  { color: #C8341A; opacity: 1; }
+    nav a.active { text-decoration: underline; text-underline-offset: 3px; }
+    nav a:hover  { color: #C8341A; }
 
     /* ── Two-column body ──────────────────────────────────── */
     .content {
@@ -131,11 +130,7 @@
     .section-label { margin-bottom: 16px; }
 
     /* ── Bio ──────────────────────────────────────────────── */
-    .bio p {
-      font-size: var(--size-h3);
-      font-weight: 600;
-      line-height: 24px;
-      color: #1A1A1A;
+    .bio h2 {
       margin-bottom: 12px;
     }
 
@@ -277,8 +272,8 @@
       <div class="left-col">
         <h2 class="section-label">Welcome!</h2>
         <div class="bio">
-          <p>I'm currently a product designer and brand design lead at Guac, a YC startup making products for grocery stores. Previously, I was a designer at Afresh.</p>
-          <p>I'm interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</p>
+          <h2>I'm currently a product designer and brand design lead at Guac, a YC startup making products for grocery stores. Previously, I was a designer at Afresh.</h2>
+          <h2>I'm interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</h2>
         </div>
 
         <div class="work-section">
