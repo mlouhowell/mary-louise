@@ -313,6 +313,20 @@
       margin-bottom: 12px;
     }
 
+    .mlw-save-edits {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 0;
+      background: #2A2018;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.15s;
+    }
+    .mlw-save-edits:hover { opacity: 0.75; }
+
     .mlw-clear-edits {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px;
@@ -541,7 +555,8 @@
       </div>
       ${editUnlocked ? `
         <div class="mlw-edit-active-label">Edit mode on — click any text to edit</div>
-        <button class="mlw-clear-edits">Clear all edits</button>
+        <button class="mlw-save-edits">Save &amp; lock</button>
+        <button class="mlw-clear-edits" style="margin-top:6px">Clear all edits</button>
       ` : `
         <div class="mlw-pw-row">
           <input class="mlw-pw-input" type="password" placeholder="Password">
@@ -560,6 +575,13 @@
     });
 
     if (editUnlocked) {
+      contentSection.querySelector('.mlw-save-edits').addEventListener('click', () => {
+        savePageContent();
+        editUnlocked = false;
+        disableEditing();
+        renderContentSection();
+      });
+
       contentSection.querySelector('.mlw-clear-edits').addEventListener('click', () => {
         localStorage.removeItem(CONTENT_KEY);
         tagAndRestoreContent();
