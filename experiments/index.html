@@ -62,8 +62,9 @@
     .page-inner::-webkit-scrollbar { display: none; }
 
     .header {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: var(--gap-cols);
       align-items: flex-start;
       margin-bottom: var(--gap-section);
     }
@@ -80,9 +81,8 @@
     nav {
       display: flex;
       flex-direction: column;
-      text-align: right;
+      text-align: left;
       padding-top: 6px;
-      flex-shrink: 0;
     }
 
     nav a {
