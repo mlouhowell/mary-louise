@@ -250,6 +250,92 @@
       background: rgba(0,0,0,0.08);
       margin: 4px 20px 0;
     }
+
+    /* Content editing section */
+    .mlw-content-section { padding: 18px 20px 20px; }
+
+    .mlw-content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .mlw-lock-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 0;
+      line-height: 1;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .mlw-lock-btn:hover { opacity: 1; }
+
+    .mlw-pw-row { display: flex; gap: 6px; }
+
+    .mlw-pw-input {
+      flex: 1;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      padding: 6px 10px;
+      border: 1px solid rgba(0,0,0,0.15);
+      background: #fff;
+      outline: none;
+      color: #2A2018;
+    }
+    .mlw-pw-input:focus { border-color: #C8341A; }
+
+    .mlw-pw-submit {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      background: #2A2018;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .mlw-pw-submit:hover { opacity: 0.75; }
+
+    .mlw-pw-error {
+      font-size: 11px;
+      color: #C8341A;
+      margin-top: 6px;
+    }
+
+    .mlw-edit-active-label {
+      font-size: 12px;
+      color: rgba(42,32,24,0.6);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .mlw-clear-edits {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px;
+      padding: 6px 0;
+      background: none;
+      border: 1px solid rgba(0,0,0,0.15);
+      cursor: pointer;
+      color: #2A2018;
+      width: 100%;
+      transition: opacity 0.15s;
+    }
+    .mlw-clear-edits:hover { opacity: 0.6; }
+
+    /* Editable text highlight */
+    .mlw-editable {
+      outline: 1.5px dashed rgba(200,52,26,0.35) !important;
+      cursor: text !important;
+      border-radius: 1px;
+    }
+    .mlw-editable:focus {
+      outline: 1.5px solid #C8341A !important;
+      background: rgba(200,52,26,0.04) !important;
+    }
   `;
   document.head.appendChild(style);
 
@@ -386,6 +472,122 @@
 
     panel.appendChild(groupEl);
   });
+
+  /* ── content editing section ─────────────────────── */
+
+  const EDIT_PASSWORD = 'studio';  // ← change this
+  const CONTENT_KEY   = 'ml-content:' + location.pathname;
+  const EDIT_SEL      = '.page-inner h1, .page-inner h2, .page-inner h3, .bio p, .quote p, .quote cite, .experiment-label';
+
+  function loadPageContent() {
+    try { return JSON.parse(localStorage.getItem(CONTENT_KEY) || '{}'); } catch(e) { return {}; }
+  }
+
+  function savePageContent() {
+    const out = {};
+    document.querySelectorAll('.mlw-editable').forEach(el => {
+      if (el.dataset.mltext) out[el.dataset.mltext] = el.innerHTML;
+    });
+    localStorage.setItem(CONTENT_KEY, JSON.stringify(out));
+  }
+
+  function tagAndRestoreContent() {
+    const counts = {};
+    const saved  = loadPageContent();
+    document.querySelectorAll(EDIT_SEL).forEach(el => {
+      const tag = el.tagName.toLowerCase();
+      counts[tag] = (counts[tag] || 0) + 1;
+      const key = tag + '[' + counts[tag] + ']';
+      el.dataset.mltext = key;
+      if (saved[key]) el.innerHTML = saved[key];
+    });
+  }
+
+  function enableEditing() {
+    document.querySelectorAll('[data-mltext]').forEach(el => {
+      el.contentEditable = 'true';
+      el.classList.add('mlw-editable');
+      el.addEventListener('input', savePageContent);
+    });
+  }
+
+  function disableEditing() {
+    document.querySelectorAll('[data-mltext]').forEach(el => {
+      el.contentEditable = 'false';
+      el.classList.remove('mlw-editable');
+    });
+  }
+
+  // Tag elements + restore on load
+  tagAndRestoreContent();
+
+  // Build section
+  const contentDivider = document.createElement('div');
+  contentDivider.className = 'mlw-divider';
+  panel.appendChild(contentDivider);
+
+  const contentSection = document.createElement('div');
+  contentSection.className = 'mlw-content-section';
+
+  let editUnlocked = false;
+
+  function renderContentSection() {
+    contentSection.innerHTML = `
+      <div class="mlw-content-header">
+        <span class="mlw-group-label" style="margin:0">Content</span>
+        <button class="mlw-lock-btn" aria-label="Lock/unlock content editing">
+          ${editUnlocked ? '🔓' : '🔒'}
+        </button>
+      </div>
+      ${editUnlocked ? `
+        <div class="mlw-edit-active-label">Edit mode on — click any text to edit</div>
+        <button class="mlw-clear-edits">Clear all edits</button>
+      ` : `
+        <div class="mlw-pw-row">
+          <input class="mlw-pw-input" type="password" placeholder="Password">
+          <button class="mlw-pw-submit">Unlock</button>
+        </div>
+        <div class="mlw-pw-error" style="display:none">Incorrect password</div>
+      `}
+    `;
+
+    contentSection.querySelector('.mlw-lock-btn').addEventListener('click', () => {
+      if (editUnlocked) {
+        editUnlocked = false;
+        disableEditing();
+        renderContentSection();
+      }
+    });
+
+    if (editUnlocked) {
+      contentSection.querySelector('.mlw-clear-edits').addEventListener('click', () => {
+        localStorage.removeItem(CONTENT_KEY);
+        tagAndRestoreContent();
+        if (editUnlocked) enableEditing();
+      });
+    } else {
+      const pwInput  = contentSection.querySelector('.mlw-pw-input');
+      const pwSubmit = contentSection.querySelector('.mlw-pw-submit');
+      const pwError  = contentSection.querySelector('.mlw-pw-error');
+
+      function tryUnlock() {
+        if (pwInput.value === EDIT_PASSWORD) {
+          editUnlocked = true;
+          enableEditing();
+          renderContentSection();
+        } else {
+          pwError.style.display = 'block';
+          pwInput.value = '';
+        }
+      }
+
+      pwSubmit.addEventListener('click', tryUnlock);
+      pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+    }
+  }
+
+  renderContentSection();
+  panel.appendChild(contentSection);
 
   document.body.appendChild(panel);
 
