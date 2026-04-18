@@ -121,14 +121,14 @@
       font-weight: 600;
       letter-spacing: 0.13em;
       text-transform: uppercase;
-      color: #3A2E20;
+      color: #1A1A1A;
     }
     .mlw-close {
       background: none;
       border: none;
       cursor: pointer;
       padding: 2px;
-      color: #3A2E20;
+      color: #1A1A1A;
       opacity: 0.5;
       transition: opacity 0.15s;
       line-height: 1;
@@ -142,7 +142,7 @@
       font-weight: 600;
       letter-spacing: 0.13em;
       text-transform: uppercase;
-      color: #8B7A5E;
+      color: rgba(0,0,0,0.4);
       margin-bottom: 14px;
     }
 
@@ -156,11 +156,10 @@
 
     .mlw-label {
       font-size: 13px;
-      color: #2A2018;
+      color: #1A1A1A;
       font-weight: 400;
     }
 
-    /* Ruler slider */
     .mlw-slider-wrap { position: relative; display: flex; align-items: center; }
 
     .mlw-slider {
@@ -170,9 +169,9 @@
       height: 14px;
       background: repeating-linear-gradient(
         90deg,
-        #8B7A5E 0px, #8B7A5E 1px,
+        rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px,
         transparent 1px, transparent 5px,
-        #8B7A5E 5px, #8B7A5E 6px,
+        rgba(0,0,0,0.2) 5px, rgba(0,0,0,0.2) 6px,
         transparent 6px, transparent 10px
       );
       background-size: 10px 14px;
@@ -187,7 +186,7 @@
       -webkit-appearance: none;
       width: 12px;
       height: 14px;
-      background: #2A2018;
+      background: #1A1A1A;
       cursor: grab;
       border: none;
       border-radius: 0;
@@ -195,7 +194,7 @@
     .mlw-slider::-moz-range-thumb {
       width: 12px;
       height: 14px;
-      background: #2A2018;
+      background: #1A1A1A;
       cursor: grab;
       border: none;
       border-radius: 0;
@@ -204,13 +203,12 @@
 
     .mlw-value {
       font-size: 13px;
-      color: #2A2018;
+      color: #1A1A1A;
       font-variant-numeric: tabular-nums;
       min-width: 24px;
       text-align: right;
     }
 
-    /* Color swatch */
     .mlw-swatch-wrap {
       position: relative;
       width: 40px;
@@ -230,12 +228,11 @@
       padding: 0;
     }
 
-    /* Reset button */
     .mlw-reset {
       background: none;
       border: none;
       cursor: pointer;
-      color: #8B7A5E;
+      color: rgba(0,0,0,0.4);
       font-size: 14px;
       padding: 0 2px;
       line-height: 1;
@@ -283,7 +280,7 @@
       border: 1px solid rgba(0,0,0,0.15);
       background: #fff;
       outline: none;
-      color: #2A2018;
+      color: #1A1A1A;
     }
     .mlw-pw-input:focus { border-color: #C8341A; }
 
@@ -292,7 +289,7 @@
       font-size: 12px;
       font-weight: 600;
       padding: 6px 12px;
-      background: #2A2018;
+      background: #1A1A1A;
       color: #fff;
       border: none;
       cursor: pointer;
@@ -308,7 +305,7 @@
 
     .mlw-edit-active-label {
       font-size: 12px;
-      color: rgba(42,32,24,0.6);
+      color: rgba(0,0,0,0.5);
       line-height: 1.5;
       margin-bottom: 12px;
     }
@@ -318,7 +315,7 @@
       font-size: 12px;
       font-weight: 600;
       padding: 7px 0;
-      background: #2A2018;
+      background: #1A1A1A;
       color: #fff;
       border: none;
       cursor: pointer;
@@ -334,7 +331,7 @@
       background: none;
       border: 1px solid rgba(0,0,0,0.15);
       cursor: pointer;
-      color: #2A2018;
+      color: #1A1A1A;
       width: 100%;
       transition: opacity 0.15s;
     }
@@ -349,6 +346,69 @@
     .mlw-editable:focus {
       outline: 1.5px solid #C8341A !important;
       background: rgba(200,52,26,0.04) !important;
+    }
+
+    /* ── Image drop zones ─────────────────────────── */
+    .mlw-droppable {
+      outline: 2px dashed rgba(200,52,26,0.3);
+      cursor: copy;
+      transition: outline-color 0.15s, background 0.15s;
+    }
+    .mlw-droppable.mlw-drag-over {
+      outline-color: #C8341A;
+      background: rgba(200,52,26,0.05) !important;
+    }
+    .page-inner.mlw-drag-over-page {
+      outline: 2px dashed rgba(200,52,26,0.3);
+    }
+
+    /* Floated image wrapper */
+    .mlw-float-wrap {
+      box-sizing: border-box;
+      position: relative;
+    }
+    .mlw-float-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Image controls toolbar */
+    .mlw-img-menu {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      z-index: 200;
+      background: rgba(10,10,10,0.82);
+      padding: 4px 6px;
+      border-radius: 3px;
+      pointer-events: all;
+    }
+    .mlw-img-menu button {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 6px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      line-height: 1.3;
+      border-radius: 2px;
+      transition: background 0.1s;
+    }
+    .mlw-img-menu button:hover { background: rgba(255,255,255,0.28); }
+    .mlw-img-menu button[data-del] { background: rgba(200,52,26,0.7); }
+    .mlw-img-menu button[data-del]:hover { background: #C8341A; }
+    .mlw-img-sep {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.2);
+      margin: 0 2px;
+      flex-shrink: 0;
     }
   `;
   document.head.appendChild(style);
@@ -487,6 +547,288 @@
     panel.appendChild(groupEl);
   });
 
+  /* ── image management ─────────────────────────────── */
+
+  const IMG_KEY = 'ml-img:' + location.pathname;
+
+  function loadImgData() {
+    try { return JSON.parse(localStorage.getItem(IMG_KEY) || '[]'); } catch(e) { return []; }
+  }
+
+  function saveImgData() {
+    const out = [];
+    // Thumb slot images
+    document.querySelectorAll('[data-mlthumbid]').forEach(slot => {
+      const img = slot.querySelector('img[data-mlimg]');
+      if (img) {
+        out.push({ type: 'thumb', slotId: slot.dataset.mlthumbid, src: img.src });
+      }
+    });
+    // Floating images
+    document.querySelectorAll('.mlw-float-wrap[data-mlimg]').forEach(wrap => {
+      const img = wrap.querySelector('img');
+      if (!img) return;
+      out.push({
+        type:   'float',
+        id:     wrap.dataset.mlimg,
+        src:    img.src,
+        float:  wrap.dataset.mlfloat || 'left',
+        width:  wrap.dataset.mlwidth || '50',
+        target: wrap.dataset.mltarget || '.page-inner',
+      });
+    });
+    localStorage.setItem(IMG_KEY, JSON.stringify(out));
+  }
+
+  function clearImgData() {
+    localStorage.removeItem(IMG_KEY);
+    document.querySelectorAll('.mlw-float-wrap').forEach(el => el.remove());
+    document.querySelectorAll('[data-mlthumbid]').forEach(slot => {
+      const img = slot.querySelector('img[data-mlimg]');
+      if (!img) return;
+      slot.innerHTML = '';
+      const ph = document.createElement('span');
+      ph.className = slot.dataset.mlthumbclass || '';
+      ph.textContent = slot.dataset.mlthumbtext || '';
+      if (ph.className) slot.appendChild(ph);
+    });
+  }
+
+  function applyFloatStyle(wrap, floatDir, widthPct) {
+    const margin = floatDir === 'right'
+      ? '0 0 20px 28px'
+      : floatDir === 'none'
+      ? '0 0 24px 0'
+      : '0 28px 20px 0';
+    wrap.style.float   = floatDir === 'none' ? 'none' : floatDir;
+    wrap.style.width   = widthPct + '%';
+    wrap.style.margin  = margin;
+    wrap.style.display = floatDir === 'none' ? 'block' : '';
+    wrap.style.clear   = floatDir === 'none' ? 'both'  : '';
+  }
+
+  function showImgMenu(img, container, type) {
+    container.querySelectorAll('.mlw-img-menu').forEach(el => el.remove());
+    container.style.position = 'relative';
+
+    const menu = document.createElement('div');
+    menu.className = 'mlw-img-menu';
+
+    if (type === 'float') {
+      menu.innerHTML = `
+        <button data-w="37">S</button>
+        <button data-w="50">M</button>
+        <button data-w="62">L</button>
+        <button data-w="100">Full</button>
+        <span class="mlw-img-sep"></span>
+        <button data-f="left" title="Float left">◁</button>
+        <button data-f="none" title="No float">▽</button>
+        <button data-f="right" title="Float right">▷</button>
+        <span class="mlw-img-sep"></span>
+        <button data-del>✕</button>
+      `;
+      menu.querySelectorAll('[data-w]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          container.dataset.mlwidth = btn.dataset.w;
+          applyFloatStyle(container, container.dataset.mlfloat || 'left', btn.dataset.w);
+          saveImgData();
+        });
+      });
+      menu.querySelectorAll('[data-f]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          container.dataset.mlfloat = btn.dataset.f;
+          applyFloatStyle(container, btn.dataset.f, container.dataset.mlwidth || '50');
+          saveImgData();
+        });
+      });
+      menu.querySelector('[data-del]').addEventListener('click', e => {
+        e.stopPropagation();
+        container.remove();
+        saveImgData();
+      });
+    } else {
+      // Thumb type — just delete
+      menu.innerHTML = `<button data-del>✕ Remove</button>`;
+      menu.querySelector('[data-del]').addEventListener('click', e => {
+        e.stopPropagation();
+        container.innerHTML = '';
+        const ph = document.createElement('span');
+        ph.className = container.dataset.mlthumbclass || '';
+        ph.textContent = container.dataset.mlthumbtext || '';
+        if (ph.className) container.appendChild(ph);
+        saveImgData();
+      });
+    }
+
+    container.appendChild(menu);
+
+    setTimeout(() => {
+      function closeMenu(e) {
+        if (!menu.contains(e.target) && e.target !== img) {
+          menu.remove();
+          document.removeEventListener('click', closeMenu);
+        }
+      }
+      document.addEventListener('click', closeMenu);
+    }, 0);
+  }
+
+  function buildFloatWrap(src, floatDir, widthPct, id, targetSel) {
+    floatDir = floatDir || 'left';
+    widthPct = widthPct || '50';
+    id = id || ('fi-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5));
+
+    const wrap = document.createElement('div');
+    wrap.className = 'mlw-float-wrap';
+    wrap.dataset.mlimg    = id;
+    wrap.dataset.mlfloat  = floatDir;
+    wrap.dataset.mlwidth  = widthPct;
+    wrap.dataset.mltarget = targetSel || '.page-inner';
+    applyFloatStyle(wrap, floatDir, widthPct);
+
+    const img = document.createElement('img');
+    img.src = src;
+    wrap.appendChild(img);
+
+    img.addEventListener('click', e => {
+      if (!editUnlocked) return;
+      e.stopPropagation();
+      showImgMenu(img, wrap, 'float');
+    });
+
+    return wrap;
+  }
+
+  function restoreImgData() {
+    const stored = loadImgData();
+    stored.forEach(data => {
+      if (data.type === 'thumb') {
+        const slot = document.querySelector(`[data-mlthumbid="${data.slotId}"]`);
+        if (!slot) return;
+        slot.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = data.src;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        img.dataset.mlimg = 'thumb';
+        slot.appendChild(img);
+        img.addEventListener('click', e => {
+          if (!editUnlocked) return;
+          e.stopPropagation();
+          showImgMenu(img, slot, 'thumb');
+        });
+      } else if (data.type === 'float') {
+        const target = document.querySelector(data.target) ||
+                       document.querySelector('.left-col, .bio, .content, .page-inner');
+        if (!target) return;
+        const wrap = buildFloatWrap(data.src, data.float, data.width, data.id, data.target);
+        target.insertBefore(wrap, target.firstChild);
+      }
+    });
+  }
+
+  // Tag thumb slots with stable IDs and save placeholder info
+  document.querySelectorAll('.experiment-thumb, .project-thumb').forEach((el, i) => {
+    el.dataset.mlthumbid = 'thumb-' + i;
+    const ph = el.querySelector('.experiment-thumb-placeholder, .project-thumb-placeholder');
+    if (ph) {
+      el.dataset.mlthumbclass = ph.className;
+      el.dataset.mlthumbtext  = ph.textContent;
+    }
+  });
+
+  restoreImgData();
+
+  /* ── drag-and-drop ────────────────────────────────── */
+
+  function enableImageDrop() {
+    const page = document.querySelector('.page-inner');
+    if (!page) return;
+
+    document.querySelectorAll('[data-mlthumbid]').forEach(el => {
+      el.classList.add('mlw-droppable');
+    });
+
+    page.addEventListener('dragover',  onDragOver);
+    page.addEventListener('dragleave', onDragLeave);
+    page.addEventListener('drop',      onDrop);
+  }
+
+  function disableImageDrop() {
+    const page = document.querySelector('.page-inner');
+    if (!page) return;
+
+    document.querySelectorAll('.mlw-droppable').forEach(el => el.classList.remove('mlw-droppable', 'mlw-drag-over'));
+    document.querySelectorAll('.mlw-img-menu').forEach(el => el.remove());
+    page.classList.remove('mlw-drag-over-page');
+
+    page.removeEventListener('dragover',  onDragOver);
+    page.removeEventListener('dragleave', onDragLeave);
+    page.removeEventListener('drop',      onDrop);
+  }
+
+  function onDragOver(e) {
+    if (!e.dataTransfer.types.includes('Files')) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    const thumb = e.target.closest('[data-mlthumbid]');
+    document.querySelectorAll('.mlw-drag-over').forEach(el => el.classList.remove('mlw-drag-over'));
+    e.currentTarget.classList.remove('mlw-drag-over-page');
+    if (thumb) thumb.classList.add('mlw-drag-over');
+    else       e.currentTarget.classList.add('mlw-drag-over-page');
+  }
+
+  function onDragLeave(e) {
+    if (e.currentTarget.contains(e.relatedTarget)) return;
+    e.currentTarget.classList.remove('mlw-drag-over-page');
+    document.querySelectorAll('.mlw-drag-over').forEach(el => el.classList.remove('mlw-drag-over'));
+  }
+
+  function onDrop(e) {
+    e.preventDefault();
+    document.querySelectorAll('.mlw-drag-over').forEach(el => el.classList.remove('mlw-drag-over'));
+    e.currentTarget.classList.remove('mlw-drag-over-page');
+
+    const file = Array.from(e.dataTransfer.files).find(f => f.type.startsWith('image/'));
+    if (!file) return;
+
+    const thumbEl = e.target.closest('[data-mlthumbid]');
+    const reader  = new FileReader();
+
+    reader.onload = (ev) => {
+      const src = ev.target.result;
+
+      if (thumbEl) {
+        thumbEl.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        img.dataset.mlimg = 'thumb';
+        thumbEl.appendChild(img);
+        img.addEventListener('click', ev2 => {
+          if (!editUnlocked) return;
+          ev2.stopPropagation();
+          showImgMenu(img, thumbEl, 'thumb');
+        });
+      } else {
+        // Float in nearest content area
+        const contentSelectors = ['.left-col', '.bio', '.content'];
+        let target = null, targetSel = '.page-inner';
+        for (const sel of contentSelectors) {
+          const el = document.querySelector(sel);
+          if (el) { target = el; targetSel = sel; break; }
+        }
+        if (!target) target = document.querySelector('.page-inner');
+
+        const wrap = buildFloatWrap(src, 'left', '50', null, targetSel);
+        target.insertBefore(wrap, target.firstChild);
+      }
+      saveImgData();
+    };
+    reader.readAsDataURL(file);
+  }
+
   /* ── content editing section ─────────────────────── */
 
   const EDIT_PASSWORD = '1California';
@@ -523,6 +865,7 @@
       el.classList.add('mlw-editable');
       el.addEventListener('input', savePageContent);
     });
+    enableImageDrop();
   }
 
   function disableEditing() {
@@ -530,9 +873,9 @@
       el.contentEditable = 'false';
       el.classList.remove('mlw-editable');
     });
+    disableImageDrop();
   }
 
-  // Tag elements + restore on load
   tagAndRestoreContent();
 
   // Build section
@@ -554,7 +897,7 @@
         </button>
       </div>
       ${editUnlocked ? `
-        <div class="mlw-edit-active-label">Edit mode on — click any text to edit</div>
+        <div class="mlw-edit-active-label">Edit mode on — click text to edit, drag images onto the page</div>
         <button class="mlw-save-edits">Save &amp; lock</button>
         <button class="mlw-clear-edits" style="margin-top:6px">Clear all edits</button>
       ` : `
@@ -577,6 +920,7 @@
     if (editUnlocked) {
       contentSection.querySelector('.mlw-save-edits').addEventListener('click', () => {
         savePageContent();
+        saveImgData();
         editUnlocked = false;
         disableEditing();
         renderContentSection();
@@ -584,6 +928,7 @@
 
       contentSection.querySelector('.mlw-clear-edits').addEventListener('click', () => {
         localStorage.removeItem(CONTENT_KEY);
+        clearImgData();
         tagAndRestoreContent();
         if (editUnlocked) enableEditing();
       });
