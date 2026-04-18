@@ -348,6 +348,24 @@
       background: rgba(200,52,26,0.04) !important;
     }
 
+    /* ── Grid overlay ────────────────────────────── */
+    .mlw-grid-overlay {
+      position: absolute;
+      top: var(--pad-page-v, 56px);
+      left: var(--pad-page-h, 80px);
+      right: var(--pad-page-h, 80px);
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: var(--gap-cols, 80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .mlw-grid-col {
+      background: rgba(200, 52, 26, 0.05);
+      outline: 1px solid rgba(200, 52, 26, 0.15);
+    }
+
     /* ── Image drop zones ─────────────────────────── */
     .mlw-droppable {
       outline: 2px dashed rgba(200,52,26,0.3);
@@ -728,6 +746,23 @@
     });
   }
 
+  /* ── grid overlay ─────────────────────────────────── */
+
+  let gridOverlay = null;
+
+  function showGridOverlay() {
+    const page = document.querySelector('.page-inner');
+    if (!page || gridOverlay) return;
+    gridOverlay = document.createElement('div');
+    gridOverlay.className = 'mlw-grid-overlay';
+    gridOverlay.innerHTML = '<div class="mlw-grid-col"></div><div class="mlw-grid-col"></div>';
+    page.appendChild(gridOverlay);
+  }
+
+  function hideGridOverlay() {
+    if (gridOverlay) { gridOverlay.remove(); gridOverlay = null; }
+  }
+
   // Tag thumb slots with stable IDs and save placeholder info
   document.querySelectorAll('.experiment-thumb, .project-thumb').forEach((el, i) => {
     el.dataset.mlthumbid = 'thumb-' + i;
@@ -865,6 +900,7 @@
       el.classList.add('mlw-editable');
       el.addEventListener('input', savePageContent);
     });
+    showGridOverlay();
     enableImageDrop();
   }
 
@@ -873,6 +909,7 @@
       el.contentEditable = 'false';
       el.classList.remove('mlw-editable');
     });
+    hideGridOverlay();
     disableImageDrop();
   }
 
