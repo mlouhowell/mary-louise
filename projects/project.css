@@ -21,7 +21,6 @@
   --pad-page-v:   56px;
   --gap-section:  56px;
   --gap-cols:     80px;
-  --triangle-size: 180px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -143,7 +142,7 @@ nav a:hover { color: #C8341A; }
 
 .section p {
   font-size: var(--size-body);
-  line-height: 1.7;
+  line-height: 24px;
   color: #0D0D0D;
   margin-bottom: 12px;
 }
@@ -226,37 +225,6 @@ footer a {
 footer a:hover { color: #0D0D0D; }
 .footer-links  { display: flex; gap: 20px; }
 
-/* ── Page-turn triangle ───────────────────────────── */
-
-.page-turn {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: var(--triangle-size);
-  height: var(--triangle-size);
-  display: block;
-  cursor: pointer;
-  z-index: 100;
-  text-decoration: none;
-}
-
-.page-turn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 50%, #010101 50%);
-}
-
-.page-turn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--color-triangle) 50%, transparent 50%);
-  transition: opacity 0.15s;
-}
-
-.page-turn:hover::after { opacity: 0.8; }
-
 /* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 800px) {
@@ -268,7 +236,6 @@ footer a:hover { color: #0D0D0D; }
     --size-nav:  16px;
     --pad-page-h: 24px;
     --gap-cols:   40px;
-    --triangle-size: 100px;
   }
 
   .header       { grid-template-columns: 1fr; }
