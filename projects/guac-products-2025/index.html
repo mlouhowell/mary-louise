@@ -5,217 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guac Products — ML Howell</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Inter+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --color-work:         #CC6FAD;
-      --color-about:        #4E9AC3;
-      --color-experiments:  #F1DFC1;
-      --color-project-bg:   #FFFFFF;
-      --color-triangle:     #0D0D0D;
-
-      --font-body:    'Inter', system-ui, sans-serif;
-      --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
-
-      --size-hero:    48px;
-      --size-nav:     20px;
-      --size-label:   12px;
-      --size-body:    16px;
-      --size-meta:    14px;
-
-      --pad-page-h:   80px;
-      --pad-page-v:   56px;
-      --gap-section:  56px;
-      --triangle-size: 440px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--font-body);
-      background-color: var(--color-project-bg);
-      min-height: 100vh;
-      color: #0D0D0D;
-      overflow-x: hidden;
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: var(--pad-page-v) var(--pad-page-h);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: var(--gap-section);
-    }
-
-    h1 {
-      font-family: var(--font-display);
-      font-size: var(--size-hero);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.05;
-    }
-
-    nav {
-      display: flex;
-      flex-direction: column;
-      text-align: right;
-      padding-top: 6px;
-      flex-shrink: 0;
-    }
-
-    nav a {
-      font-family: var(--font-display);
-      font-size: var(--size-nav);
-      font-weight: 400;
-      color: #0D0D0D;
-      text-decoration: none;
-      line-height: 1.35;
-      letter-spacing: -0.01em;
-      transition: opacity 0.15s;
-    }
-
-    nav a:hover { opacity: 0.55; }
-
-    /* Hero image */
-    .hero-image {
-      width: 100%;
-      aspect-ratio: 16 / 8;
-      background: #EBEBEB;
-      overflow: hidden;
-      margin-bottom: var(--gap-section);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hero-image-placeholder {
-      font-size: 13px;
-      color: rgba(0,0,0,0.3);
-      letter-spacing: 0.04em;
-    }
-
-    /* Content sections */
-    .section-label {
-      font-size: var(--size-label);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(0,0,0,0.4);
-      margin-bottom: 12px;
-    }
-
-    .section {
-      max-width: 640px;
-      margin-bottom: var(--gap-section);
-    }
-
-    .section h2 {
-      font-family: var(--font-display);
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 12px;
-    }
-
-    .section p {
-      font-size: var(--size-body);
-      line-height: 1.7;
-      color: #0D0D0D;
-      margin-bottom: 12px;
-    }
-
-    /* Screenshot block */
-    .screenshot-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-      margin-bottom: var(--gap-section);
-    }
-
-    .screenshot {
-      background: #F4F4F4;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .screenshot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .screenshot-placeholder {
-      font-size: 13px;
-      color: rgba(0,0,0,0.3);
-      letter-spacing: 0.04em;
-    }
-
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 40px;
-      margin-top: auto;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    footer span,
-    footer a {
-      font-size: var(--size-meta);
-      color: rgba(0,0,0,0.4);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    footer a:hover { color: #0D0D0D; }
-    .footer-links  { display: flex; gap: 20px; }
-
-    .page-turn {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 0 var(--triangle-size) var(--triangle-size);
-      border-color: transparent transparent var(--color-triangle) transparent;
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    @media (max-width: 800px) {
-      :root {
-        --pad-page-h: 24px;
-        --size-hero: 28px;
-        --size-nav: 16px;
-        --triangle-size: 140px;
-      }
-      .screenshot-row { grid-template-columns: 1fr; }
-    }
-  </style>
+  <link rel="stylesheet" href="/projects/project.css">
 </head>
 <body>
 
-  <div class="page-turn"></div>
+  <a href="/" class="page-turn" aria-label="Back to Work"></a>
 
   <div class="page">
     <div class="header">
@@ -228,7 +22,6 @@
     </div>
 
     <div class="hero-image">
-      <!-- Replace src with actual hero image -->
       <span class="hero-image-placeholder">Hero image</span>
     </div>
 
@@ -242,14 +35,12 @@
       <p>Little blurb about the ordering app goes here.</p>
     </div>
 
-    <div class="screenshot-row">
-      <div class="screenshot">
-        <!-- Replace with app screenshot -->
-        <span class="screenshot-placeholder">Screenshot 1</span>
+    <div class="img-row col-2">
+      <div class="img-row-item">
+        <span class="img-placeholder">Screenshot 1</span>
       </div>
-      <div class="screenshot">
-        <!-- Replace with app screenshot -->
-        <span class="screenshot-placeholder">Screenshot 2</span>
+      <div class="img-row-item">
+        <span class="img-placeholder">Screenshot 2</span>
       </div>
     </div>
 
@@ -264,6 +55,7 @@
     </footer>
   </div>
 
+  <script src="/settings-widget.js?v=5"></script>
   <script>
     (function () {
       try {

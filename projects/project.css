@@ -1,0 +1,278 @@
+/* ── Shared styles for all project pages ───────────── */
+
+:root {
+  --color-work:         #CC6FAD;
+  --color-about:        #4E9AC3;
+  --color-experiments:  #F1DFC1;
+  --color-project-bg:   #FFFFFF;
+  --color-triangle:     #C8341A;
+
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
+
+  --size-h1:   40px;
+  --size-h2:   24px;
+  --size-h3:   20px;
+  --size-body: 16px;
+  --size-nav:  20px;
+  --size-label: 11px;
+
+  --pad-page-h:   80px;
+  --pad-page-v:   56px;
+  --gap-section:  56px;
+  --gap-cols:     80px;
+  --triangle-size: 180px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-project-bg);
+  min-height: 100vh;
+  color: #0D0D0D;
+  overflow-x: hidden;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--pad-page-v) var(--pad-page-h);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ───────────────────────────────────────── */
+
+.header {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: var(--gap-cols);
+  align-items: flex-start;
+  margin-bottom: var(--gap-section);
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--size-h1);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 40px;
+}
+
+h2 {
+  font-family: var(--font-body);
+  font-size: var(--size-h2);
+  font-weight: 600;
+  line-height: 32px;
+  color: #0D0D0D;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: var(--size-h3);
+  font-weight: 600;
+  line-height: 24px;
+  color: #0D0D0D;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding-top: 6px;
+  gap: 8px;
+}
+
+nav a {
+  font-family: var(--font-body);
+  font-size: var(--size-nav);
+  font-weight: 600;
+  color: #0D0D0D;
+  text-decoration: none;
+  line-height: 24px;
+  transition: opacity 0.15s;
+}
+
+nav a:hover { color: #C8341A; }
+
+/* ── Hero image ───────────────────────────────────── */
+
+.hero-image {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  background: #EBEBEB;
+  overflow: hidden;
+  margin-bottom: var(--gap-section);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-image-placeholder {
+  font-size: 13px;
+  color: rgba(0,0,0,0.3);
+  letter-spacing: 0.04em;
+}
+
+/* ── Content sections ─────────────────────────────── */
+
+.section-label {
+  font-size: var(--size-label);
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+  margin-bottom: 12px;
+}
+
+.section {
+  max-width: 720px;
+  margin-bottom: var(--gap-section);
+}
+
+.section h2 { margin-bottom: 12px; }
+
+.section p {
+  font-size: var(--size-body);
+  line-height: 1.7;
+  color: #0D0D0D;
+  margin-bottom: 12px;
+}
+
+/* ── Image blocks ─────────────────────────────────── */
+
+.img-full {
+  width: 100%;
+  overflow: hidden;
+  background: #F4F4F4;
+  margin-bottom: var(--gap-section);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-full img { width: 100%; display: block; }
+
+.img-row {
+  display: grid;
+  gap: 24px;
+  margin-bottom: var(--gap-section);
+}
+
+.img-row.col-2 { grid-template-columns: repeat(2, 1fr); }
+.img-row.col-3 { grid-template-columns: repeat(3, 1fr); }
+
+.img-row-item {
+  background: #F4F4F4;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+}
+
+.img-row-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.img-placeholder {
+  font-size: 13px;
+  color: rgba(0,0,0,0.3);
+  letter-spacing: 0.04em;
+}
+
+/* ── Two-col layout within a section ─────────────── */
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: var(--gap-cols);
+  margin-bottom: var(--gap-section);
+  align-items: start;
+}
+
+/* ── Footer ───────────────────────────────────────── */
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 40px;
+  margin-top: auto;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+footer span,
+footer a {
+  font-size: 12px;
+  color: rgba(0,0,0,0.4);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+footer a:hover { color: #0D0D0D; }
+.footer-links  { display: flex; gap: 20px; }
+
+/* ── Page-turn triangle ───────────────────────────── */
+
+.page-turn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: var(--triangle-size);
+  height: var(--triangle-size);
+  display: block;
+  cursor: pointer;
+  z-index: 100;
+  text-decoration: none;
+}
+
+.page-turn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 50%, #010101 50%);
+}
+
+.page-turn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-triangle) 50%, transparent 50%);
+  transition: opacity 0.15s;
+}
+
+.page-turn:hover::after { opacity: 0.8; }
+
+/* ── Responsive ───────────────────────────────────── */
+
+@media (max-width: 800px) {
+  :root {
+    --size-h1:   28px;
+    --size-h2:   20px;
+    --size-h3:   17px;
+    --size-body: 15px;
+    --size-nav:  16px;
+    --pad-page-h: 24px;
+    --gap-cols:   40px;
+    --triangle-size: 100px;
+  }
+
+  .header       { grid-template-columns: 1fr; }
+  .img-row.col-2,
+  .img-row.col-3 { grid-template-columns: 1fr; }
+  .two-col      { grid-template-columns: 1fr; }
+}
