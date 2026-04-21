@@ -201,12 +201,13 @@ nav a:hover { color: #C8341A; }
 
 footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding-top: 40px;
   margin-top: auto;
   flex-wrap: wrap;
   gap: 16px;
+  column-gap: 20px;
 }
 
 footer span,
