@@ -206,6 +206,115 @@
     }
     .page-turn:hover::after { opacity: 0.8; }
 
+    /* ── Experiment cards ────────────────────────────── */
+    .experiment-item {
+      cursor: pointer;
+    }
+    .experiment-item:hover .experiment-thumb {
+      opacity: 0.85;
+    }
+    .experiment-item:focus-visible {
+      outline: 2px solid #1A1A1A;
+      outline-offset: 3px;
+    }
+    .experiment-thumb { transition: opacity 0.15s; }
+
+    /* ── Modal ───────────────────────────────────────── */
+    .exp-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .exp-modal.is-open { display: flex; }
+
+    .exp-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .exp-modal-panel {
+      position: relative;
+      background: #fff;
+      width: 100%;
+      max-width: 600px;
+      max-height: 88vh;
+      overflow-y: auto;
+      margin: 24px;
+      scrollbar-width: none;
+    }
+    .exp-modal-panel::-webkit-scrollbar { display: none; }
+
+    .exp-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1A1A1A;
+      opacity: 0.45;
+      transition: opacity 0.15s;
+      z-index: 1;
+      padding: 0;
+    }
+    .exp-modal-close:hover { opacity: 1; }
+
+    .exp-modal-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .exp-modal-body {
+      padding: 24px 28px 32px;
+    }
+
+    .exp-modal-title {
+      font-family: var(--font-display);
+      font-size: var(--size-h2);
+      font-weight: 600;
+      line-height: 1.3;
+      color: #1A1A1A;
+      margin-bottom: 10px;
+    }
+
+    .exp-modal-desc {
+      font-size: var(--size-body);
+      line-height: 1.6;
+      color: rgba(0,0,0,0.65);
+      margin-bottom: 16px;
+    }
+    .exp-modal-desc:empty { display: none; }
+
+    .exp-modal-link {
+      display: inline-block;
+      font-size: var(--size-body);
+      color: #1A1A1A;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity 0.15s;
+    }
+    .exp-modal-link:hover { opacity: 0.55; }
+    .exp-modal-link[hidden] { display: none; }
+
+    @media (max-width: 800px) {
+      .exp-modal { align-items: flex-end; }
+      .exp-modal-panel {
+        margin: 0;
+        max-width: 100%;
+        max-height: 85vh;
+      }
+    }
+
     @media (max-width: 800px) {
       :root {
         --size-h1:   28px;
@@ -236,35 +345,35 @@
 
     <div class="grid">
 
-      <div class="experiment-item">
+      <div class="experiment-item" data-slug="comma" role="button" tabindex="0" aria-label="View Comma — voice note tool">
         <div class="experiment-thumb">
           <img src="images/Comma.gif" alt="Comma voice note tool">
         </div>
         <h3 class="experiment-label">Comma — voice note tool</h3>
       </div>
 
-      <div class="experiment-item">
+      <div class="experiment-item" data-slug="image-models" role="button" tabindex="0" aria-label="View Image model experiments">
         <div class="experiment-thumb">
           <img src="images/Frame_2.png" alt="Image model experiments">
         </div>
         <h3 class="experiment-label">Image model experiments</h3>
       </div>
 
-      <div class="experiment-item">
+      <div class="experiment-item" data-slug="postly" role="button" tabindex="0" aria-label="View Postly — postcard app">
         <div class="experiment-thumb">
           <img src="images/Postly_feed.png" alt="Postly postcard app">
         </div>
         <h3 class="experiment-label">Postly — postcard app</h3>
       </div>
 
-      <div class="experiment-item">
+      <div class="experiment-item" data-slug="run-club" role="button" tabindex="0" aria-label="View Seven A.M. Run Club — logo design">
         <div class="experiment-thumb">
           <img src="images/Running_logos.png" alt="Seven A.M. Run Club logo design">
         </div>
         <h3 class="experiment-label">Seven A.M. Run Club — logo design</h3>
       </div>
 
-      <div class="experiment-item">
+      <div class="experiment-item" data-slug="pixel-art" role="button" tabindex="0" aria-label="View Pixel art icon set">
         <div class="experiment-thumb">
           <img src="images/Icon_set.png" alt="Pixel art icon set">
         </div>
@@ -286,6 +395,25 @@
     <a href="/" class="page-turn" aria-label="Back to Work"></a>
   </div>
 
+  <!-- Experiment detail modal -->
+  <div class="exp-modal" id="exp-modal" role="dialog" aria-modal="true" aria-labelledby="exp-modal-title">
+    <div class="exp-modal-backdrop"></div>
+    <div class="exp-modal-panel">
+      <button class="exp-modal-close" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 2L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <img class="exp-modal-img" src="" alt="">
+      <div class="exp-modal-body">
+        <h2 class="exp-modal-title" id="exp-modal-title"></h2>
+        <p class="exp-modal-desc"></p>
+        <a class="exp-modal-link" href="" target="_blank" rel="noopener noreferrer" hidden></a>
+      </div>
+    </div>
+  </div>
+
   <script src="/settings-widget.js?v=10"></script>
   <script>
     (function () {
@@ -296,6 +424,136 @@
         const root = document.documentElement;
         Object.entries(s).forEach(([k, v]) => root.style.setProperty(k, v));
       } catch (e) {}
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const EXPERIMENTS = {
+        'comma': {
+          title: 'Comma — voice note tool',
+          desc:  '',
+          img:   'images/Comma.gif',
+          alt:   'Comma voice note tool',
+          link:  null,
+        },
+        'image-models': {
+          title: 'Image model experiments',
+          desc:  '',
+          img:   'images/Frame_2.png',
+          alt:   'Image model experiments',
+          link:  null,
+        },
+        'postly': {
+          title: 'Postly — postcard app',
+          desc:  '',
+          img:   'images/Postly_feed.png',
+          alt:   'Postly postcard app',
+          link:  null,
+        },
+        'run-club': {
+          title: 'Seven A.M. Run Club — logo design',
+          desc:  '',
+          img:   'images/Running_logos.png',
+          alt:   'Seven A.M. Run Club logo design',
+          link:  null,
+        },
+        'pixel-art': {
+          title: 'Pixel art icon set',
+          desc:  '',
+          img:   'images/Icon_set.png',
+          alt:   'Pixel art icon set',
+          link:  null,
+        },
+      };
+
+      const modal      = document.getElementById('exp-modal');
+      const panel      = modal.querySelector('.exp-modal-panel');
+      const backdrop   = modal.querySelector('.exp-modal-backdrop');
+      const closeBtn   = modal.querySelector('.exp-modal-close');
+      const modalImg   = modal.querySelector('.exp-modal-img');
+      const modalTitle = modal.querySelector('.exp-modal-title');
+      const modalDesc  = modal.querySelector('.exp-modal-desc');
+      const modalLink  = modal.querySelector('.exp-modal-link');
+
+      let prevFocus = null;
+      let scrollTop = 0;
+
+      function openModal(slug, push) {
+        const data = EXPERIMENTS[slug];
+        if (!data) return;
+
+        modalImg.src             = data.img;
+        modalImg.alt             = data.alt;
+        modalTitle.textContent   = data.title;
+        modalDesc.textContent    = data.desc;
+        if (data.link) {
+          modalLink.href         = data.link;
+          modalLink.textContent  = 'View project ↗';
+          modalLink.removeAttribute('hidden');
+        } else {
+          modalLink.setAttribute('hidden', '');
+        }
+
+        scrollTop = document.querySelector('.page-inner')?.scrollTop || 0;
+        document.body.style.overflow = 'hidden';
+        prevFocus = document.activeElement;
+
+        modal.classList.add('is-open');
+        modal.removeAttribute('aria-hidden');
+        closeBtn.focus();
+
+        if (push) history.pushState({ slug }, '', '#' + slug);
+      }
+
+      function closeModal(push) {
+        if (!modal.classList.contains('is-open')) return;
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        const pi = document.querySelector('.page-inner');
+        if (pi) pi.scrollTop = scrollTop;
+        if (prevFocus) prevFocus.focus();
+        if (push) history.pushState({}, '', location.pathname);
+      }
+
+      // Focus trap
+      panel.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        const focusable = panel.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+        }
+      });
+
+      // Card clicks + keyboard
+      document.querySelectorAll('.experiment-item[data-slug]').forEach(function (item) {
+        item.addEventListener('click', function () { openModal(item.dataset.slug, true); });
+        item.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(item.dataset.slug, true); }
+        });
+      });
+
+      // Close triggers
+      closeBtn.addEventListener('click',   function () { closeModal(true); });
+      backdrop.addEventListener('click',   function () { closeModal(true); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal(true);
+      });
+
+      // Back / forward button
+      window.addEventListener('popstate', function () {
+        const slug = location.hash.slice(1);
+        if (slug && EXPERIMENTS[slug]) openModal(slug, false);
+        else closeModal(false);
+      });
+
+      // Direct link on load
+      const initSlug = location.hash.slice(1);
+      if (initSlug && EXPERIMENTS[initSlug]) openModal(initSlug, false);
     })();
   </script>
 
