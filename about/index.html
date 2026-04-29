@@ -176,6 +176,32 @@
       }
     }
 
+    .profile-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1360 / 768;
+      margin-bottom: 20px;
+    }
+
+    .profile-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-frame-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: var(--color-text);
+      -webkit-mask-image: url('/About%20me%20image/Doodle%20Frame.svg');
+      mask-image: url('/About%20me%20image/Doodle%20Frame.svg');
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
     .bio-links {
       display: flex;
       flex-direction: column;
@@ -291,6 +317,10 @@
           <h2>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</h2>
         </div>
         <div class="bio-links">
+          <div class="profile-wrap">
+            <img src="/About%20me%20image/Image%20that%20fits%20within%20the%20frame.jpg" class="profile-photo" alt="ML Howell">
+            <div class="profile-frame-overlay"></div>
+          </div>
           <h2 class="section-label">Contact me</h2>
           <a href="mailto:marylouisehowell@gmail.com">Email</a>
           <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>
