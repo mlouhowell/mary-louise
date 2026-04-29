@@ -77,8 +77,8 @@
   style.textContent = `
     .mlw-trigger {
       position: fixed;
-      bottom: 28px;
-      left: 28px;
+      top: 24px;
+      right: 24px;
       z-index: 9999;
       width: 32px;
       height: 32px;
@@ -97,17 +97,18 @@
 
     .mlw-panel {
       position: fixed;
-      bottom: 0;
-      left: 0;
+      top: 0;
+      right: 0;
       z-index: 9998;
       width: 280px;
       max-height: 100vh;
       overflow-y: auto;
       background: #FFFFFF;
       font-family: 'Inter', system-ui, sans-serif;
-      transform: translateY(calc(100% + 4px));
+      transform: translateY(calc(-100% - 4px));
       transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-      padding-bottom: 72px;
+      padding-top: 72px;
+      padding-bottom: 24px;
     }
     .mlw-panel.open { transform: translateY(0); }
 
@@ -262,11 +263,9 @@
   trigger.className = 'mlw-trigger';
   trigger.setAttribute('aria-label', 'Open settings');
   trigger.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1" y="3" width="12" height="1.2" fill="white"/>
-    <rect x="1" y="6.4" width="12" height="1.2" fill="white"/>
-    <rect x="1" y="9.8" width="12" height="1.2" fill="white"/>
-    <rect x="3.5" y="1.8" width="1.4" height="3.6" fill="white"/>
-    <rect x="8" y="5.2" width="1.4" height="3.6" fill="white"/>
+    <path d="M12 2L4.5 9.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M4.5 9.5L3 11" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M2.5 12.5C2.5 12.5 1.5 11 2.5 10C3.5 9 5 10 4.5 11.5C4.2 12.5 3 13.5 2.5 12.5Z" fill="white"/>
   </svg>`;
   document.body.appendChild(trigger);
 
