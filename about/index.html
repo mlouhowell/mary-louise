@@ -125,13 +125,12 @@
 
     .bio {
       display: grid;
-      grid-template-columns: 1fr 1fr 0.75fr;
+      grid-template-columns: 1.25fr 0.75fr;
       gap: var(--gap-cols);
       align-items: start;
     }
 
     .bio-copy {
-      grid-column: span 2;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -220,9 +219,8 @@
         --gap-cols: 40px;
         --triangle-size: 72px;
       }
-      .header   { grid-template-columns: 1fr; gap: 24px; }
-      .bio      { grid-template-columns: 1fr; }
-      .bio-copy { grid-column: span 1; }
+      .header { grid-template-columns: 1fr; gap: 24px; }
+      .bio    { grid-template-columns: 1fr; }
     }
   </style>
 </head>
