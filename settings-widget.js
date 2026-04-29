@@ -126,18 +126,6 @@
       text-transform: uppercase;
       color: #1A1A1A;
     }
-    .mlw-close {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 2px;
-      color: #1A1A1A;
-      opacity: 0.5;
-      transition: opacity 0.15s;
-      line-height: 1;
-    }
-    .mlw-close:hover { opacity: 1; }
-
     .mlw-group { padding: 18px 20px 8px; }
 
     .mlw-group-label {
@@ -277,7 +265,6 @@
   panel.innerHTML = `
     <div class="mlw-header">
       <span class="mlw-title">Settings</span>
-      <button class="mlw-close" aria-label="Close">&#9632;</button>
     </div>
   `;
 
@@ -409,10 +396,6 @@
     trigger.innerHTML = isOpen ? ICON_CLOSE : ICON_BRUSH;
   });
 
-  panel.querySelector('.mlw-close').addEventListener('click', () => {
-    panel.classList.remove('open');
-    trigger.innerHTML = ICON_BRUSH;
-  });
 
   /* ── apply saved settings on load ────────────────── */
 
