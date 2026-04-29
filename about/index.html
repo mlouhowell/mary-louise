@@ -131,9 +131,45 @@
     }
 
     .bio-copy {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      display: block;
+    }
+
+    .bio-copy h2 {
+      margin-bottom: 16px;
+    }
+
+    .bio-copy h2:last-child {
+      margin-bottom: 0;
+    }
+
+    .bio-illus {
+      display: block;
+      height: auto;
+      width: 52%;
+    }
+
+    .bio-illus-right {
+      float: right;
+      margin: 4px 0 20px 28px;
+    }
+
+    .bio-illus-left {
+      float: left;
+      margin: 4px 28px 20px 0;
+    }
+
+    .bio-copy::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    @media (max-width: 800px) {
+      .bio-illus {
+        width: 100%;
+        float: none;
+        margin: 0 0 20px;
+      }
     }
 
     .bio-links {
@@ -240,9 +276,11 @@
     <div class="content">
       <div class="bio">
         <div class="bio-copy">
+          <img src="/Illustrations/Golden%20Gate.svg" class="bio-illus bio-illus-right" alt="Golden Gate Bridge illustration">
           <h2>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</h2>
           <h2>Most recently, I was a product designer and brand design lead at Guac, a startup solving grocery food waste with AI. I've spent the last two years designing solutions for store teams in grocery stores who need to know how many strawberries to order or sandwiches to make. As the first designer on the team, I led the work of new products, features, and have helped to shape the Guac brand.</h2>
           <h2>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</h2>
+          <img src="/Illustrations/Swimmer.svg" class="bio-illus bio-illus-left" alt="Swimmer illustration">
           <h2>My boyfriend and I built Street Cleaning Parking in 2024, an iOS app that helps people avoid parking tickets.</h2>
           <h2>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</h2>
         </div>
@@ -254,7 +292,6 @@
           <a href="https://drive.google.com/file/d/1VOLKVJ8wWKylwi6IQKMF0EewdIpzMVSg/view" target="_blank">Resume</a>
         </div>
       </div>
-      <img src="/about/sf-illustration.png" alt="San Francisco illustration" style="width:100%;display:block;margin-top:var(--gap-section);">
     </div>
 
     <footer>
