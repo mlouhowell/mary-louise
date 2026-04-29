@@ -43,6 +43,41 @@
     },
   ];
 
+  /* ── contrast helpers ────────────────────────────── */
+
+  function hexLuminance(hex) {
+    hex = hex.replace('#', '');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    const r = parseInt(hex.slice(0,2), 16) / 255;
+    const g = parseInt(hex.slice(2,4), 16) / 255;
+    const b = parseInt(hex.slice(4,6), 16) / 255;
+    const lin = c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  }
+
+  function contrastText(hex) {
+    const L = hexLuminance(hex);
+    const whiteContrast = 1.05 / (L + 0.05);
+    const darkContrast  = (L + 0.05) / 0.0606; // #1A1A1A relative luminance + 0.05
+    return whiteContrast >= darkContrast ? '#FFFFFF' : '#1A1A1A';
+  }
+
+  function currentPageBgVar() {
+    const p = location.pathname;
+    if (p.startsWith('/about'))       return '--color-about';
+    if (p.startsWith('/experiments')) return '--color-experiments';
+    if (p.startsWith('/projects'))    return null;
+    return '--color-work';
+  }
+
+  function refreshTextColor() {
+    const bgVar = currentPageBgVar();
+    if (!bgVar) return;
+    const saved = loadSaved();
+    const hex   = (saved[bgVar] || DEFAULTS[bgVar] || '#ffffff').trim();
+    applyVar('--color-text', contrastText(hex));
+  }
+
   /* ── helpers ──────────────────────────────────────── */
 
   function loadSaved() {
@@ -306,6 +341,7 @@
           hexDisplay.textContent = colorInput.value.toUpperCase();
           applyVar(item.var, colorInput.value);
           saveAll();
+          refreshTextColor();
         });
 
         swatchWrap.appendChild(colorInput);
@@ -329,6 +365,7 @@
           hexDisplay.textContent = def.toUpperCase();
           applyVar(item.var, def);
           saveAll();
+          refreshTextColor();
         });
         row.appendChild(resetBtn);
 
@@ -400,5 +437,6 @@
 
   const saved = loadSaved();
   Object.entries(saved).forEach(([k, v]) => applyVar(k, v));
+  refreshTextColor();
 
 })();

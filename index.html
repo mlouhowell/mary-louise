@@ -13,6 +13,7 @@
       --color-experiments:  #F1DFC1;
       --color-project-bg:   #FFFFFF;
       --color-triangle:     #C8341A;
+      --color-text:         #1A1A1A;
 
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
@@ -36,7 +37,7 @@
       font-family: var(--font-body);
       background-color: #010101;
       min-height: 100vh;
-      color: #1A1A1A;
+      color: var(--color-text);
       overflow-x: hidden;
     }
 
@@ -86,7 +87,7 @@
       font-size: var(--size-h2);
       font-weight: 600;
       line-height: 1.35;
-      color: #1A1A1A;
+      color: var(--color-text);
     }
 
     h3 {
@@ -94,7 +95,7 @@
       font-size: var(--size-h3);
       font-weight: 600;
       line-height: 1.2;
-      color: #1A1A1A;
+      color: var(--color-text);
     }
 
     nav {
@@ -109,7 +110,7 @@
       font-family: var(--font-body);
       font-size: var(--size-h3);
       font-weight: 600;
-      color: #010101;
+      color: var(--color-text);
       text-decoration: none;
       line-height: 1.2;
       transition: opacity 0.15s;
@@ -162,7 +163,7 @@
 
     .project-caption a {
       font-size: var(--size-body);
-      color: #0D0D0D;
+      color: var(--color-text);
       text-decoration: underline;
       text-underline-offset: 3px;
       transition: opacity 0.15s;
@@ -181,7 +182,7 @@
 
     .quote cite {
       font-size: var(--size-body);
-      color: #1A1A1A;
+      color: var(--color-text);
       font-style: normal;
     }
 
@@ -200,12 +201,12 @@
     footer span,
     footer a {
       font-size: 12px;
-      color: #010101;
+      color: var(--color-text);
       text-decoration: none;
       transition: color 0.15s;
     }
 
-    footer a:hover { color: #1A1A1A; }
+    footer a:hover { opacity: 0.6; }
 
     .footer-links { display: flex; gap: 20px; }
 
@@ -358,9 +359,8 @@
     <a href="/about/" class="page-turn" aria-label="Next: About"></a>
   </div>
 
-  <script src="/settings-widget.js?v=10"></script>
+  <script src="/settings-widget.js?v=11"></script>
   <script>
-    // Apply saved settings from /settings page
     (function () {
       try {
         const saved = localStorage.getItem('ml-settings');
@@ -368,6 +368,17 @@
         const s = JSON.parse(saved);
         const root = document.documentElement;
         Object.entries(s).forEach(([k, v]) => root.style.setProperty(k, v));
+        // Pre-compute text color to avoid flash
+        const hex = (s['--color-work'] || '#CC6FAD').trim();
+        function lum(h) {
+          h = h.replace('#','');
+          if (h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+          const r=parseInt(h.slice(0,2),16)/255, g=parseInt(h.slice(2,4),16)/255, b=parseInt(h.slice(4,6),16)/255;
+          const l=c=>c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+          return 0.2126*l(r)+0.7152*l(g)+0.0722*l(b);
+        }
+        const L=lum(hex);
+        root.style.setProperty('--color-text', 1.05/(L+0.05) >= (L+0.05)/0.0606 ? '#FFFFFF' : '#1A1A1A');
       } catch (e) {}
     })();
   </script>
