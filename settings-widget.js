@@ -393,8 +393,26 @@
 
   /* ── toggle ───────────────────────────────────────── */
 
-  trigger.addEventListener('click', () => panel.classList.toggle('open'));
-  panel.querySelector('.mlw-close').addEventListener('click', () => panel.classList.remove('open'));
+  const ICON_BRUSH = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2L4.5 9.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M4.5 9.5L3 11" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M2.5 12.5C2.5 12.5 1.5 11 2.5 10C3.5 9 5 10 4.5 11.5C4.2 12.5 3 13.5 2.5 12.5Z" fill="white"/>
+  </svg>`;
+
+  const ICON_CLOSE = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2L12 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M12 2L2 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`;
+
+  trigger.addEventListener('click', () => {
+    const isOpen = panel.classList.toggle('open');
+    trigger.innerHTML = isOpen ? ICON_CLOSE : ICON_BRUSH;
+  });
+
+  panel.querySelector('.mlw-close').addEventListener('click', () => {
+    panel.classList.remove('open');
+    trigger.innerHTML = ICON_BRUSH;
+  });
 
   /* ── apply saved settings on load ────────────────── */
 
