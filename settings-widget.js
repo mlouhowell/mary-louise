@@ -337,6 +337,11 @@
     }
     .mlw-clear-edits:hover { opacity: 0.6; }
 
+    /* Hide on mobile */
+    @media (max-width: 800px) {
+      .mlw-trigger, .mlw-panel { display: none !important; }
+    }
+
     /* Editable text highlight */
     .mlw-editable {
       outline: 1.5px dashed rgba(200,52,26,0.35) !important;
