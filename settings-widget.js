@@ -77,8 +77,8 @@
   style.textContent = `
     .mlw-trigger {
       position: fixed;
-      top: 24px;
-      right: 24px;
+      top: 8px;
+      right: 20px;
       z-index: 9999;
       width: 32px;
       height: 32px;
@@ -107,7 +107,6 @@
       font-family: 'Inter', system-ui, sans-serif;
       transform: translateY(calc(-100% - 4px));
       transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-      padding-top: 72px;
       padding-bottom: 24px;
     }
     .mlw-panel.open { transform: translateY(0); }
