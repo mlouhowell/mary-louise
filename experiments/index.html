@@ -35,7 +35,7 @@
 
     body {
       font-family: var(--font-body);
-      background-color: #010101;
+      background-color: var(--color-experiments);
       min-height: 100vh;
       color: var(--color-text);
       overflow-x: hidden;
@@ -43,8 +43,8 @@
 
     .page {
       position: fixed;
-      top: 40px;
-      bottom: 40px;
+      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
       max-width: 1200px;
@@ -66,10 +66,14 @@
 
     .header {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: var(--gap-cols);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
       align-items: flex-start;
       margin-bottom: var(--gap-section);
+    }
+
+    .header h1 {
+      grid-column: 1 / 3;
     }
 
     h1 {
@@ -119,29 +123,27 @@
     nav a:hover  { color: #C8341A; }
 
     .grid {
-      display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: var(--gap-cols);
+      columns: 3;
+      column-gap: 24px;
       flex: 1;
-      align-content: start;
     }
 
-    .experiment-item { display: flex; flex-direction: column; gap: 10px; }
+    .experiment-item {
+      display: flex;
+      flex-direction: column;
+      break-inside: avoid;
+      margin-bottom: 52px;
+    }
 
     .experiment-thumb {
       width: 100%;
-      aspect-ratio: 4 / 3;
       background: rgba(0,0,0,0.08);
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .experiment-thumb img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
       display: block;
     }
 
@@ -149,15 +151,63 @@
       font-size: 13px;
       color: rgba(0,0,0,0.3);
       letter-spacing: 0.04em;
+      padding: 40px;
     }
 
-    .experiment-label {
+    .experiment-meta {
+      padding: 10px 0 13px;
+      border-bottom: 1px solid rgba(0,0,0,0.13);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .meta-name {
+      font-family: var(--font-body);
       font-size: var(--size-body);
-      font-weight: 400;
-      line-height: 24px;
+      font-weight: 500;
       color: var(--color-text);
-      text-decoration: underline;
-      text-underline-offset: 3px;
+      line-height: 1.3;
+    }
+
+    .meta-arrow {
+      font-size: 13px;
+      color: rgba(0,0,0,0.35);
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    .meta-bottom {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta-date {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(0,0,0,0.45);
+    }
+
+    .meta-pill {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.08);
+      padding: 2px 6px;
+      border-radius: 3px;
+      line-height: 1.6;
     }
 
     footer {
@@ -182,32 +232,6 @@
     footer a:hover { opacity: 0.6; }
     .footer-links  { display: flex; gap: 20px; }
 
-    .page-turn {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: var(--triangle-size);
-      height: var(--triangle-size);
-      display: block;
-      cursor: pointer;
-      z-index: 100;
-      text-decoration: none;
-    }
-    .page-turn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 50%, #010101 50%);
-    }
-    .page-turn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--color-triangle) 50%, transparent 50%);
-      transition: opacity 0.15s;
-    }
-    .page-turn:hover::after { opacity: 0.8; }
-
     /* ── Experiment cards ────────────────────────────── */
     .experiment-item {
       cursor: pointer;
@@ -215,6 +239,10 @@
     .experiment-item:hover .experiment-thumb {
       opacity: 0.85;
     }
+    .experiment-item:hover .meta-name {
+      color: #C8341A;
+    }
+    .meta-name { transition: color 0.15s; }
     .experiment-item:focus-visible {
       outline: 2px solid #1A1A1A;
       outline-offset: 3px;
@@ -242,8 +270,8 @@
       position: relative;
       background: #fff;
       width: 100%;
-      max-width: 600px;
-      max-height: 88vh;
+      max-width: 880px;
+      max-height: 92vh;
       overflow-y: auto;
       margin: 24px;
       scrollbar-width: none;
@@ -252,55 +280,58 @@
 
     .exp-modal-close {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: 20px;
+      right: 24px;
       background: none;
       border: none;
       cursor: pointer;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1A1A1A;
-      opacity: 0.45;
+      color: #0D0D0D;
+      opacity: 0.35;
       transition: opacity 0.15s;
       z-index: 1;
       padding: 0;
     }
     .exp-modal-close:hover { opacity: 1; }
+    .exp-modal-close svg { width: 16px; height: 16px; }
 
     .exp-modal-img {
       width: 100%;
       height: auto;
       display: block;
+      background: #F4F4F4;
     }
 
     .exp-modal-body {
-      padding: 24px 28px 32px;
+      padding: 40px 56px 56px;
     }
 
     .exp-modal-title {
       font-family: var(--font-display);
-      font-size: var(--size-h2);
+      font-size: var(--size-h1);
       font-weight: 600;
-      line-height: 1.3;
-      color: #1A1A1A;
-      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: #0D0D0D;
+      margin-bottom: 16px;
     }
 
     .exp-modal-desc {
       font-size: var(--size-body);
       line-height: 1.6;
-      color: rgba(0,0,0,0.65);
-      margin-bottom: 16px;
+      color: #0D0D0D;
+      margin-bottom: 24px;
     }
     .exp-modal-desc:empty { display: none; }
 
     .exp-modal-link {
       display: inline-block;
       font-size: var(--size-body);
-      color: #1A1A1A;
+      color: #0D0D0D;
       text-decoration: underline;
       text-underline-offset: 3px;
       transition: opacity 0.15s;
@@ -313,8 +344,10 @@
       .exp-modal-panel {
         margin: 0;
         max-width: 100%;
-        max-height: 85vh;
+        max-height: 88vh;
       }
+      .exp-modal-body { padding: 28px 24px 40px; }
+      .exp-modal-title { font-size: var(--size-h2); }
     }
 
     @media (max-width: 800px) {
@@ -328,7 +361,7 @@
         --triangle-size: 72px;
       }
       .header { grid-template-columns: 1fr; gap: 24px; }
-      .grid   { grid-template-columns: 1fr; }
+      .grid   { columns: 1; column-gap: 0; }
     }
   </style>
 </head>
@@ -337,7 +370,7 @@
   <div class="page">
     <div class="page-inner">
     <div class="header">
-      <h1>I like to experiment with image models, build my own apps, and I'm always playing with new tools</h1>
+      <h1>My experiments</h1>
       <nav>
         <a href="/">Work</a>
         <a href="/about/">About</a>
@@ -351,35 +384,80 @@
         <div class="experiment-thumb">
           <img src="images/Comma.gif" alt="Comma voice note tool">
         </div>
-        <h3 class="experiment-label">Comma — voice note tool</h3>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Comma — voice note tool</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2024</span>
+            <span class="meta-pill">Product</span>
+          </div>
+        </div>
       </div>
 
       <div class="experiment-item" data-slug="image-models" role="button" tabindex="0" aria-label="View Image model experiments">
         <div class="experiment-thumb">
           <img src="images/Frame_2.png" alt="Image model experiments">
         </div>
-        <h3 class="experiment-label">Image model experiments</h3>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Image model experiments</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2024</span>
+            <span class="meta-pill">AI</span>
+          </div>
+        </div>
       </div>
 
       <div class="experiment-item" data-slug="postly" role="button" tabindex="0" aria-label="View Postly — postcard app">
         <div class="experiment-thumb">
           <img src="images/Postly_feed.png" alt="Postly postcard app">
         </div>
-        <h3 class="experiment-label">Postly — postcard app</h3>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Postly — postcard app</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2023</span>
+            <span class="meta-pill">Product</span>
+          </div>
+        </div>
       </div>
 
       <div class="experiment-item" data-slug="run-club" role="button" tabindex="0" aria-label="View Seven A.M. Run Club — logo design">
         <div class="experiment-thumb">
           <img src="images/Running_logos.png" alt="Seven A.M. Run Club logo design">
         </div>
-        <h3 class="experiment-label">Seven A.M. Run Club — logo design</h3>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Seven A.M. Run Club — logo design</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2024</span>
+            <span class="meta-pill">Branding</span>
+          </div>
+        </div>
       </div>
 
       <div class="experiment-item" data-slug="pixel-art" role="button" tabindex="0" aria-label="View Pixel art icon set">
         <div class="experiment-thumb">
           <img src="images/Icon_set.png" alt="Pixel art icon set">
         </div>
-        <h3 class="experiment-label">Pixel art icon set</h3>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Pixel art icon set</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2023</span>
+            <span class="meta-pill">Illustration</span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -394,7 +472,6 @@
       </div>
     </footer>
     </div><!-- /.page-inner -->
-    <a href="/" class="page-turn" aria-label="Back to Work"></a>
   </div>
 
   <!-- Experiment detail modal -->
@@ -416,7 +493,7 @@
     </div>
   </div>
 
-  <script src="/settings-widget.js?v=17"></script>
+  <script src="/settings-widget.js?v=21"></script>
   <script>
     (function () {
       try {

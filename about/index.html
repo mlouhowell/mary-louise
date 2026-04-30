@@ -35,7 +35,7 @@
 
     body {
       font-family: var(--font-body);
-      background-color: #010101;
+      background-color: var(--color-about);
       min-height: 100vh;
       color: var(--color-text);
       overflow-x: hidden;
@@ -43,8 +43,8 @@
 
     .page {
       position: fixed;
-      top: 40px;
-      bottom: 40px;
+      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
       max-width: 1200px;
@@ -66,10 +66,14 @@
 
     .header {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: var(--gap-cols);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
       align-items: flex-start;
       margin-bottom: var(--gap-section);
+    }
+
+    .header h1 {
+      grid-column: 1 / 3;
     }
 
     h1 {
@@ -126,62 +130,20 @@
 
     .bio {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: var(--gap-cols);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
       align-items: start;
     }
 
-    .bio-copy {
-      display: block;
-    }
-
-    .bio-copy h2 {
-      margin-bottom: 16px;
-    }
-
-    .bio-copy h2:last-child {
-      margin-bottom: 0;
-    }
-
-    .bio-illus {
-      display: block;
-      height: auto;
-      width: 52%;
-    }
-
-    .bio-illus-right {
-      float: right;
-      margin: 4px 0 20px 28px;
-    }
-
-    .bio-illus-left {
-      float: left;
-      margin: 4px 28px 20px 0;
-    }
-
-    .bio-clear {
-      clear: both;
-    }
-
-    .bio-copy::after {
-      content: '';
-      display: table;
-      clear: both;
-    }
-
-    @media (max-width: 800px) {
-      .bio-illus {
-        width: 100%;
-        float: none;
-        margin: 0 0 20px;
-      }
+    .bio-photo-wrap {
+      grid-column: 3;
+      width: 100%;
     }
 
     .profile-wrap {
       position: relative;
       width: 100%;
       aspect-ratio: 1360 / 768;
-      margin-bottom: 20px;
     }
 
     .profile-photo {
@@ -203,30 +165,27 @@
       mask-size: 100% 100%;
     }
 
-    .bio-links {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .bio-copy {
+      grid-column: 1 / 3;
+      grid-row: 1;
+      position: relative;
     }
 
-    .bio-links .section-label {
-      font-size: var(--size-h2);
-      font-weight: 600;
-      color: var(--color-text);
-      margin-bottom: 4px;
+    .bio-illus {
+      position: absolute;
+      height: auto;
+      filter: invert(var(--illus-invert, 0));
+      transition: filter 0.15s;
     }
 
-    .bio-links a {
+    .bio-line {
+      position: absolute;
+      white-space: nowrap;
       font-family: var(--font-body);
-      font-size: var(--size-h3);
-      font-weight: 600;
+      font-size: var(--size-body);
+      line-height: 27px;
       color: var(--color-text);
-      text-decoration: none;
-      line-height: 1.2;
-      transition: opacity 0.15s;
     }
-
-    .bio-links a:hover { color: #C8341A; }
 
     footer {
       display: flex;
@@ -248,32 +207,7 @@
     }
 
     footer a:hover { opacity: 0.6; }
-
-    .page-turn {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: var(--triangle-size);
-      height: var(--triangle-size);
-      display: block;
-      cursor: pointer;
-      z-index: 100;
-      text-decoration: none;
-    }
-    .page-turn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 50%, #010101 50%);
-    }
-    .page-turn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--color-triangle) 50%, transparent 50%);
-      transition: opacity 0.15s;
-    }
-    .page-turn:hover::after { opacity: 0.8; }
+    .footer-links { display: flex; gap: 20px; }
 
     @media (max-width: 800px) {
       :root {
@@ -286,10 +220,14 @@
         --gap-cols: 40px;
         --triangle-size: 72px;
       }
-      .header { grid-template-columns: 1fr; gap: 24px; }
-      .bio    { grid-template-columns: 1fr; }
+      .header           { grid-template-columns: 1fr; gap: 24px; }
+      .header h1        { grid-column: 1; }
+      .bio              { grid-template-columns: 1fr; }
+      .bio-copy         { grid-column: 1; grid-row: auto; }
+      .bio-photo-wrap   { grid-column: 1; width: 100%; }
     }
   </style>
+
 </head>
 <body>
 
@@ -306,39 +244,38 @@
 
     <div class="content">
       <div class="bio">
-        <div class="bio-copy">
-          <!-- TODO: Add /Illustrations/Ireland.svg here (bio-illus-right) when available -->
-          <img src="/Illustrations/Golden%20Gate.svg" class="bio-illus bio-illus-right" alt="San Francisco illustration">
-          <h2>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</h2>
-          <div class="bio-clear"></div>
-          <h2>Most recently, I was a product designer and brand design lead at Guac, a YC startup solving grocery food waste with AI. Here, I designed products that helped grocers predict how much to order and how much to make for fresh food with an expiration date. As the first designer on the team, I led the work of new products, features, and helped to shape the Guac brand.</h2>
-          <!-- TODO: Add /Illustrations/Sandwich.svg here (bio-illus-left) when available -->
-          <h2>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</h2>
-          <img src="/Illustrations/Swimmer.svg" class="bio-illus bio-illus-right" alt="Swimmer by Alcatraz illustration">
-          <h2>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</h2>
-        </div>
-        <div class="bio-links">
+        <div class="bio-photo-wrap">
           <div class="profile-wrap">
-            <img src="/About%20me%20image/Image%20that%20fits%20within%20the%20frame.png" class="profile-photo" alt="ML Howell">
-            <div class="profile-frame-overlay"></div>
+            <img src="/About%20me%20image/DSC05853%203.JPG" class="profile-photo" alt="ML Howell">
           </div>
-          <h2 class="section-label">Contact me</h2>
-          <a href="mailto:marylouisehowell@gmail.com">Email</a>
-          <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>
-          <a href="https://twitter.com/marlouiise" target="_blank">X</a>
-          <a href="https://drive.google.com/file/d/1VOLKVJ8wWKylwi6IQKMF0EewdIpzMVSg/view" target="_blank">Resume</a>
+        </div>
+        <div class="bio-copy" id="bio-copy">
+          <img src="/Illustrations/Sandwich.svg"    class="bio-illus" style="top:492px; left:53%; width:38%;"  alt="Sandwich illustration">
+          <img src="/Illustrations/Golden Gate.svg" class="bio-illus" style="top:58px;  left:0;    width:100%;" alt="Golden Gate illustration">
+          <img src="/Illustrations/Swimmer.svg"     class="bio-illus" style="top:710px; left:0;    width:50%;"  alt="Swimmer by Alcatraz illustration">
+          <div id="bio-text-source" hidden>
+            <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
+            <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
+            <p>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</p>
+            <p>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</p>
+          </div>
         </div>
       </div>
     </div>
 
     <footer>
       <span>2026 © ML Howell V1.1</span>
+      <div class="footer-links">
+        <a href="mailto:marylouisehowell@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/marlouiise" target="_blank">X</a>
+        <a href="https://drive.google.com/file/d/1VOLKVJ8wWKylwi6IQKMF0EewdIpzMVSg/view" target="_blank">Resume</a>
+      </div>
     </footer>
     </div><!-- /.page-inner -->
-    <a href="/experiments/" class="page-turn" aria-label="Next: Experiments"></a>
   </div>
 
-  <script src="/settings-widget.js?v=17"></script>
+  <script src="/settings-widget.js?v=21"></script>
   <script>
     (function () {
       try {
@@ -356,9 +293,111 @@
           return 0.2126*l(r)+0.7152*l(g)+0.0722*l(b);
         }
         const L=lum(hex);
-        root.style.setProperty('--color-text', 1.05/(L+0.05) >= (L+0.05)/0.0606 ? '#FFFFFF' : '#1A1A1A');
+        const isLight = 1.05/(L+0.05) >= (L+0.05)/0.0606;
+        root.style.setProperty('--color-text', isLight ? '#FFFFFF' : '#1A1A1A');
+        root.style.setProperty('--illus-invert', isLight ? '1' : '0');
       } catch (e) {}
     })();
+  </script>
+
+  <script type="module">
+  import { prepareWithSegments, layoutNextLineRange, materializeLineRange }
+    from 'https://esm.sh/@chenglou/pretext'
+
+  const FONT     = '16px Inter'
+  const LINE_H   = 27    // 16px * 1.65
+  const PARA_GAP = 48
+  const IMG_GAP  = 14
+
+  const bioCopy = document.getElementById('bio-copy')
+
+  async function layoutBio() {
+    await document.fonts.ready
+
+    const colW = bioCopy.clientWidth
+
+    // Clamp images so they never overflow the column
+    bioCopy.querySelectorAll('.bio-illus').forEach(img => {
+      const maxLeft = colW - img.offsetWidth
+      if (img.offsetLeft > maxLeft) img.style.left = Math.max(0, maxLeft) + 'px'
+      if (img.offsetLeft < 0)       img.style.left = '0px'
+    })
+
+    // Image bounds relative to bio-copy
+    const imgs = Array.from(bioCopy.querySelectorAll('.bio-illus')).map(img => ({
+      top:    img.offsetTop,
+      left:   img.offsetLeft,
+      right:  img.offsetLeft + img.offsetWidth,
+      bottom: img.offsetTop  + img.offsetHeight,
+    }))
+
+    // Paragraph texts from hidden source
+    const paras = Array.from(document.querySelectorAll('#bio-text-source p'))
+      .map(p => p.textContent.trim()).filter(Boolean)
+
+    // Clear previous render
+    bioCopy.querySelectorAll('.bio-line').forEach(el => el.remove())
+
+    let y = 0
+
+    for (let pi = 0; pi < paras.length; pi++) {
+      const prepared = prepareWithSegments(paras[pi], FONT)
+      let cursor = { segmentIndex: 0, graphemeIndex: 0 }
+
+      while (true) {
+        // Skip y past any full-width image whose midline overlaps this row
+        let advanced = true
+        while (advanced) {
+          advanced = false
+          const midY = y + LINE_H / 2
+          for (const img of imgs) {
+            const isFullWidth = img.left < colW * 0.1 && img.right > colW * 0.85
+            if (isFullWidth && midY >= img.top && midY < img.bottom) {
+              y = img.bottom + IMG_GAP
+              advanced = true
+            }
+          }
+        }
+
+        // Calculate line x and available width (skip full-width images)
+        let lineX = 0
+        let lineW = colW
+        const midY = y + LINE_H / 2
+        for (const img of imgs) {
+          const isFullWidth = img.left < colW * 0.1 && img.right > colW * 0.85
+          if (!isFullWidth && midY >= img.top && midY < img.bottom) {
+            if (img.left < colW / 2) {
+              lineX = Math.max(lineX, img.right + IMG_GAP)
+              lineW = colW - lineX
+            } else {
+              lineW = Math.min(lineW, img.left - IMG_GAP)
+            }
+          }
+        }
+
+        const range = layoutNextLineRange(prepared, cursor, Math.max(lineW, 60))
+        if (!range) break
+
+        const line = materializeLineRange(prepared, range)
+        const span = document.createElement('span')
+        span.className = 'bio-line'
+        span.style.top  = y + 'px'
+        span.style.left = lineX + 'px'
+        span.textContent = line.text
+        bioCopy.appendChild(span)
+
+        cursor = range.end
+        y += LINE_H
+      }
+
+      if (pi < paras.length - 1) y += PARA_GAP
+    }
+
+    bioCopy.style.height = (y + 40) + 'px'
+  }
+
+  document.fonts.ready.then(layoutBio)
+  window.addEventListener('resize', layoutBio)
   </script>
 
 </body>
