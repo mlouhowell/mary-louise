@@ -44,27 +44,12 @@
 
     /* ── Page layout ──────────────────────────────────────── */
     .page {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
       max-width: 1200px;
       margin: 0 auto;
-      background-color: var(--color-work);
-      overflow: hidden;
-    }
-
-    .page-inner {
-      height: 100%;
-      overflow-y: auto;
-      scrollbar-width: none;
       padding: var(--pad-page-v) var(--pad-page-h);
       display: flex;
       flex-direction: column;
     }
-
-    .page-inner::-webkit-scrollbar { display: none; }
 
     /* ── Header ───────────────────────────────────────────── */
     .header {
@@ -291,12 +276,12 @@
         --gap-cols: 40px;
         --triangle-size: 72px;
       }
-      .header  { grid-template-columns: 1fr; gap: 24px; }
+      .header  { grid-template-columns: 1fr; gap: var(--gap-section); }
       .header h1 { grid-column: 1; }
       .content { grid-template-columns: 1fr; }
       .content .bio-col,
       .content .work-col,
-      .content .right-col { grid-column: 1; }
+      .content .right-col { grid-column: 1; grid-row: auto; }
       .bio-col   { order: 1; grid-row: auto; }
       .right-col { order: 2; margin-top: var(--gap-section); grid-row: auto; }
       .work-col  { order: 3; margin-top: var(--gap-section); grid-row: auto; }
@@ -308,7 +293,6 @@
 <body>
 
   <div class="page">
-    <div class="page-inner">
     <div class="header">
       <h1>Hey, my name is ML.</h1>
       <nav>
@@ -439,7 +423,6 @@
         <a href="https://drive.google.com/file/d/1VOLKVJ8wWKylwi6IQKMF0EewdIpzMVSg/view" target="_blank">Resume</a>
       </div>
     </footer>
-    </div><!-- /.page-inner -->
   </div>
 
   <script src="/settings-widget.js?v=22"></script>
