@@ -147,16 +147,26 @@
     /* ── Work / project preview ───────────────────────────── */
     .work-section { margin-top: 0; }
 
+    .project-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 32px;
+    }
+
     .project-thumb {
       width: 100%;
       aspect-ratio: 16 / 9;
       background: rgba(0,0,0,0.1);
       overflow: hidden;
-      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: opacity 0.15s;
     }
+
+    .project-item:hover .project-thumb { opacity: 0.85; }
+    .project-item:hover .project-meta-name { color: #C8341A; }
 
     .project-thumb img {
       width: 100%;
@@ -171,21 +181,58 @@
       letter-spacing: 0.04em;
     }
 
-    .project-caption a {
-      font-size: var(--size-body);
-      color: var(--color-text);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      transition: opacity 0.15s;
-      display: block;
+    .project-meta {
+      padding: 10px 0 13px;
+      border-bottom: 1px solid rgba(0,0,0,0.13);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .project-caption a:hover { opacity: 0.55; }
+    .project-meta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
 
-    .project-type {
+    .project-meta-name {
       font-size: var(--size-body);
+      font-weight: 500;
       color: var(--color-text);
-      opacity: 0.55;
+      line-height: 1.3;
+      transition: color 0.15s;
+    }
+
+    .project-meta-arrow {
+      font-size: 13px;
+      color: rgba(0,0,0,0.35);
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    .project-meta-bottom {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-meta-date {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(0,0,0,0.45);
+    }
+
+    .project-meta-pill {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.08);
+      padding: 2px 6px;
+      border-radius: 3px;
+      line-height: 1.6;
     }
 
     /* ── Quotes ───────────────────────────────────────────── */
@@ -287,54 +334,102 @@
 
       <div class="work-col">
         <div class="work-section">
-          <h2 class="section-label">Work</h2>
 
-          <div class="project-thumb">
-            <img src="/projects/guac-products-2025/images/GuacProducts_Hero_2.png" alt="Guac Products">
-          </div>
-          <div class="project-caption">
-            <a href="/projects/guac-products-2025/">Guac Products</a>
-            <span class="project-type">iOS, Android, and Desktop</span>
-          </div>
+          <a href="/projects/guac-products-2025/" class="project-item">
+            <div class="project-thumb">
+              <img src="/projects/guac-products-2025/images/GuacProducts_Hero_2.png" alt="Guac Products">
+            </div>
+            <div class="project-meta">
+              <div class="project-meta-top">
+                <span class="project-meta-name">Guac Products</span>
+                <span class="project-meta-arrow">↗</span>
+              </div>
+              <div class="project-meta-bottom">
+                <span class="project-meta-date">2025</span>
+                <span class="project-meta-pill">Product</span>
+              </div>
+            </div>
+          </a>
 
-          <div class="project-thumb" style="margin-top: 32px;">
-            <img src="/projects/postly/Images/Hero.png" alt="Postly Postcard App">
-          </div>
-          <div class="project-caption">
-            <a href="/projects/postly/">Postly</a>
-            <span class="project-type">iOS App</span>
-          </div>
+          <a href="/projects/postly/" class="project-item">
+            <div class="project-thumb">
+              <img src="/projects/postly/Images/Hero.png" alt="Postly">
+            </div>
+            <div class="project-meta">
+              <div class="project-meta-top">
+                <span class="project-meta-name">Postly</span>
+                <span class="project-meta-arrow">↗</span>
+              </div>
+              <div class="project-meta-bottom">
+                <span class="project-meta-date">2023</span>
+                <span class="project-meta-pill">Product</span>
+              </div>
+            </div>
+          </a>
 
-          <div class="project-thumb" style="margin-top: 32px;">
-            <span class="project-thumb-placeholder">Project image</span>
-          </div>
-          <div class="project-caption">
-            <a href="/projects/streetcleaningparking/">Street Cleaning Parking</a>
-            <span class="project-type">iOS App</span>
-          </div>
+          <a href="/projects/streetcleaningparking/" class="project-item">
+            <div class="project-thumb">
+              <span class="project-thumb-placeholder">Project image</span>
+            </div>
+            <div class="project-meta">
+              <div class="project-meta-top">
+                <span class="project-meta-name">Street Cleaning Parking</span>
+                <span class="project-meta-arrow">↗</span>
+              </div>
+              <div class="project-meta-bottom">
+                <span class="project-meta-date">2023</span>
+                <span class="project-meta-pill">Product</span>
+              </div>
+            </div>
+          </a>
 
-          <div class="project-thumb" style="margin-top: 32px;">
-            <img src="/projects/guac/Images/Hero.png" alt="Guac Brand Identity">
-          </div>
-          <div class="project-caption">
-            <a href="/projects/guac/">Guac Exhibition Booth</a>
-            <span class="project-type">Brand Identity</span>
-          </div>
+          <a href="/projects/guac/" class="project-item">
+            <div class="project-thumb">
+              <img src="/projects/guac/Images/Hero.png" alt="Guac Exhibition Booth">
+            </div>
+            <div class="project-meta">
+              <div class="project-meta-top">
+                <span class="project-meta-name">Guac Exhibition Booth</span>
+                <span class="project-meta-arrow">↗</span>
+              </div>
+              <div class="project-meta-bottom">
+                <span class="project-meta-date">2024</span>
+                <span class="project-meta-pill">Branding</span>
+              </div>
+            </div>
+          </a>
 
-          <div class="project-thumb" style="margin-top: 32px;">
-            <img src="/projects/afresh-brand-refresh/Images/Hero.png" alt="Afresh Brand Refresh">
-          </div>
-          <div class="project-caption">
-            <a href="/projects/afresh-brand-refresh/">Afresh Refresh</a>
-            <span class="project-type">Brand Identity</span>
-          </div>
+          <a href="/projects/afresh-brand-refresh/" class="project-item">
+            <div class="project-thumb">
+              <img src="/projects/afresh-brand-refresh/Images/Hero.png" alt="Afresh Refresh">
+            </div>
+            <div class="project-meta">
+              <div class="project-meta-top">
+                <span class="project-meta-name">Afresh Refresh</span>
+                <span class="project-meta-arrow">↗</span>
+              </div>
+              <div class="project-meta-bottom">
+                <span class="project-meta-date">2022</span>
+                <span class="project-meta-pill">Branding</span>
+              </div>
+            </div>
+          </a>
 
-          <div class="project-thumb" style="margin-top: 32px;">
-            <span class="project-thumb-placeholder">Project image</span>
-          </div>
-          <div class="project-caption">
-            <a href="/projects/afreshdesignsystem/">Afresh Design System</a>
-          </div>
+          <a href="/projects/afreshdesignsystem/" class="project-item">
+            <div class="project-thumb">
+              <span class="project-thumb-placeholder">Project image</span>
+            </div>
+            <div class="project-meta">
+              <div class="project-meta-top">
+                <span class="project-meta-name">Afresh Design System</span>
+                <span class="project-meta-arrow">↗</span>
+              </div>
+              <div class="project-meta-bottom">
+                <span class="project-meta-date">2022</span>
+                <span class="project-meta-pill">Systems</span>
+              </div>
+            </div>
+          </a>
 
         </div>
       </div>
