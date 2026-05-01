@@ -304,7 +304,7 @@
     // Load saved settings
     function loadSettings() {
       try {
-        const saved = localStorage.getItem('ml-settings');
+        const saved = sessionStorage.getItem('ml-settings');
         return saved ? JSON.parse(saved) : {};
       } catch (e) { return {}; }
     }
@@ -372,13 +372,13 @@
         const val = el.type === 'range' ? el.value + 'px' : el.value;
         settings[varName] = val;
       });
-      localStorage.setItem('ml-settings', JSON.stringify(settings));
+      sessionStorage.setItem('ml-settings', JSON.stringify(settings));
       showToast('Settings saved');
     });
 
     // Reset
     document.getElementById('btn-reset').addEventListener('click', () => {
-      localStorage.removeItem('ml-settings');
+      sessionStorage.removeItem('ml-settings');
       document.querySelectorAll('[data-var]').forEach(el => {
         const varName = el.dataset.var;
         const def = DEFAULTS[varName];

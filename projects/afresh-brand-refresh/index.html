@@ -146,11 +146,11 @@
     </footer>
   </div>
 
-  <script src="/settings-widget.js?v=37"></script>
+  <script src="/settings-widget.js?v=39"></script>
   <script>
     (function () {
       try {
-        const saved = localStorage.getItem('ml-settings');
+        const saved = sessionStorage.getItem('ml-settings');
         if (!saved) return;
         const s = JSON.parse(saved);
         const root = document.documentElement;

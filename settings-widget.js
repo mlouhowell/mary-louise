@@ -83,7 +83,7 @@
   /* ── helpers ──────────────────────────────────────── */
 
   function loadSaved() {
-    try { return JSON.parse(localStorage.getItem('ml-settings') || '{}'); } catch (e) { return {}; }
+    try { return JSON.parse(sessionStorage.getItem('ml-settings') || '{}'); } catch (e) { return {}; }
   }
 
   function saveAll() {
@@ -91,7 +91,7 @@
     panel.querySelectorAll('[data-mlvar]').forEach(el => {
       s[el.dataset.mlvar] = el.dataset.mltype === 'range' ? el.value + 'px' : el.value;
     });
-    localStorage.setItem('ml-settings', JSON.stringify(s));
+    sessionStorage.setItem('ml-settings', JSON.stringify(s));
   }
 
   function applyVar(name, value) {
@@ -306,6 +306,9 @@
 
   /* ── apply saved settings on all pages ──────────── */
   const isMobile = window.innerWidth <= 800;
+  if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+    sessionStorage.removeItem('ml-settings');
+  }
   const saved = loadSaved();
   Object.entries(saved).forEach(([k, v]) => {
     if (isMobile && k === '--pad-page-h') return;
@@ -435,7 +438,7 @@
 
         slider.addEventListener('input', () => {
           valDisplay.textContent = slider.value;
-          applyVar(item.var, slider.value + 'px');
+          if (!(isMobile && item.var === '--pad-page-h')) applyVar(item.var, slider.value + 'px');
           saveAll();
         });
 
@@ -447,7 +450,7 @@
           const def = parseInt(rawDefault(item.var));
           slider.value = def;
           valDisplay.textContent = def;
-          applyVar(item.var, def + 'px');
+          if (!(isMobile && item.var === '--pad-page-h')) applyVar(item.var, def + 'px');
           saveAll();
         });
         row.appendChild(resetBtn);
@@ -484,7 +487,9 @@
     refreshTextColor();
     const s = loadSaved();
     s['--color-work'] = hex;
-    localStorage.setItem('ml-settings', JSON.stringify(s));
+    sessionStorage.setItem('ml-settings', JSON.stringify(s));
+    const input = panel.querySelector('[data-mlvar="--color-work"]');
+    if (input) input.value = hex;
   });
 
   const brushPath = trigger.querySelector('.mlw-brush-group');
