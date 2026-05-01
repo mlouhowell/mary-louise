@@ -113,12 +113,15 @@
     return '--color-work';
   }
 
-  function refreshTextColor() {
+  function refreshTextColor(hexOverride) {
     const bgVar = currentPageBgVar();
-    if (!bgVar) return;
-    const saved = loadSaved();
-    const hex   = (saved[bgVar] || DEFAULTS[bgVar] || '#ffffff').trim();
-    const text  = contrastText(hex);
+    if (!bgVar && !hexOverride) return;
+    let hex = hexOverride;
+    if (!hex) {
+      const saved = loadSaved();
+      hex = (saved[bgVar] || DEFAULTS[bgVar] || '#ffffff').trim();
+    }
+    const text    = contrastText(hex);
     const isLight = text === '#FFFFFF';
     applyVar('--color-text',    text);
     applyVar('--color-muted',   isLight ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.4)');
@@ -531,12 +534,18 @@
     if (!path) return;
     const hex = path.dataset.color;
     applyVar('--color-work', hex);
-    refreshTextColor();
+    refreshTextColor(hex);
     const s = loadSaved();
     s['--color-work'] = hex;
     sessionStorage.setItem('ml-settings', JSON.stringify(s));
     const input = panel.querySelector('[data-mlvar="--color-work"]');
-    if (input) { input.value = hex; input.dispatchEvent(new Event('input')); }
+    if (input) {
+      input.value = hex;
+      const swatchWrap = input.parentElement;
+      if (swatchWrap) swatchWrap.style.background = hex;
+      const hexDisplay = swatchWrap && swatchWrap.nextElementSibling;
+      if (hexDisplay) hexDisplay.textContent = hex.toUpperCase();
+    }
     const nextColor = shiftColor(hex);
     path.setAttribute('fill', nextColor);
     path.dataset.color = nextColor;
