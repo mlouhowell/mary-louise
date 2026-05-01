@@ -304,8 +304,17 @@
   `;
   document.head.appendChild(style);
 
-  /* ── skip on project pages ───────────────────────── */
-  if (location.pathname.startsWith('/projects') || location.pathname.startsWith('/about') || location.pathname.startsWith('/experiments')) return;
+  /* ── apply saved settings on all pages ──────────── */
+  const isMobile = window.innerWidth <= 800;
+  const saved = loadSaved();
+  Object.entries(saved).forEach(([k, v]) => {
+    if (isMobile && k === '--pad-page-h') return;
+    applyVar(k, v);
+  });
+  refreshTextColor();
+
+  /* ── UI only on home page ────────────────────────── */
+  if (!location.pathname.match(/^\/?(index\.html)?$/)) return;
 
   /* ── trigger button ───────────────────────────────── */
 
@@ -531,15 +540,5 @@
     }
   });
 
-
-  /* ── apply saved settings on load ────────────────── */
-
-  const isMobile = window.innerWidth <= 800;
-  const saved = loadSaved();
-  Object.entries(saved).forEach(([k, v]) => {
-    if (isMobile && k === '--pad-page-h') return;
-    applyVar(k, v);
-  });
-  refreshTextColor();
 
 })();
