@@ -281,20 +281,20 @@
     }
     .mlw-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 14px;
+      width: 14px;
+      height: 16px;
       background: #1A1A1A;
       cursor: grab;
       border: none;
-      border-radius: 0;
+      border-radius: 67% 33% 52% 48% / 42% 58% 42% 58%;
     }
     .mlw-slider::-moz-range-thumb {
-      width: 12px;
-      height: 14px;
+      width: 14px;
+      height: 16px;
       background: #1A1A1A;
       cursor: grab;
       border: none;
-      border-radius: 0;
+      border-radius: 67% 33% 52% 48% / 42% 58% 42% 58%;
     }
     .mlw-slider:active::-webkit-slider-thumb { cursor: grabbing; }
 
