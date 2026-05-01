@@ -211,7 +211,7 @@
 
     @media (max-width: 800px) {
       :root {
-        --size-h1:   26px;
+        --size-h1:   28px;
         --size-h2:   20px;
         --size-h3:   17px;
         --size-body: 15px;
@@ -220,7 +220,7 @@
         --gap-cols: 40px;
         --triangle-size: 72px;
       }
-      .header           { grid-template-columns: 1fr; gap: 24px; }
+      .header           { grid-template-columns: 1fr; gap: var(--gap-section); }
       .header h1        { grid-column: 1; }
       .bio              { grid-template-columns: 1fr; }
       .bio-copy         { grid-column: 1; grid-row: auto; }
