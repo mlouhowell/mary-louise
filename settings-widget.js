@@ -39,6 +39,53 @@
     },
   ];
 
+  /* ── color shift helpers ─────────────────────────── */
+
+  function hexToHsl(hex) {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.slice(0,2), 16) / 255;
+    const g = parseInt(hex.slice(2,4), 16) / 255;
+    const b = parseInt(hex.slice(4,6), 16) / 255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    let h, s, l = (max + min) / 2;
+    if (max === min) { h = s = 0; } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+        case g: h = ((b - r) / d + 2) / 6; break;
+        case b: h = ((r - g) / d + 4) / 6; break;
+      }
+    }
+    return [h * 360, s * 100, l * 100];
+  }
+
+  function hslToHex(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    let r, g, b;
+    if (s === 0) { r = g = b = l; } else {
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return '#' + [r, g, b].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('');
+  }
+
+  function shiftColor(hex) {
+    const [h, s, l] = hexToHsl(hex);
+    const newL = l > 55 ? Math.max(10, l - 20) : Math.min(90, l + 20);
+    return hslToHex(h, s, newL);
+  }
+
   /* ── contrast helpers ────────────────────────────── */
 
   function hexLuminance(hex) {
@@ -478,7 +525,7 @@
   const closeBtn = panel.querySelector('.mlw-close');
   closeBtn.innerHTML = ICON_CLOSE;
 
-  // Blob click — change page color
+  // Blob click — change page color, then shift blob to next shade
   trigger.addEventListener('click', (e) => {
     const path = e.target.closest('path[data-color]');
     if (!path) return;
@@ -490,6 +537,9 @@
     sessionStorage.setItem('ml-settings', JSON.stringify(s));
     const input = panel.querySelector('[data-mlvar="--color-work"]');
     if (input) input.value = hex;
+    const nextColor = shiftColor(hex);
+    path.setAttribute('fill', nextColor);
+    path.dataset.color = nextColor;
   });
 
   const brushPath = trigger.querySelector('.mlw-brush-group');
