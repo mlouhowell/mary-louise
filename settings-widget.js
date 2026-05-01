@@ -281,20 +281,20 @@
     }
     .mlw-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 16px;
-      background: #1A1A1A;
+      width: 18px;
+      height: 22px;
+      background: #FFFFFF;
       cursor: grab;
-      border: none;
-      border-radius: 67% 33% 52% 48% / 42% 58% 42% 58%;
+      border: 2px solid #1A1A1A;
+      border-radius: 72% 28% 61% 39% / 45% 63% 37% 55%;
     }
     .mlw-slider::-moz-range-thumb {
-      width: 14px;
-      height: 16px;
-      background: #1A1A1A;
+      width: 18px;
+      height: 22px;
+      background: #FFFFFF;
       cursor: grab;
-      border: none;
-      border-radius: 67% 33% 52% 48% / 42% 58% 42% 58%;
+      border: 2px solid #1A1A1A;
+      border-radius: 72% 28% 61% 39% / 45% 63% 37% 55%;
     }
     .mlw-slider:active::-webkit-slider-thumb { cursor: grabbing; }
 
