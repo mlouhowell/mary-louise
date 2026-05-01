@@ -536,7 +536,7 @@
     s['--color-work'] = hex;
     sessionStorage.setItem('ml-settings', JSON.stringify(s));
     const input = panel.querySelector('[data-mlvar="--color-work"]');
-    if (input) input.value = hex;
+    if (input) { input.value = hex; input.dispatchEvent(new Event('input')); }
     const nextColor = shiftColor(hex);
     path.setAttribute('fill', nextColor);
     path.dataset.color = nextColor;
