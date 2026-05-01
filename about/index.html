@@ -183,7 +183,7 @@
       white-space: nowrap;
       font-family: var(--font-body);
       font-size: var(--size-body);
-      line-height: 27px;
+      line-height: 1.6875;
       color: var(--color-text);
     }
 
@@ -215,7 +215,7 @@
         --size-h2:   20px;
         --size-h3:   17px;
         --size-body: 15px;
-        --pad-page-h: 24px;
+        --pad-page-h: 16px;
         --size-nav: 16px;
         --gap-cols: 40px;
         --triangle-size: 72px;
@@ -304,8 +304,6 @@
   import { prepareWithSegments, layoutNextLineRange, materializeLineRange }
     from 'https://esm.sh/@chenglou/pretext'
 
-  const FONT     = '16px Inter'
-  const LINE_H   = 27    // 16px * 1.65
   const PARA_GAP = 48
   const IMG_GAP  = 14
 
@@ -313,6 +311,10 @@
 
   async function layoutBio() {
     await document.fonts.ready
+
+    const bodyPx = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--size-body')) || 16
+    const FONT   = `${bodyPx}px Inter`
+    const LINE_H = Math.round(bodyPx * 1.6875)
 
     const colW = bioCopy.clientWidth
 
@@ -398,6 +400,9 @@
 
   document.fonts.ready.then(layoutBio)
   window.addEventListener('resize', layoutBio)
+
+  const settingsObserver = new MutationObserver(layoutBio)
+  settingsObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
   </script>
 
 </body>
