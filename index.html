@@ -138,6 +138,10 @@
       grid-column: 1 / 3;
     }
 
+    .content .bio-col   { grid-row: 1; }
+    .content .work-col  { grid-row: 2; margin-top: var(--gap-section); }
+    .content .right-col { grid-row: 1 / 3; grid-column: 3; }
+
     .section-label { margin-bottom: 16px; }
 
     /* ── Bio ──────────────────────────────────────────────── */
@@ -293,9 +297,9 @@
       .content .bio-col,
       .content .work-col,
       .content .right-col { grid-column: 1; }
-      .bio-col   { order: 1; }
-      .right-col { order: 2; margin-top: var(--gap-section); }
-      .work-col  { order: 3; margin-top: var(--gap-section); }
+      .bio-col   { order: 1; grid-row: auto; }
+      .right-col { order: 2; margin-top: var(--gap-section); grid-row: auto; }
+      .work-col  { order: 3; margin-top: var(--gap-section); grid-row: auto; }
       .bio h2    { margin-bottom: 0; }
       .right-col .quote:last-child { margin-bottom: 0; }
     }
@@ -357,7 +361,7 @@
 
           <a href="/projects/postly/" class="project-item">
             <div class="project-thumb">
-              <img src="/projects/postly/Images/Hero.png" alt="Postly">
+              <img src="/projects/postly/Images/Postly%20hero.png" alt="Postly">
             </div>
             <div class="project-meta">
               <div class="project-meta-top">

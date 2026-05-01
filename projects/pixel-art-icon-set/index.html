@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/Icons/Shamrock.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Art Icon Set — ML Howell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Inter+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/projects/project.css">
+</head>
+<body>
+
+  <div class="page">
+    <div class="header">
+      <h1>Pixel Art Icon Set</h1>
+      <nav>
+        <a href="/">Work</a>
+        <a href="/about/">About</a>
+        <a href="/experiments/">Experiments</a>
+      </nav>
+    </div>
+
+    <div class="img-full">
+      <img src="/experiments/images/Icon_set.png" alt="Pixel art icon set">
+    </div>
+
+    <footer>
+      <span>2026 © ML Howell V2.1</span>
+      <div class="footer-links">
+        <a href="mailto:marylouisehowell@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/marlouiise" target="_blank">X</a>
+        <a href="https://github.com/mlouhowell" target="_blank">GitHub</a>
+        <a href="https://drive.google.com/file/d/1VOLKVJ8wWKylwi6IQKMF0EewdIpzMVSg/view" target="_blank">Resume</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/settings-widget.js?v=22"></script>
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('ml-settings');
+        if (!saved) return;
+        const s = JSON.parse(saved);
+        const root = document.documentElement;
+        const _mob = window.innerWidth <= 800;
+        Object.entries(s).forEach(([k, v]) => { if (_mob && k === '--pad-page-h') return; root.style.setProperty(k, v); });
+      } catch (e) {}
+    })();
+  </script>
+
+</body>
+</html>

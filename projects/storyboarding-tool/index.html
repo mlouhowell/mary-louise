@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/Icons/Shamrock.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storyboarding Tool — ML Howell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Inter+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/projects/project.css">
+  <style>
+    .section ol {
+      font-size: var(--size-body);
+      line-height: 24px;
+      color: #0D0D0D;
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+    .section ol li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+    <div class="header">
+      <h1>Storyboarding Tool</h1>
+      <nav>
+        <a href="/">Work</a>
+        <a href="/about/">About</a>
+        <a href="/experiments/">Experiments</a>
+      </nav>
+    </div>
+
+    <div class="hero-image">
+      <img src="/experiments/Storyboard/Hero.png" alt="Storyboarding Tool hero">
+    </div>
+
+    <div class="section">
+      <h3 class="section-label">A web tool for generating a storyboard</h3>
+      <p>Instead of reading a paragraph of text about a user journey I thought it would be interesting to explore storyboarding. I wanted to design a tool teams could use to generate a sequence of images to accomplish two things:</p>
+      <ol>
+        <li>Build empathy by showing a more visual representation of the user's environment</li>
+        <li>Clearly identify brand opportunities to inject into the product at the right moments</li>
+      </ol>
+    </div>
+
+    <div class="img-full">
+      <img src="/experiments/Storyboard/Image 1.png" alt="Storyboarding Tool image 1">
+    </div>
+
+    <div class="section">
+      <h3 class="section-label">Testing Models</h3>
+      <p>Before turning to Claude to help me build this, I opened up Midjourney to test out generating styles. Midjourney feels more creative and fluid to work within, but I had problems trying to develop a sequence of images that would tell a clear story. I used this prompt in the early explorations:</p>
+      <p>"A rider is getting a ride in a Lyft car and they are going to an interview. They see that they are running 10 minutes late for this interview and are increasingly becoming frustrated."</p>
+      <p>I couldn't quite get the content of the images to work with Midjourney so I started testing out Imagen 4 but within the UI I was building. Some of my prompts were more playful and ridiculous to test out the model outputs. Over-shoulder, mid, wise, and close-up angles told the model the crop of the image.</p>
+    </div>
+
+    <div class="img-row col-2">
+      <div class="img-row-item"><img src="/experiments/Storyboard/Image 2.png" alt="Storyboarding Tool image 2"></div>
+      <div class="img-row-item"><img src="/experiments/Storyboard/Image 3.png" alt="Storyboarding Tool image 3"></div>
+    </div>
+
+    <div class="section">
+      <p>With some prompting I got the character to stay the same throughout the sequence and I made it editable to alter the crop types of each image.</p>
+      <p>I moved the settings to the right of the panels and added another model, Flux, to test alongside Imagen.</p>
+      <p>Toggling between models made the differences more obvious. Imagen is a lot more consistent between characters and looks more refined. Flux often sends images with some strange proportions.</p>
+      <p>I'm still refining this tool and hoping to get it live soon! I'm hoping it will help teams build empathy and better imagine the users world and environment.</p>
+    </div>
+
+    <div class="img-row col-2">
+      <div class="img-row-item"><img src="/experiments/Storyboard/Image 4.png" alt="Storyboarding Tool image 4"></div>
+      <div class="img-row-item"><img src="/experiments/Storyboard/Image 5.png" alt="Storyboarding Tool image 5"></div>
+    </div>
+
+    <footer>
+      <span>2026 © ML Howell V2.1</span>
+      <div class="footer-links">
+        <a href="mailto:marylouisehowell@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/marlouiise" target="_blank">X</a>
+        <a href="https://github.com/mlouhowell" target="_blank">GitHub</a>
+        <a href="https://drive.google.com/file/d/1VOLKVJ8wWKylwi6IQKMF0EewdIpzMVSg/view" target="_blank">Resume</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/settings-widget.js?v=22"></script>
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('ml-settings');
+        if (!saved) return;
+        const s = JSON.parse(saved);
+        const root = document.documentElement;
+        const _mob = window.innerWidth <= 800;
+        Object.entries(s).forEach(([k, v]) => { if (_mob && k === '--pad-page-h') return; root.style.setProperty(k, v); });
+      } catch (e) {}
+    })();
+  </script>
+
+</body>
+</html>
