@@ -284,7 +284,8 @@
         if (!saved) return;
         const s = JSON.parse(saved);
         const root = document.documentElement;
-        Object.entries(s).forEach(([k, v]) => root.style.setProperty(k, v));
+        const _mob = window.innerWidth <= 800;
+        Object.entries(s).forEach(([k, v]) => { if (_mob && k === '--pad-page-h') return; root.style.setProperty(k, v); });
         const hex = (s['--color-about'] || '#4E9AC3').trim();
         function lum(h) {
           h = h.replace('#','');
