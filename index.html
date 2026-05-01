@@ -132,7 +132,8 @@
       flex: 1;
     }
 
-    .content .left-col {
+    .content .bio-col,
+    .content .work-col {
       grid-column: 1 / 3;
     }
 
@@ -144,7 +145,7 @@
     }
 
     /* ── Work / project preview ───────────────────────────── */
-    .work-section { margin-top: var(--gap-section); }
+    .work-section { margin-top: calc(var(--gap-section) - 24px); }
 
     .project-thumb {
       width: 100%;
@@ -234,7 +235,12 @@
       .header  { grid-template-columns: 1fr; gap: 24px; }
       .header h1 { grid-column: 1; }
       .content { grid-template-columns: 1fr; }
-      .content .left-col { grid-column: 1; }
+      .content .bio-col,
+      .content .work-col,
+      .content .right-col { grid-column: 1; }
+      .bio-col   { order: 1; }
+      .right-col { order: 2; margin-top: var(--gap-section); }
+      .work-col  { order: 3; }
     }
   </style>
 </head>
@@ -253,12 +259,26 @@
 
     <div class="content">
 
-      <div class="left-col">
+      <div class="bio-col">
         <h2 class="section-label">Welcome!</h2>
         <div class="bio">
           <h2>I'm a product designer in SF interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</h2>
         </div>
+      </div>
 
+      <div class="right-col">
+        <h2 class="section-label">Quotes I like</h2>
+        <div class="quote">
+          <p>It is important to use your hands, that is what distinguishes you from a cow or a computer operator.</p>
+          <cite>— Paul Rand</cite>
+        </div>
+        <div class="quote">
+          <p>Write about what you know. Being honest is what counts. Trying to make the ordinary — extraordinary.</p>
+          <cite>— Ricky Gervais</cite>
+        </div>
+      </div>
+
+      <div class="work-col">
         <div class="work-section">
           <h2 class="section-label">Work</h2>
 
@@ -307,22 +327,10 @@
         </div>
       </div>
 
-      <div class="right-col">
-        <h2 class="section-label">Quotes I like</h2>
-        <div class="quote">
-          <p>It is important to use your hands, that is what distinguishes you from a cow or a computer operator.</p>
-          <cite>— Paul Rand</cite>
-        </div>
-        <div class="quote">
-          <p>Write about what you know. Being honest is what counts. Trying to make the ordinary — extraordinary.</p>
-          <cite>— Ricky Gervais</cite>
-        </div>
-      </div>
-
     </div>
 
     <footer>
-      <span>2026 © ML Howell V1.1</span>
+      <span>2026 © ML Howell V2.1</span>
       <div class="footer-links">
         <a href="mailto:marylouisehowell@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>

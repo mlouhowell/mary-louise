@@ -252,7 +252,7 @@
         <div class="bio-copy" id="bio-copy">
           <img src="/Illustrations/Sandwich.svg"    class="bio-illus" style="top:492px; left:53%; width:38%;"  alt="Sandwich illustration">
           <img src="/Illustrations/Golden Gate.svg" class="bio-illus" style="top:58px;  left:0;    width:100%;" alt="Golden Gate illustration">
-          <img src="/Illustrations/Swimmer.svg"     class="bio-illus" style="top:710px; left:0;    width:50%;"  alt="Swimmer by Alcatraz illustration">
+          <img src="/Illustrations/Swimmer.svg"     class="bio-illus illus-swimmer" style="top:710px; left:0;    width:50%;"  alt="Swimmer by Alcatraz illustration">
           <div id="bio-text-source" hidden>
             <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
             <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
@@ -264,7 +264,7 @@
     </div>
 
     <footer>
-      <span>2026 © ML Howell V1.1</span>
+      <span>2026 © ML Howell V2.1</span>
       <div class="footer-links">
         <a href="mailto:marylouisehowell@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>
@@ -325,13 +325,21 @@
       if (img.offsetLeft < 0)       img.style.left = '0px'
     })
 
+    const isMobile = window.innerWidth <= 800
+    const swimmerEl = bioCopy.querySelector('.illus-swimmer')
+
+    // On mobile, move swimmer out of the way so text flows past it
+    if (isMobile && swimmerEl) swimmerEl.style.top = '9999px'
+
     // Image bounds relative to bio-copy
-    const imgs = Array.from(bioCopy.querySelectorAll('.bio-illus')).map(img => ({
-      top:    img.offsetTop,
-      left:   img.offsetLeft,
-      right:  img.offsetLeft + img.offsetWidth,
-      bottom: img.offsetTop  + img.offsetHeight,
-    }))
+    const imgs = Array.from(bioCopy.querySelectorAll('.bio-illus'))
+      .filter(img => !(isMobile && img.classList.contains('illus-swimmer')))
+      .map(img => ({
+        top:    img.offsetTop,
+        left:   img.offsetLeft,
+        right:  img.offsetLeft + img.offsetWidth,
+        bottom: img.offsetTop  + img.offsetHeight,
+      }))
 
     // Paragraph texts from hidden source
     const paras = Array.from(document.querySelectorAll('#bio-text-source p'))
@@ -395,7 +403,13 @@
       if (pi < paras.length - 1) y += PARA_GAP
     }
 
-    bioCopy.style.height = (y + 40) + 'px'
+    // On mobile, place swimmer after all text
+    if (isMobile && swimmerEl) {
+      swimmerEl.style.top = y + 'px'
+      bioCopy.style.height = (y + swimmerEl.offsetHeight + 40) + 'px'
+    } else {
+      bioCopy.style.height = (y + 40) + 'px'
+    }
   }
 
   document.fonts.ready.then(layoutBio)
