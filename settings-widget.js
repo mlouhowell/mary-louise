@@ -9,7 +9,7 @@
     '--size-body': '16px',
     '--size-nav':  '20px',
     '--pad-page-h':        '80px',
-    '--gap-cols':          '80px',
+    '--gap-cols':          '24px',
   };
 
   const GROUPS = [
