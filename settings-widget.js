@@ -464,8 +464,12 @@
 
   /* ── apply saved settings on load ────────────────── */
 
+  const isMobile = window.innerWidth <= 800;
   const saved = loadSaved();
-  Object.entries(saved).forEach(([k, v]) => applyVar(k, v));
+  Object.entries(saved).forEach(([k, v]) => {
+    if (isMobile && k === '--pad-page-h') return;
+    applyVar(k, v);
+  });
   refreshTextColor();
 
 })();
