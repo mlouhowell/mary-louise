@@ -72,8 +72,12 @@
     const saved = loadSaved();
     const hex   = (saved[bgVar] || DEFAULTS[bgVar] || '#ffffff').trim();
     const text  = contrastText(hex);
-    applyVar('--color-text', text);
-    applyVar('--illus-invert', text === '#FFFFFF' ? '1' : '0');
+    const isLight = text === '#FFFFFF';
+    applyVar('--color-text',    text);
+    applyVar('--color-muted',   isLight ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.4)');
+    applyVar('--color-subtle',  isLight ? 'rgba(255,255,255,0.2)'  : 'rgba(0,0,0,0.13)');
+    applyVar('--color-pill-bg', isLight ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)');
+    applyVar('--illus-invert',  isLight ? '1' : '0');
   }
 
   /* ── helpers ──────────────────────────────────────── */

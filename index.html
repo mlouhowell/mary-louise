@@ -15,6 +15,9 @@
       --color-project-bg:   #FFFFFF;
       --color-triangle:     #C8341A;
       --color-text:         #1A1A1A;
+      --color-muted:        rgba(0,0,0,0.4);
+      --color-subtle:       rgba(0,0,0,0.13);
+      --color-pill-bg:      rgba(0,0,0,0.08);
 
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
@@ -173,7 +176,7 @@
 
     .project-meta {
       padding: 10px 0 13px;
-      border-bottom: 1px solid rgba(0,0,0,0.13);
+      border-bottom: 1px solid var(--color-subtle);
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -196,7 +199,7 @@
 
     .project-meta-arrow {
       font-size: 13px;
-      color: rgba(0,0,0,0.35);
+      color: var(--color-muted);
       flex-shrink: 0;
       line-height: 1.4;
     }
@@ -210,7 +213,7 @@
     .project-meta-date {
       font-size: 13px;
       font-weight: 400;
-      color: rgba(0,0,0,0.45);
+      color: var(--color-muted);
     }
 
     .project-meta-pill {
@@ -218,8 +221,8 @@
       font-weight: 600;
       letter-spacing: 0.07em;
       text-transform: uppercase;
-      color: rgba(0,0,0,0.45);
-      background: rgba(0,0,0,0.08);
+      color: var(--color-muted);
+      background: var(--color-pill-bg);
       padding: 2px 6px;
       border-radius: 3px;
       line-height: 1.6;
@@ -426,7 +429,7 @@
     </footer>
   </div>
 
-  <script src="/settings-widget.js?v=36"></script>
+  <script src="/settings-widget.js?v=37"></script>
   <script>
     (function () {
       try {
@@ -446,7 +449,11 @@
           return 0.2126*l(r)+0.7152*l(g)+0.0722*l(b);
         }
         const L=lum(hex);
-        root.style.setProperty('--color-text', 1.05/(L+0.05) >= (L+0.05)/0.0606 ? '#FFFFFF' : '#1A1A1A');
+        const isLight = 1.05/(L+0.05) >= (L+0.05)/0.0606;
+        root.style.setProperty('--color-text',    isLight ? '#FFFFFF' : '#1A1A1A');
+        root.style.setProperty('--color-muted',   isLight ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.4)');
+        root.style.setProperty('--color-subtle',  isLight ? 'rgba(255,255,255,0.2)'  : 'rgba(0,0,0,0.13)');
+        root.style.setProperty('--color-pill-bg', isLight ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)');
       } catch (e) {}
     })();
   </script>
