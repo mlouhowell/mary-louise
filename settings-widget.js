@@ -290,20 +290,31 @@
     }
     .mlw-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 22px;
-      height: 20px;
-      background: ${_blobKnobUrl} center/contain no-repeat;
+      appearance: none;
+      width: 26px;
+      height: 24px;
+      background-color: transparent;
+      background-image: ${_blobKnobUrl};
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       cursor: grab;
       border: none;
       border-radius: 0;
+      box-shadow: none;
     }
     .mlw-slider::-moz-range-thumb {
-      width: 22px;
-      height: 20px;
-      background: ${_blobKnobUrl} center/contain no-repeat;
+      width: 26px;
+      height: 24px;
+      background-color: transparent;
+      background-image: ${_blobKnobUrl};
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       cursor: grab;
       border: none;
       border-radius: 0;
+      box-shadow: none;
     }
     .mlw-slider:active::-webkit-slider-thumb { cursor: grabbing; }
 
