@@ -235,6 +235,48 @@
     footer a:hover { opacity: 0.6; }
     .footer-links  { display: flex; gap: 20px; }
 
+    /* ── Video thumbnail play button ────────────────── */
+    .experiment-thumb-video {
+      position: relative;
+    }
+    .experiment-thumb-video .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      transition: transform 0.15s, background 0.15s;
+    }
+    .experiment-item:hover .play-icon {
+      background: #fff;
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+    .play-icon svg {
+      margin-left: 3px;
+    }
+
+    /* ── Modal video embed ───────────────────────────── */
+    .exp-modal-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      display: none;
+    }
+    .exp-modal-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
     /* ── Experiment cards ────────────────────────────── */
     .experiment-item {
       cursor: pointer;
@@ -383,6 +425,22 @@
 
     <div class="grid">
 
+      <div class="experiment-item" data-slug="movie-trailer" role="button" tabindex="0" aria-label="Play Movie Trailer">
+        <div class="experiment-thumb experiment-thumb-video">
+          <img src="https://img.youtube.com/vi/NI3RVZXV_lk/maxresdefault.jpg" alt="Movie Trailer">
+        </div>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Movie Trailer</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2026</span>
+            <span class="meta-pill">AI Image Generation</span>
+          </div>
+        </div>
+      </div>
+
       <a class="experiment-item" href="/projects/storyboarding-tool/" aria-label="View Storyboarding Tool" style="text-decoration:none;color:inherit;">
         <div class="experiment-thumb">
           <img src="images/Storyboard.png" alt="Storyboarding Tool">
@@ -487,6 +545,7 @@
           <path d="M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </button>
+      <div class="exp-modal-video"><iframe src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
       <img class="exp-modal-img" src="" alt="">
       <div class="exp-modal-body">
         <h2 class="exp-modal-title" id="exp-modal-title"></h2>
@@ -527,6 +586,12 @@
   <script>
     (function () {
       const EXPERIMENTS = {
+        'movie-trailer': {
+          title: 'Movie Trailer',
+          youtube: 'NI3RVZXV_lk',
+          desc:  'A movie trailer I made using Runway and Eleven Labs for a Runway pitch competition.',
+          link:  null,
+        },
         'movie-club': {
           title: 'Movie Club Posters',
           desc:  '',
@@ -547,6 +612,8 @@
       const panel      = modal.querySelector('.exp-modal-panel');
       const backdrop   = modal.querySelector('.exp-modal-backdrop');
       const closeBtn   = modal.querySelector('.exp-modal-close');
+      const modalVideo = modal.querySelector('.exp-modal-video');
+      const modalVideoIframe = modalVideo.querySelector('iframe');
       const modalImg   = modal.querySelector('.exp-modal-img');
       const modalTitle = modal.querySelector('.exp-modal-title');
       const modalDesc  = modal.querySelector('.exp-modal-desc');
@@ -559,8 +626,16 @@
         const data = EXPERIMENTS[slug];
         if (!data) return;
 
-        modalImg.src             = data.img;
-        modalImg.alt             = data.alt;
+        if (data.youtube) {
+          modalVideo.style.display = 'block';
+          modalImg.style.display   = 'none';
+          modalVideoIframe.src     = 'https://www.youtube.com/embed/' + data.youtube + '?autoplay=1&rel=0';
+        } else {
+          modalVideo.style.display = 'none';
+          modalImg.style.display   = 'block';
+          modalImg.src             = data.img;
+          modalImg.alt             = data.alt;
+        }
         modalTitle.textContent   = data.title;
         modalDesc.textContent    = data.desc;
         if (data.link) {
@@ -584,6 +659,7 @@
 
       function closeModal(push) {
         if (!modal.classList.contains('is-open')) return;
+        modalVideoIframe.src = '';
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
