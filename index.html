@@ -8,8 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Inter+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     @font-face {
-      font-family: 'Grateful Script';
-      src: url('/fonts/GratefulScript.ttf') format('truetype');
+      font-family: 'HandOfML';
+      src: url('/fonts/HandOfML.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
       font-display: swap;
@@ -299,6 +299,20 @@
       .bio h2    { margin-bottom: 0; }
       .right-col .quote:last-child { margin-bottom: 0; }
     }
+
+    @keyframes mlw-palette-spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .mlw-spin-text {
+      position: absolute;
+      top: calc(50% + 2px);
+      left: calc(38% - 2px);
+      width: 52%;
+      height: auto;
+      animation: mlw-palette-spin 14s linear infinite;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -332,10 +346,7 @@
           <p>Write about what you know. Being honest is what counts. Trying to make the ordinary — extraordinary.</p>
           <cite>— Ricky Gervais</cite>
         </div>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div id="mlw-illus"></div>
-          <span style="font-family: 'Grateful Script', cursive; font-size: 28px; color: var(--color-text); line-height: 1.2; pointer-events: none;">Pick your palette</span>
-        </div>
+        <div id="mlw-illus" style="position: relative;"></div>
       </div>
 
       <div class="work-col">
@@ -441,6 +452,32 @@
   </div>
 
   <script src="/settings-widget.js?v=51"></script>
+  <script>
+    (function () {
+      function addPaletteSpinText() {
+        const el = document.getElementById('mlw-illus');
+        if (!el) return;
+        const ns = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(ns, 'svg');
+        svg.setAttribute('viewBox', '0 0 200 200');
+        svg.setAttribute('class', 'mlw-spin-text');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.innerHTML =
+          '<defs>' +
+            '<path id="mlwCirclePath" d="M 100,100 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"/>' +
+          '</defs>' +
+          '<text font-family="HandOfML, cursive" font-size="13" fill="currentColor">' +
+            '<textPath href="#mlwCirclePath" textLength="238.76" lengthAdjust="spacingAndGlyphs">Pick your palette · Pick your palette ·</textPath>' +
+          '</text>';
+        el.appendChild(svg);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addPaletteSpinText);
+      } else {
+        addPaletteSpinText();
+      }
+    })();
+  </script>
   <script>
     (function () {
       try {
