@@ -7,6 +7,14 @@
   <title>ML Howell — Work</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Inter+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Grateful Script';
+      src: url('/fonts/GratefulScript.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ── Design tokens (overridable via /settings) ────────── */
     :root {
       --color-work:         #CC6FAD;
@@ -324,7 +332,10 @@
           <p>Write about what you know. Being honest is what counts. Trying to make the ordinary — extraordinary.</p>
           <cite>— Ricky Gervais</cite>
         </div>
-        <div id="mlw-illus"></div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="mlw-illus"></div>
+          <span style="font-family: 'Grateful Script', cursive; font-size: 28px; color: var(--color-text); line-height: 1.2; pointer-events: none;">Pick your palette</span>
+        </div>
       </div>
 
       <div class="work-col">
