@@ -1,8 +1,8 @@
 (function () {
   const DEFAULTS = {
-    '--color-work':        '#CC6FAD',
+    '--color-work':        '#A0BFDF',
     '--color-about':       '#4E9AC3',
-    '--color-experiments': '#F1DFC1',
+    '--color-experiments': '#FFFFFF',
     '--size-h1':   '40px',
     '--size-h2':   '24px',
     '--size-h3':   '20px',
