@@ -323,15 +323,24 @@
       overflow-y: auto;
       margin: 24px;
       scrollbar-width: none;
-      padding-top: 52px;
       border-radius: 8px;
     }
     .exp-modal-panel::-webkit-scrollbar { display: none; }
 
+    .exp-modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #fff;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 16px;
+      border-radius: 8px 8px 0 0;
+    }
+
     .exp-modal-close {
-      position: absolute;
-      top: 12px;
-      right: 16px;
       background: #fff;
       border: none;
       cursor: pointer;
@@ -343,16 +352,22 @@
       color: #0D0D0D;
       opacity: 0.6;
       transition: opacity 0.15s;
-      z-index: 1;
       padding: 0;
       border-radius: 50%;
     }
     .exp-modal-close:hover { opacity: 1; }
     .exp-modal-close svg { width: 16px; height: 16px; }
 
-    .exp-modal-img {
+    .exp-modal-imgs {
       width: calc(100% - 48px);
       margin: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .exp-modal-imgs img {
+      width: 100%;
       height: auto;
       display: block;
       background: #F4F4F4;
@@ -398,8 +413,8 @@
         margin: 0;
         max-width: 100%;
         max-height: 88vh;
-        padding-top: 48px;
       }
+      .exp-modal-imgs { grid-template-columns: 1fr; }
       .exp-modal-body { padding: 28px 24px 40px; }
       .exp-modal-title { font-size: var(--size-h2); }
     }
@@ -436,7 +451,7 @@
 
       <div class="experiment-item" data-slug="movie-trailer" role="button" tabindex="0" aria-label="Play Movie Trailer">
         <div class="experiment-thumb experiment-thumb-video">
-          <img src="https://img.youtube.com/vi/NI3RVZXV_lk/maxresdefault.jpg" alt="Movie Trailer">
+          <img src="images/movie-trailer-thumb.png" alt="Movie Trailer">
         </div>
         <div class="experiment-meta">
           <div class="meta-top">
@@ -532,6 +547,22 @@
         </div>
       </div>
 
+      <div class="experiment-item" data-slug="midjourney" role="button" tabindex="0" aria-label="View Midjourney Experiments">
+        <div class="experiment-thumb">
+          <img src="images/midjourney-thumb.png" alt="Midjourney Experiments">
+        </div>
+        <div class="experiment-meta">
+          <div class="meta-top">
+            <span class="meta-name">Midjourney Experiments</span>
+            <span class="meta-arrow">↗</span>
+          </div>
+          <div class="meta-bottom">
+            <span class="meta-date">2026</span>
+            <span class="meta-pill">AI Image Generation</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <footer>
@@ -551,14 +582,16 @@
   <div class="exp-modal" id="exp-modal" role="dialog" aria-modal="true" aria-labelledby="exp-modal-title">
     <div class="exp-modal-backdrop"></div>
     <div class="exp-modal-panel">
-      <button class="exp-modal-close" aria-label="Close">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M2 2L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </button>
+      <div class="exp-modal-header">
+        <button class="exp-modal-close" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
       <div class="exp-modal-video"><iframe src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
-      <img class="exp-modal-img" src="" alt="">
+      <div class="exp-modal-imgs"></div>
       <div class="exp-modal-body">
         <h2 class="exp-modal-title" id="exp-modal-title"></h2>
         <p class="exp-modal-desc"></p>
@@ -618,6 +651,24 @@
           alt:   'Pixel art icon set',
           link:  null,
         },
+        'midjourney': {
+          title: 'Midjourney Experiments',
+          desc:  '',
+          imgs: [
+            '/projects/midjourney-experiments/0_0.png',
+            '/projects/midjourney-experiments/0_0_640_N%20(1).webp',
+            '/projects/midjourney-experiments/0_0_640_N.webp',
+            '/projects/midjourney-experiments/0_1_640_N.webp',
+            '/projects/midjourney-experiments/0_2.png',
+            '/projects/midjourney-experiments/0_2_640_N%20(1).webp',
+            '/projects/midjourney-experiments/0_2_640_N%20(2).webp',
+            '/projects/midjourney-experiments/0_2_640_N%20(3).webp',
+            '/projects/midjourney-experiments/0_2_640_N.webp',
+            '/projects/midjourney-experiments/0_3_640_N.webp',
+            '/projects/midjourney-experiments/mouhowell_15453_lush_green_grass_that_fills_up_the_whole_page_22be5214-4110-4cd4-88c2-6d91327455ff_0.png',
+          ],
+          link:  null,
+        },
       };
 
       const modal      = document.getElementById('exp-modal');
@@ -626,7 +677,7 @@
       const closeBtn   = modal.querySelector('.exp-modal-close');
       const modalVideo = modal.querySelector('.exp-modal-video');
       const modalVideoIframe = modalVideo.querySelector('iframe');
-      const modalImg   = modal.querySelector('.exp-modal-img');
+      const modalImgs  = modal.querySelector('.exp-modal-imgs');
       const modalTitle = modal.querySelector('.exp-modal-title');
       const modalDesc  = modal.querySelector('.exp-modal-desc');
       const modalLink  = modal.querySelector('.exp-modal-link');
@@ -638,15 +689,19 @@
         const data = EXPERIMENTS[slug];
         if (!data) return;
 
+        modalImgs.innerHTML = '';
         if (data.youtube) {
           modalVideo.style.display = 'block';
-          modalImg.style.display   = 'none';
           modalVideoIframe.src     = 'https://www.youtube.com/embed/' + data.youtube + '?autoplay=1&rel=0';
         } else {
           modalVideo.style.display = 'none';
-          modalImg.style.display   = 'block';
-          modalImg.src             = data.img;
-          modalImg.alt             = data.alt;
+          const srcs = data.imgs || [data.img];
+          srcs.forEach(function (src) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = data.alt || data.title;
+            modalImgs.appendChild(img);
+          });
         }
         modalTitle.textContent   = data.title;
         modalDesc.textContent    = data.desc;
