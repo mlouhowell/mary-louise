@@ -134,16 +134,18 @@
 
     .bio {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 2fr 1fr;
       column-gap: var(--gap-cols);
       align-items: start;
-      position: relative;
-      row-gap: var(--gap-section);
+    }
+
+    .bio-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-section);
     }
 
     .bio-photo-wrap {
-      grid-column: 3;
-      grid-row: 1;
       width: 100%;
     }
 
@@ -190,10 +192,7 @@
     }
 
     .bio-copy {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: calc((100% - var(--gap-cols) * 2) * 2 / 3 + var(--gap-cols));
+      position: relative;
     }
 
     .bio-illus {
@@ -214,8 +213,7 @@
     }
 
     .resume-section {
-      grid-column: 3;
-      grid-row: 2;
+      /* inside .bio-right flex column, no grid placement needed */
     }
 
     .resume-entry {
@@ -290,8 +288,7 @@
       .header           { grid-template-columns: 1fr; gap: var(--gap-section); }
       .header h1        { grid-column: 1; }
       .bio              { grid-template-columns: 1fr; }
-      .bio-copy         { position: static; width: auto; }
-      .bio-photo-wrap   { grid-column: 1; width: 100%; }
+      .bio-photo-wrap   { width: 100%; }
     }
   </style>
 
@@ -311,11 +308,6 @@
 
     <div class="content">
       <div class="bio">
-        <div class="bio-photo-wrap">
-          <div class="profile-wrap">
-            <img src="/About%20me%20image/DSC05853%203.JPG" class="profile-photo" alt="ML Howell" loading="eager">
-          </div>
-        </div>
         <div class="bio-copy" id="bio-copy">
           <img src="/Illustrations/Sandwich.svg"    class="bio-illus" style="top:492px; left:53%; width:38%;"  alt="Sandwich illustration" loading="eager">
           <img src="/Illustrations/Golden Gate.svg" class="bio-illus" style="top:58px;  left:0;    width:100%;" alt="Golden Gate illustration" loading="eager">
@@ -325,6 +317,12 @@
             <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
             <p>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</p>
             <p>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</p>
+          </div>
+        </div>
+        <div class="bio-right">
+        <div class="bio-photo-wrap">
+          <div class="profile-wrap">
+            <img src="/About%20me%20image/DSC05853%203.JPG" class="profile-photo" alt="ML Howell" loading="eager">
           </div>
         </div>
         <div class="resume-section">
@@ -349,6 +347,7 @@
             <span class="resume-date">2017-2018</span>
           </div>
         </div>
+        </div><!-- /.bio-right -->
       </div>
     </div>
 
