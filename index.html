@@ -174,6 +174,12 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      opacity: 0;
+      animation: imageLoadFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .project-thumb img.loaded {
+      opacity: 1;
     }
 
     .project-thumb-placeholder {
@@ -181,6 +187,43 @@
       color: rgba(0,0,0,0.35);
       letter-spacing: 0.04em;
     }
+
+    @keyframes imageLoadFade {
+      from {
+        opacity: 0;
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .project-item {
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .work-col .project-item:nth-child(1) { animation-delay: 0.05s; }
+    .work-col .project-item:nth-child(2) { animation-delay: 0.1s; }
+    .work-col .project-item:nth-child(3) { animation-delay: 0.15s; }
+    .work-col .project-item:nth-child(4) { animation-delay: 0.2s; }
+    .work-col .project-item:nth-child(5) { animation-delay: 0.25s; }
+    .work-col .project-item:nth-child(6) { animation-delay: 0.3s; }
+    .work-col .project-item:nth-child(7) { animation-delay: 0.35s; }
+    .work-col .project-item:nth-child(8) { animation-delay: 0.4s; }
+    .work-col .project-item:nth-child(9) { animation-delay: 0.45s; }
+    .work-col .project-item:nth-child(10) { animation-delay: 0.5s; }
 
     .project-meta {
       padding: 10px 0 13px;
@@ -477,6 +520,22 @@
 
   <script src="/footer.js?v=1"></script>
   <script src="/settings-widget.js?v=51"></script>
+  <script>
+    (function () {
+      document.querySelectorAll('.project-thumb img').forEach(img => {
+        if (img.complete) {
+          img.classList.add('loaded');
+        } else {
+          img.addEventListener('load', () => {
+            img.classList.add('loaded');
+          });
+          img.addEventListener('error', () => {
+            img.classList.add('loaded');
+          });
+        }
+      });
+    })();
+  </script>
   <script>
     (function () {
       function addPaletteSpinText() {
