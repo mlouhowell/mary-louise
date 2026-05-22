@@ -39,6 +39,7 @@
       min-height: 100vh;
       color: var(--color-text);
       overflow-x: hidden;
+      width: 100vw;
     }
 
     .page {
@@ -51,6 +52,7 @@
       margin: 0 auto;
       background-color: var(--color-about);
       overflow: hidden;
+      width: 100vw;
     }
 
     .page-inner {
@@ -171,6 +173,7 @@
       height: 48px;
       z-index: 2;
       pointer-events: none;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.14));
     }
 
     .profile-wrap {
@@ -262,7 +265,7 @@
       width: 100%;
       align-self: start;
       padding: 20px 16px 18px;
-      background-color: #EDE8DC;
+      background-color: #FFFACD;
       transform: rotate(2.5deg);
       transform-origin: top center;
       box-shadow:
@@ -274,22 +277,16 @@
     .resume-section::before {
       content: '';
       position: absolute;
-      top: -7px;
-      left: 18%;
-      width: 38%;
-      height: 20px;
-      background: linear-gradient(
-        180deg,
-        rgba(255,255,255,0.6) 0%,
-        rgba(200,220,245,0.28) 100%
-      );
-      border-radius: 1px;
-      box-shadow:
-        0 0 0 0.5px rgba(160,190,220,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.7),
-        inset 0 -1px 0 rgba(180,200,230,0.25);
-      transform: rotate(-0.8deg);
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-0.8deg);
+      width: 48px;
+      height: 48px;
+      background-image: url('/About%20me%20image/Magnet%202.png');
+      background-size: contain;
+      background-repeat: no-repeat;
       z-index: 2;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.14));
     }
 
     .resume-entry {
@@ -374,7 +371,7 @@
       .header h1        { grid-column: 1; }
       .bio              { grid-template-columns: 1fr; }
       .bio-copy         { grid-column: 1; }
-      .bio-right        { grid-column: 1; }
+      .bio-right        { grid-column: 1; max-width: 100%; overflow: hidden; }
       .bio-photo-wrap   { width: 100%; }
     }
   </style>
