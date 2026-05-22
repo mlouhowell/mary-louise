@@ -229,17 +229,21 @@
     .resume-section::before {
       content: '';
       position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 35%, #555, #1a1a1a 60%, #000);
+      top: -7px;
+      left: 18%;
+      width: 64%;
+      height: 20px;
+      background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.6) 0%,
+        rgba(200,220,245,0.28) 100%
+      );
+      border-radius: 1px;
       box-shadow:
-        0 2px 5px rgba(0,0,0,0.4),
-        inset 0 1px 2px rgba(255,255,255,0.35),
-        inset 0 -1px 2px rgba(0,0,0,0.2);
+        0 0 0 0.5px rgba(160,190,220,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.7),
+        inset 0 -1px 0 rgba(180,200,230,0.25);
+      transform: rotate(-0.8deg);
       z-index: 2;
     }
 
