@@ -623,5 +623,57 @@
     })();
   </script>
 
+  <script>
+    (function () {
+      if (window.innerWidth <= 800) return;
+
+      var pageInner = document.querySelector('.page-inner');
+      var content   = document.querySelector('.content');
+      var rightCol  = document.querySelector('.right-col');
+      if (!pageInner || !content || !rightCol) return;
+
+      var SCROLL_START = 100;
+      var SCROLL_END   = 480;
+
+      var W, G, colW, ticking = false;
+
+      function measure() {
+        content.style.gridTemplateColumns = '';
+        W    = content.offsetWidth;
+        G    = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap-cols')) || 80;
+        colW = (W - 2 * G) / 3;
+        // Switch to pixel-based immediately so transitions are seamless
+        content.style.gridTemplateColumns = colW + 'px ' + colW + 'px ' + colW + 'px';
+      }
+
+      function easeInOut(t) {
+        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      }
+
+      function render() {
+        ticking = false;
+        var scroll = pageInner.scrollTop;
+        var raw    = (scroll - SCROLL_START) / (SCROLL_END - SCROLL_START);
+        var p      = easeInOut(Math.max(0, Math.min(1, raw)));
+
+        var rw = colW * (1 - p);
+        var lw = (W - 2 * G - rw) / 2;
+
+        content.style.gridTemplateColumns = lw + 'px ' + lw + 'px ' + rw + 'px';
+        rightCol.style.opacity        = 1 - Math.min(1, p * 2);
+        rightCol.style.pointerEvents  = p > 0.5 ? 'none' : '';
+      }
+
+      function onScroll() {
+        if (!ticking) { ticking = true; requestAnimationFrame(render); }
+      }
+
+      requestAnimationFrame(function () {
+        measure();
+        pageInner.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', function () { measure(); render(); });
+      });
+    })();
+  </script>
 </body>
 </html>
