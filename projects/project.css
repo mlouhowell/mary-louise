@@ -48,7 +48,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: var(--gap-cols);
   align-items: flex-start;
-  margin-bottom: calc(var(--gap-section) * 2);
+  margin-bottom: 96px;
 }
 
 .header h1 {
