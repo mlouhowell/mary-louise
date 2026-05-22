@@ -160,8 +160,13 @@
     .section-label { margin-bottom: 16px; }
 
     /* ── Bio ──────────────────────────────────────────────── */
-    .bio h2 {
-      margin-bottom: 12px;
+    .bio p {
+      font-family: var(--font-body);
+      font-size: var(--size-body);
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      line-height: 1.5;
+      color: var(--color-text);
     }
 
     /* ── Work / project preview ───────────────────────────── */
@@ -364,7 +369,7 @@
       .bio-col   { order: 1; grid-row: auto; }
       .right-col { order: 2; margin-top: var(--gap-section); grid-row: auto; }
       .work-col  { order: 3; margin-top: var(--gap-section); grid-row: auto; }
-      .bio h2    { margin-bottom: 0; }
+
       .right-col .quote:last-child { margin-bottom: 0; }
     }
 
@@ -401,7 +406,7 @@
       <div class="bio-col">
         <h2 class="section-label">Welcome!</h2>
         <div class="bio">
-          <h2>I'm a product designer in SF interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</h2>
+          <p>I'm a product designer in SF interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</p>
         </div>
       </div>
 
