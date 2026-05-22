@@ -368,6 +368,7 @@
       .mlw-trigger {
         top: var(--pad-page-v);
         right: var(--pad-page-h);
+        max-width: 50%;
       }
     }
   `;
