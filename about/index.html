@@ -267,9 +267,9 @@
           </div>
         </div>
         <div class="bio-copy" id="bio-copy">
-          <img src="/Illustrations/Sandwich.svg"    class="bio-illus" style="top:492px; left:53%; width:38%;"  alt="Sandwich illustration">
-          <img src="/Illustrations/Golden Gate.svg" class="bio-illus" style="top:58px;  left:0;    width:100%;" alt="Golden Gate illustration">
-          <img src="/Illustrations/Swimmer.svg"     class="bio-illus illus-swimmer" style="top:710px; left:0;    width:50%;"  alt="Swimmer by Alcatraz illustration">
+          <img src="/Illustrations/Sandwich.svg"    class="bio-illus" style="top:492px; left:53%; width:38%;"  alt="Sandwich illustration" loading="eager">
+          <img src="/Illustrations/Golden Gate.svg" class="bio-illus" style="top:58px;  left:0;    width:100%;" alt="Golden Gate illustration" loading="eager">
+          <img src="/Illustrations/Swimmer.svg"     class="bio-illus illus-swimmer" style="top:710px; left:0;    width:50%;"  alt="Swimmer by Alcatraz illustration" loading="eager">
           <div id="bio-text-source" hidden>
             <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
             <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
@@ -339,6 +339,15 @@
 
   async function layoutBio() {
     await document.fonts.ready
+
+    const bioIllus = Array.from(bioCopy.querySelectorAll('.bio-illus'))
+    await Promise.all(bioIllus.map(img => {
+      if (img.complete) return Promise.resolve()
+      return new Promise(resolve => {
+        img.addEventListener('load', resolve, { once: true })
+        img.addEventListener('error', resolve, { once: true })
+      })
+    }))
 
     const bodyPx = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--size-body')) || 16
     const FONT   = `${bodyPx}px Inter`
