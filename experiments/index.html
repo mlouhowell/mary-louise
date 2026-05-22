@@ -148,6 +148,12 @@
       width: 100%;
       height: auto;
       display: block;
+      opacity: 0;
+      animation: imageLoadFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .experiment-thumb img.loaded {
+      opacity: 1;
     }
 
     .experiment-thumb-placeholder {
@@ -156,6 +162,40 @@
       letter-spacing: 0.04em;
       padding: 40px;
     }
+
+    @keyframes imageLoadFade {
+      from {
+        opacity: 0;
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .experiment-item {
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .experiment-item:nth-child(1) { animation-delay: 0.05s; }
+    .experiment-item:nth-child(2) { animation-delay: 0.1s; }
+    .experiment-item:nth-child(3) { animation-delay: 0.15s; }
+    .experiment-item:nth-child(4) { animation-delay: 0.2s; }
+    .experiment-item:nth-child(5) { animation-delay: 0.25s; }
+    .experiment-item:nth-child(6) { animation-delay: 0.3s; }
+    .experiment-item:nth-child(7) { animation-delay: 0.35s; }
 
     .experiment-meta {
       padding: 10px 0 13px;
@@ -239,6 +279,19 @@
     .experiment-thumb-video {
       position: relative;
     }
+
+    .experiment-thumb video {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .experiment-thumb video.loaded {
+      opacity: 1;
+    }
+
     .experiment-thumb-video .play-icon {
       position: absolute;
       top: 50%;
@@ -617,6 +670,32 @@
         root.style.setProperty('--color-subtle',  isLight ? 'rgba(255,255,255,0.2)'  : 'rgba(0,0,0,0.13)');
         root.style.setProperty('--color-pill-bg', isLight ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)');
       } catch (e) {}
+    })();
+  </script>
+
+  <script>
+    (function () {
+      document.querySelectorAll('.experiment-thumb img').forEach(img => {
+        if (img.complete) {
+          img.classList.add('loaded');
+        } else {
+          img.addEventListener('load', () => {
+            img.classList.add('loaded');
+          });
+          img.addEventListener('error', () => {
+            img.classList.add('loaded');
+          });
+        }
+      });
+
+      document.querySelectorAll('.experiment-thumb video').forEach(video => {
+        const addLoadedClass = () => video.classList.add('loaded');
+        if (video.readyState >= 2) {
+          addLoadedClass();
+        } else {
+          video.addEventListener('loadeddata', addLoadedClass, { once: true });
+        }
+      });
     })();
   </script>
 
