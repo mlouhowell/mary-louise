@@ -55,12 +55,28 @@
 
     /* ── Page layout ──────────────────────────────────────── */
     .page {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
       max-width: 1200px;
       margin: 0 auto;
+      background-color: var(--color-work);
+      overflow: hidden;
+    }
+
+    .page-inner {
+      height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+      scrollbar-gutter: stable;
       padding: var(--pad-page-v) var(--pad-page-h);
       display: flex;
       flex-direction: column;
     }
+
+    .page-inner::-webkit-scrollbar { display: none; }
 
     /* ── Header ───────────────────────────────────────────── */
     .header {
@@ -361,6 +377,7 @@
 <body>
 
   <div class="page">
+    <div class="page-inner">
     <div class="header">
       <h1>Hey, my name is ML</h1>
       <nav>
@@ -516,6 +533,7 @@
     </div>
 
     <footer></footer>
+    </div><!-- /.page-inner -->
   </div>
 
   <script src="/footer.js?v=1"></script>
