@@ -135,7 +135,8 @@
     .bio {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--gap-cols);
+      column-gap: var(--gap-cols);
+      row-gap: var(--gap-section);
       align-items: start;
     }
 
@@ -213,7 +214,6 @@
     .resume-section {
       grid-column: 3;
       grid-row: 2;
-      margin-top: 48px;
     }
 
     .resume-entry {
