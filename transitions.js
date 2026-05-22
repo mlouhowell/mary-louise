@@ -1,6 +1,6 @@
 (function () {
   var PAGE_COLORS = {
-    '/':              '#A0BFDF',
+    '/':              '#FFFFFF',
     '/about/':        '#4E9AC3',
     '/experiments/':  '#F1DFC1',
   };
