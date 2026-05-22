@@ -10,13 +10,13 @@
     :root {
       --color-work:         #CC6FAD;
       --color-about:        #4E9AC3;
-      --color-experiments:  #FFFFFF;
-      --color-project-bg:   #FFFFFF;
+      --color-experiments:  #000000;
+      --color-project-bg:   #000000;
       --color-triangle:     #C8341A;
-      --color-text:         #1A1A1A;
-      --color-muted:        rgba(0,0,0,0.4);
-      --color-subtle:       rgba(0,0,0,0.13);
-      --color-pill-bg:      rgba(0,0,0,0.08);
+      --color-text:         #FFFFFF;
+      --color-muted:        rgba(255,255,255,0.5);
+      --color-subtle:       rgba(255,255,255,0.13);
+      --color-pill-bg:      rgba(255,255,255,0.12);
 
       --font-body:    'Inter', system-ui, sans-serif;
       --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
@@ -144,7 +144,7 @@
 
     .experiment-thumb {
       width: 100%;
-      background: rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.08);
       overflow: hidden;
     }
 
@@ -162,7 +162,7 @@
 
     .experiment-thumb-placeholder {
       font-size: 13px;
-      color: rgba(0,0,0,0.3);
+      color: rgba(255,255,255,0.3);
       letter-spacing: 0.04em;
       padding: 40px;
     }
@@ -663,7 +663,7 @@
         const root = document.documentElement;
         const _mob = window.innerWidth <= 800;
         Object.entries(s).forEach(([k, v]) => { if (_mob && k === '--pad-page-h') return; root.style.setProperty(k, v); });
-        const hex = (s['--color-experiments'] || '#F1DFC1').trim();
+        const hex = (s['--color-experiments'] || '#000000').trim();
         function lum(h) {
           h = h.replace('#','');
           if (h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
@@ -678,6 +678,16 @@
         root.style.setProperty('--color-subtle',  isLight ? 'rgba(255,255,255,0.2)'  : 'rgba(0,0,0,0.13)');
         root.style.setProperty('--color-pill-bg', isLight ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)');
       } catch (e) {}
+    })();
+  </script>
+  <script>
+    (function () {
+      var r = document.documentElement.style;
+      r.setProperty('--color-experiments', '#000000');
+      r.setProperty('--color-text',    '#FFFFFF');
+      r.setProperty('--color-muted',   'rgba(255,255,255,0.5)');
+      r.setProperty('--color-subtle',  'rgba(255,255,255,0.13)');
+      r.setProperty('--color-pill-bg', 'rgba(255,255,255,0.12)');
     })();
   </script>
 

@@ -2,7 +2,7 @@
   var PAGE_COLORS = {
     '/':              '#FFFFFF',
     '/about/':        '#4E9AC3',
-    '/experiments/':  '#F1DFC1',
+    '/experiments/':  '#000000',
   };
 
   // Overlay element used to flash the target color on exit
