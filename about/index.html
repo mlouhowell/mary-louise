@@ -205,6 +205,45 @@
       color: var(--color-text);
     }
 
+    .resume-section {
+      grid-column: 3;
+      grid-row: 1 / 3;
+      margin-top: 48px;
+    }
+
+    .resume-entry {
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .resume-entry:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .resume-title {
+      font-family: var(--font-body);
+      font-size: var(--size-body);
+      font-weight: 500;
+      color: var(--color-text);
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .resume-date {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(0,0,0,0.4);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
     footer {
       display: flex;
       justify-content: flex-start;
@@ -276,6 +315,28 @@
             <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
             <p>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</p>
             <p>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</p>
+          </div>
+        </div>
+        <div class="resume-section">
+          <div class="resume-entry">
+            <span class="resume-title">Guac / Product Designer</span>
+            <span class="resume-date">2024-2026</span>
+          </div>
+          <div class="resume-entry">
+            <span class="resume-title">Afresh / Product and Brand Designer</span>
+            <span class="resume-date">2021-2024</span>
+          </div>
+          <div class="resume-entry">
+            <span class="resume-title">theAlchemi / Brand Designer</span>
+            <span class="resume-date">2019-2021</span>
+          </div>
+          <div class="resume-entry">
+            <span class="resume-title">Happy Cog / Design Intern</span>
+            <span class="resume-date">2018</span>
+          </div>
+          <div class="resume-entry">
+            <span class="resume-title">Maryland Institute<br>College of Art / Graphic Design</span>
+            <span class="resume-date">2017-2018</span>
           </div>
         </div>
       </div>
