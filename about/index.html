@@ -153,6 +153,23 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      opacity: 0;
+      animation: imageLoadFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .profile-photo.loaded {
+      opacity: 1;
+    }
+
+    @keyframes imageLoadFade {
+      from {
+        opacity: 0;
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0px);
+      }
     }
 
     .profile-frame-overlay {
@@ -246,7 +263,7 @@
       <div class="bio">
         <div class="bio-photo-wrap">
           <div class="profile-wrap">
-            <img src="/About%20me%20image/DSC05853%203.JPG" class="profile-photo" alt="ML Howell">
+            <img src="/About%20me%20image/DSC05853%203.JPG" class="profile-photo" alt="ML Howell" loading="eager">
           </div>
         </div>
         <div class="bio-copy" id="bio-copy">
@@ -269,6 +286,23 @@
 
   <script src="/footer.js?v=1"></script>
   <script src="/settings-widget.js?v=51"></script>
+  <script>
+    (function () {
+      const profilePhoto = document.querySelector('.profile-photo');
+      if (!profilePhoto) return;
+
+      if (profilePhoto.complete) {
+        profilePhoto.classList.add('loaded');
+      } else {
+        profilePhoto.addEventListener('load', () => {
+          profilePhoto.classList.add('loaded');
+        });
+        profilePhoto.addEventListener('error', () => {
+          profilePhoto.classList.add('loaded');
+        });
+      }
+    })();
+  </script>
   <script>
     (function () {
       try {
