@@ -134,7 +134,7 @@
 
     .bio {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       column-gap: var(--gap-cols);
       align-items: start;
     }
@@ -143,6 +143,7 @@
       display: flex;
       flex-direction: column;
       gap: var(--gap-section);
+      grid-column: 3;
     }
 
     .bio-photo-wrap {
@@ -192,6 +193,7 @@
     }
 
     .bio-copy {
+      grid-column: 1 / 3;
       position: relative;
     }
 
