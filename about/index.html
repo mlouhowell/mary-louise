@@ -217,53 +217,30 @@
       position: relative;
     }
 
-    .doodle-cards {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+    .doodles-bottom {
       grid-column: 2;
       grid-row: 2;
-      margin-top: 0;
-      gap: 10px;
-      align-items: flex-start;
-      align-content: flex-start;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      padding: 0 20px;
+      margin-top: auto;
     }
 
     .doodle-card {
       position: relative;
-      padding: 8px 8px 5px;
-      width: 100%;
-      box-shadow: 1px 3px 10px rgba(0,0,0,0.18);
-      z-index: 1;
-    }
-
-    .doodle-card::before {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: 22%;
-      width: 56%;
-      height: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.58) 0%, rgba(200,220,245,0.28) 100%);
-      border-radius: 1px;
-      box-shadow: 0 0 0 0.5px rgba(160,190,220,0.35), inset 0 1px 0 rgba(255,255,255,0.7);
-      z-index: 2;
+      width: 160px;
+      height: auto;
+      opacity: 0.85;
+      cursor: grab;
+      flex-shrink: 0;
     }
 
     .doodle-card img {
       width: 100%;
       height: auto;
       display: block;
-    }
-
-    .doodle-card-1 {
-      background-color: #F2C4A8;
-      transform: rotate(-3deg);
-    }
-
-.doodle-card-3 {
-      background-color: #B8D4CC;
-      transform: rotate(-1.5deg);
     }
 
     .bio-line {
@@ -451,15 +428,16 @@
             <span class="resume-date">2018</span>
           </div>
         </div>
-        <div class="doodle-cards">
+        <div class="doodles-bottom">
           <div class="doodle-card doodle-card-1">
             <img src="/Illustrations/Golden Gate.svg" alt="Golden Gate illustration" loading="lazy">
           </div>
+          <div style="flex: 1;"></div>
           <div class="doodle-card doodle-card-3">
             <img src="/Illustrations/Swimmer.svg" alt="Swimmer illustration" loading="lazy">
           </div>
         </div>
-        <div id="board-marker-wrap" style="position:absolute;bottom:-46px;left:50%;transform:translateX(-50%);z-index:50;line-height:0;cursor:pointer;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);overflow:visible;">
+        <div id="board-marker-wrap" style="position:absolute;bottom:-41px;left:50%;transform:translateX(-50%);z-index:50;line-height:0;cursor:pointer;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);overflow:visible;">
           <svg id="bm-svg" viewBox="0 0 190 42" width="190" height="42" overflow="visible" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="bm-cap" x1="0" y1="0" x2="0" y2="1">
@@ -562,11 +540,17 @@
 
       board.style.position = 'relative';
 
-      // Flatten doodle cards directly into board so each is independently draggable
-      var wrapper = board.querySelector('.doodle-cards');
-      if (wrapper) {
-        while (wrapper.firstChild) board.appendChild(wrapper.firstChild);
-        wrapper.remove();
+      // Flatten doodles container so cards are independently draggable
+      var doodlesWrapper = board.querySelector('.doodles-bottom');
+      if (doodlesWrapper) {
+        while (doodlesWrapper.firstChild) {
+          if (doodlesWrapper.firstChild.classList && doodlesWrapper.firstChild.classList.contains('doodle-card')) {
+            board.appendChild(doodlesWrapper.firstChild);
+          } else {
+            doodlesWrapper.removeChild(doodlesWrapper.firstChild);
+          }
+        }
+        doodlesWrapper.remove();
       }
 
       var items = Array.from(board.querySelectorAll(
@@ -591,6 +575,17 @@
 
       board.style.display = 'block';
       board.style.height  = savedH + 'px';
+
+      // Position doodles at bottom corners
+      var doodles = Array.from(board.querySelectorAll('.doodle-card'));
+      if (doodles.length >= 2) {
+        var bottomY = savedH - doodles[0].offsetHeight - 40;
+        doodles[0].style.width = (160 * 1.4) + 'px';
+        doodles[0].style.left = (10 + 25) + 'px';
+        doodles[0].style.top = (bottomY - 25 - 30 - 20) + 'px';
+        doodles[1].style.left = (board.offsetWidth - doodles[1].offsetWidth - 10 - 20) + 'px';
+        doodles[1].style.top = bottomY + 'px';
+      }
 
       var active = null, sx = 0, sy = 0, sl = 0, st = 0;
 
