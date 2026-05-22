@@ -224,11 +224,58 @@
       position: relative;
     }
 
-    .bio-illus {
+    .doodle-cards {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .doodle-card {
+      position: relative;
+      padding: 10px 10px 6px;
+      width: 62%;
+      box-shadow: 1px 3px 10px rgba(0,0,0,0.18);
+      z-index: 1;
+    }
+
+    .doodle-card::before {
+      content: '';
       position: absolute;
+      top: -6px;
+      left: 22%;
+      width: 56%;
+      height: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.58) 0%, rgba(200,220,245,0.28) 100%);
+      border-radius: 1px;
+      box-shadow: 0 0 0 0.5px rgba(160,190,220,0.35), inset 0 1px 0 rgba(255,255,255,0.7);
+      z-index: 2;
+    }
+
+    .doodle-card img {
+      width: 100%;
       height: auto;
-      filter: invert(var(--illus-invert, 0));
-      transition: filter 0.15s;
+      display: block;
+    }
+
+    .doodle-card:nth-child(1) {
+      background-color: #F2C4A8;
+      transform: rotate(-3deg);
+      align-self: flex-start;
+      margin-left: 4%;
+    }
+
+    .doodle-card:nth-child(2) {
+      background-color: #E8E0A0;
+      transform: rotate(2.5deg);
+      align-self: flex-end;
+      margin-right: 4%;
+    }
+
+    .doodle-card:nth-child(3) {
+      background-color: #B8D4CC;
+      transform: rotate(-1.5deg);
+      align-self: center;
     }
 
     .bio-line {
@@ -382,9 +429,6 @@
     <div class="content">
       <div class="bio">
         <div class="bio-copy" id="bio-copy">
-          <img src="/Illustrations/Sandwich.svg"    class="bio-illus" style="top:492px; left:53%; width:38%;"  alt="Sandwich illustration" loading="eager">
-          <img src="/Illustrations/Golden Gate.svg" class="bio-illus" style="top:58px;  left:0;    width:100%;" alt="Golden Gate illustration" loading="eager">
-          <img src="/Illustrations/Swimmer.svg"     class="bio-illus illus-swimmer" style="top:710px; left:0;    width:50%;"  alt="Swimmer by Alcatraz illustration" loading="eager">
           <div id="bio-text-source" hidden>
             <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
             <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
@@ -414,6 +458,17 @@
           <div class="resume-entry">
             <span class="resume-title"><a href="https://happycog.com" target="_blank" rel="noopener" class="resume-link">Happy Cog</a> / Design Intern</span>
             <span class="resume-date">2018</span>
+          </div>
+        </div>
+        <div class="doodle-cards">
+          <div class="doodle-card">
+            <img src="/Illustrations/Golden Gate.svg" alt="Golden Gate illustration" loading="lazy">
+          </div>
+          <div class="doodle-card">
+            <img src="/Illustrations/Sandwich.svg" alt="Sandwich illustration" loading="lazy">
+          </div>
+          <div class="doodle-card">
+            <img src="/Illustrations/Swimmer.svg" alt="Swimmer illustration" loading="lazy">
           </div>
         </div>
         </div><!-- /.bio-right -->
