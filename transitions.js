@@ -13,7 +13,7 @@
     'z-index:9999',
     'pointer-events:none',
     'opacity:0',
-    'transition:opacity 0.2s cubic-bezier(0.4,0,0.2,1)',
+    'transition:opacity 0.15s ease',
   ].join(';');
   document.documentElement.appendChild(overlay);
 
@@ -21,7 +21,7 @@
   var inner = document.querySelector('.page-inner');
   if (inner) {
     inner.style.opacity = '0';
-    inner.style.transition = 'opacity 0.25s cubic-bezier(0.4,0,0.2,1)';
+    inner.style.transition = 'opacity 0.2s ease';
     // Double rAF ensures the opacity:0 is painted before we flip to 1
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -70,6 +70,6 @@
 
     setTimeout(function () {
       window.location.href = href;
-    }, 210);
+    }, 80);
   }, true);
 })();
