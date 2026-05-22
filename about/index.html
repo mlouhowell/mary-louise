@@ -137,6 +137,8 @@
       grid-template-columns: repeat(3, 1fr);
       column-gap: var(--gap-cols);
       align-items: start;
+      position: relative;
+      row-gap: var(--gap-section);
     }
 
     .bio-photo-wrap {
@@ -188,9 +190,10 @@
     }
 
     .bio-copy {
-      grid-column: 1 / 3;
-      grid-row: 1;
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc((100% - var(--gap-cols) * 2) * 2 / 3 + var(--gap-cols));
     }
 
     .bio-illus {
@@ -213,7 +216,6 @@
     .resume-section {
       grid-column: 3;
       grid-row: 2;
-      margin-top: 48px;
     }
 
     .resume-entry {
@@ -288,7 +290,7 @@
       .header           { grid-template-columns: 1fr; gap: var(--gap-section); }
       .header h1        { grid-column: 1; }
       .bio              { grid-template-columns: 1fr; }
-      .bio-copy         { grid-column: 1; grid-row: auto; }
+      .bio-copy         { position: static; width: auto; }
       .bio-photo-wrap   { grid-column: 1; width: 100%; }
     }
   </style>
