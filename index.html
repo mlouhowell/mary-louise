@@ -386,6 +386,13 @@
       animation: mlw-palette-spin 14s linear infinite;
       pointer-events: none;
     }
+
+    @media (max-width: 800px) {
+      .mlw-spin-text {
+        width: 72%;
+        left: 50%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -579,11 +586,13 @@
         svg.setAttribute('viewBox', '0 0 200 200');
         svg.setAttribute('class', 'mlw-spin-text');
         svg.setAttribute('aria-hidden', 'true');
+        const isMobile = window.innerWidth <= 800;
+        const fontSize = isMobile ? '9' : '13';
         svg.innerHTML =
           '<defs>' +
             '<path id="mlwCirclePath" d="M 100,100 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"/>' +
           '</defs>' +
-          '<text font-family="HandOfML, cursive" font-size="13" fill="currentColor">' +
+          '<text font-family="HandOfML, cursive" font-size="' + fontSize + '" fill="currentColor">' +
             '<textPath href="#mlwCirclePath" textLength="238.76" lengthAdjust="spacingAndGlyphs">Pick your palette · Pick your palette ·</textPath>' +
           '</text>';
         el.appendChild(svg);
