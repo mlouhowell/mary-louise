@@ -375,10 +375,10 @@
       .header h1        { grid-column: 1; }
       .bio              { grid-template-columns: 1fr; }
       .bio-copy         { grid-column: 1; min-width: 0; }
-      .bio-right        { grid-column: 1; grid-template-columns: 1fr; max-width: 100%; overflow: hidden; position: relative; padding-bottom: 20px; }
+      .bio-right        { grid-column: 1; grid-template-columns: 1fr; max-width: 100%; overflow: visible; position: relative; padding-bottom: 20px; }
       #board-marker-wrap { bottom: -15px !important; }
       .bio-photo-wrap   { width: 126px; grid-column: auto; grid-row: auto; margin-left: -10px; }
-      .resume-section   { margin-top: 40px; margin-left: -20px; position: relative; z-index: 2; width: calc(100% + 20px); font-size: 11px; padding: 14px 11px 12px; }
+      .resume-section   { margin-top: 40px; margin-left: 0px; position: relative; z-index: 2; width: calc(100% + 20px); font-size: 11px; padding: 14px 11px 12px; }
       .bio-photo-magnet { left: calc(50% - 10px); }
       .resume-section::before { left: calc(50% - 10px); top: -22px; }
     }
@@ -636,7 +636,7 @@
             doodles[0].style.left = '8px';
             doodles[0].style.top = (bottomY - 195) + 'px';
             doodles[1].style.width = '130px';
-            doodles[1].style.left = (boardW - 308) + 'px';
+            doodles[1].style.left = (boardW - 338) + 'px';
             doodles[1].style.top = (bottomY - 70) + 'px';
           } else {
             doodles[0].style.width = '224px';
