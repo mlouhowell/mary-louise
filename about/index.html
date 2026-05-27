@@ -698,17 +698,20 @@
       document.addEventListener('mousemove', function (e) { drag(e.clientX, e.clientY); });
       document.addEventListener('mouseup', drop);
 
-      board.addEventListener('touchstart', function (e) {
-        var el = e.target.closest('.bio-photo-wrap, .resume-section');
-        if (!el || !board.contains(el)) return;
-        grab(el, e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-      document.addEventListener('touchmove', function (e) {
-        if (!active) return;
-        e.preventDefault();
-        drag(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: false });
-      document.addEventListener('touchend', drop);
+      // Touch drag — desktop-only (mobile needs scroll to work freely)
+      if (window.innerWidth > 800) {
+        board.addEventListener('touchstart', function (e) {
+          var el = e.target.closest('.bio-photo-wrap, .resume-section');
+          if (!el || !board.contains(el)) return;
+          grab(el, e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        document.addEventListener('touchmove', function (e) {
+          if (!active) return;
+          e.preventDefault();
+          drag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+        document.addEventListener('touchend', drop);
+      }
     }
 
     if (document.readyState === 'complete') {
