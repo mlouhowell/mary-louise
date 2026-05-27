@@ -860,7 +860,10 @@
     const FONT   = `${bodyPx}px Inter`
     const LINE_H = Math.round(bodyPx * 1.6875)
 
-    const colW = bioCopy.clientWidth
+    const pageInner = document.querySelector('.page-inner')
+    const piStyle   = getComputedStyle(pageInner)
+    const availW    = pageInner.clientWidth - parseFloat(piStyle.paddingLeft) - parseFloat(piStyle.paddingRight)
+    const colW      = Math.min(Math.floor(bioCopy.getBoundingClientRect().width), Math.floor(availW))
 
     // Clamp images so they never overflow the column
     bioCopy.querySelectorAll('.bio-illus').forEach(img => {
