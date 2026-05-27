@@ -728,9 +728,14 @@
     function init() {
       var board    = document.querySelector('.bio-right');
       var mkWrap   = document.getElementById('board-marker-wrap');
+      var mkSvg    = document.getElementById('bm-svg');
       var capGroup = document.getElementById('bm-cap-g');
       var nib      = document.getElementById('bm-nib');
       if (!board || !mkWrap) return;
+
+      // Give the SVG its own transition so the wrapper (hit area) never moves
+      mkSvg.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+      mkSvg.style.display = 'block';
 
       // Canvas overlay for drawing
       var canvas = document.createElement('canvas');
@@ -764,14 +769,15 @@
       var mkCursor = "url(\"data:image/svg+xml," + encodeURIComponent(mkCursorSVG) + "\") 3 29, crosshair";
 
       // Helper: open/close marker visuals
+      // Animate the SVG only — wrapper stays put so hover hit area never jitters
       function openMarkerVisual() {
-        mkWrap.style.transform = 'translateX(-50%) translateY(-16px) rotate(-14deg)';
+        mkSvg.style.transform = 'translateY(-16px) rotate(-14deg)';
         capGroup.style.transform = 'translateX(-36px) translateY(-6px) rotate(-30deg)';
         nib.style.opacity = '1';
       }
 
       function closeMarkerVisual() {
-        mkWrap.style.transform = 'translateX(-50%)';
+        mkSvg.style.transform = '';
         capGroup.style.transform = '';
         nib.style.opacity = '0';
       }
