@@ -763,21 +763,39 @@
       ].join('');
       var mkCursor = "url(\"data:image/svg+xml," + encodeURIComponent(mkCursorSVG) + "\") 3 29, crosshair";
 
-      // Toggle draw mode when marker is clicked
+      // Helper: open/close marker visuals
+      function openMarkerVisual() {
+        mkWrap.style.transform = 'translateX(-50%) translateY(-16px) rotate(-14deg)';
+        capGroup.style.transform = 'translateX(-36px) translateY(-6px) rotate(-30deg)';
+        nib.style.opacity = '1';
+      }
+
+      function closeMarkerVisual() {
+        mkWrap.style.transform = 'translateX(-50%)';
+        capGroup.style.transform = '';
+        nib.style.opacity = '0';
+      }
+
+      // Hover: uncap the marker as a preview (only when not already drawing)
+      mkWrap.addEventListener('mouseenter', function () {
+        if (!drawMode) openMarkerVisual();
+      });
+
+      mkWrap.addEventListener('mouseleave', function () {
+        if (!drawMode) closeMarkerVisual();
+      });
+
+      // Click: toggle draw mode
       mkWrap.addEventListener('click', function (e) {
         e.stopPropagation();
         drawMode = !drawMode;
 
         if (drawMode) {
-          mkWrap.style.transform = 'translateX(-50%) translateY(-16px) rotate(-14deg)';
-          capGroup.style.transform = 'translateX(-36px) translateY(-6px) rotate(-30deg)';
-          nib.style.opacity = '1';
+          openMarkerVisual();
           canvas.style.pointerEvents = 'auto';
           canvas.style.cursor = mkCursor;
         } else {
-          mkWrap.style.transform = 'translateX(-50%)';
-          capGroup.style.transform = '';
-          nib.style.opacity = '0';
+          closeMarkerVisual();
           canvas.style.pointerEvents = 'none';
           canvas.style.cursor = '';
           penDown = false;
