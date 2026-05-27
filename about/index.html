@@ -459,11 +459,11 @@
               </linearGradient>
             </defs>
             <!-- White body -->
-            <path d="M 68,5 L 163,5 A 11,11 0 0 1 163,27 L 68,27 Z" fill="url(#bm-body)"/>
-            <!-- Body highlight -->
-            <rect x="70" y="7" width="91" height="4.5" rx="2.25" fill="rgba(255,255,255,0.72)"/>
-            <!-- Label strip -->
-            <rect x="84" y="11" width="64" height="9" rx="1.5" fill="rgba(0,0,0,0.04)" stroke="rgba(0,0,0,0.07)" stroke-width="0.5"/>
+            <g id="bm-body-g">
+              <path d="M 68,5 L 163,5 A 11,11 0 0 1 163,27 L 68,27 Z" fill="url(#bm-body)"/>
+              <!-- Body highlight -->
+              <rect x="70" y="7" width="91" height="4.5" rx="2.25" fill="rgba(255,255,255,0.72)"/>
+            </g>
             <!-- Felt nib — revealed when uncapped -->
             <!-- Nib — white neck taper + rectangular chisel tip -->
             <g id="bm-nib" style="opacity:0;transition:opacity 0.15s 0.18s;">
@@ -729,16 +729,18 @@
     if (window.innerWidth <= 800) return;
 
     function init() {
-      var board    = document.querySelector('.bio-right');
-      var mkWrap   = document.getElementById('board-marker-wrap');
-      var mkSvg    = document.getElementById('bm-svg');
-      var capGroup = document.getElementById('bm-cap-g');
-      var nib      = document.getElementById('bm-nib');
+      var board     = document.querySelector('.bio-right');
+      var mkWrap    = document.getElementById('board-marker-wrap');
+      var mkSvg     = document.getElementById('bm-svg');
+      var capGroup  = document.getElementById('bm-cap-g');
+      var nib       = document.getElementById('bm-nib');
+      var bodyGroup = document.getElementById('bm-body-g');
       if (!board || !mkWrap) return;
 
       // Give the SVG its own transition so the wrapper (hit area) never moves
       mkSvg.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
       mkSvg.style.display = 'block';
+      bodyGroup.style.transition = 'opacity 0.2s ease';
 
       // Canvas overlay for drawing
       var canvas = document.createElement('canvas');
@@ -760,16 +762,16 @@
       var penDown  = false;
       var lx, ly;
 
-      // Custom marker cursor — angled like a held pen, hotspot at nib tip (3,29)
+      // Custom marker cursor — angled like a held pen, hotspot at nib tip scaled to 64px
       var mkCursorSVG = [
-        "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'>",
+        "<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 32 32'>",
         "<path d='M 7.5,19.5 L 25.5,1.5 A 3.5,3.5 0 0 1 30.5,6.5 L 12.5,24.5 Z' fill='#f0f0f0' stroke='#c8c8c8' stroke-width='.6'/>",
         "<path d='M 9,18 L 24,3 L 26,5 L 11,20 Z' fill='rgba(255,255,255,0.65)'/>",
         "<path d='M 4.6,24.6 L 7.5,19.5 L 12.5,24.5 L 7.4,27.4 Z' fill='#e4e4e4'/>",
         "<path d='M 1.6,27.6 L 4.6,24.6 L 7.4,27.4 L 4.4,30.4 Z' fill='#1a1a1a'/>",
         "</svg>"
       ].join('');
-      var mkCursor = "url(\"data:image/svg+xml," + encodeURIComponent(mkCursorSVG) + "\") 3 29, crosshair";
+      var mkCursor = "url(\"data:image/svg+xml," + encodeURIComponent(mkCursorSVG) + "\") 8 73, crosshair";
 
       // Helper: open/close marker visuals
       // Animate the SVG only — wrapper stays put so hover hit area never jitters
@@ -800,14 +802,22 @@
         drawMode = !drawMode;
 
         if (drawMode) {
-          openMarkerVisual();
+          // Reset cap to normal position (body will disappear, cap stays as exit target)
+          closeMarkerVisual();
           canvas.style.pointerEvents = 'auto';
           canvas.style.cursor = mkCursor;
+          mkWrap.style.cursor = mkCursor; // show marker cursor immediately on click
+          // Hide body only — cap stays visible so user knows where to click to exit
+          bodyGroup.style.opacity = '0';
+          mkWrap.style.zIndex = '300'; // above canvas so cap stays clickable
         } else {
-          closeMarkerVisual();
           canvas.style.pointerEvents = 'none';
           canvas.style.cursor = '';
           penDown = false;
+          // Restore body
+          bodyGroup.style.opacity = '';
+          mkWrap.style.zIndex = '50';
+          mkWrap.style.cursor = 'pointer';
         }
       });
 
