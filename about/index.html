@@ -362,7 +362,7 @@
         const root = document.documentElement;
         const _mob = window.innerWidth <= 800;
         Object.entries(s).forEach(([k, v]) => { if (_mob && k === '--pad-page-h') return; root.style.setProperty(k, v); });
-        const hex = (s['--color-about'] || '#4E9AC3').trim();
+        const hex = (s['--color-about'] || '#9DC6E3').trim();
         function lum(h) {
           h = h.replace('#','');
           if (h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
