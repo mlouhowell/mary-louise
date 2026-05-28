@@ -6,140 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — Work</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/global.css">
   <style>
-    @font-face {
-      font-family: 'HandOfML';
-      src: url('/fonts/HandOfML.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    /* ── Design tokens (overridable via /settings) ────────── */
-    :root {
-      --color-work:         #FFFFFF;
-      --color-about:        #4E9AC3;
-      --color-experiments:  #F1DFC1;
-      --color-project-bg:   #FFFFFF;
-      --color-triangle:     #C8341A;
-      --color-text:         #1A1A1A;
-      --color-muted:        rgba(0,0,0,0.4);
-      --color-subtle:       rgba(0,0,0,0.13);
-      --color-pill-bg:      rgba(0,0,0,0.08);
-
-      --font-body:    'Inter', system-ui, sans-serif;
-      --font-display: 'Inter Display', 'Inter', system-ui, sans-serif;
-
-      --size-h1:   32px;
-      --size-h2:   24px;
-      --size-h3:   20px;
-      --size-body: 16px;
-      --size-nav:  20px;
-
-      --pad-page-h:   80px;
-      --pad-page-v:   56px;
-      --gap-section:  48px;
-      --gap-cols:     80px;
-      --triangle-size: 180px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--font-body);
-      background-color: var(--color-work);
-      min-height: 100vh;
-      color: var(--color-text);
-      overflow-x: hidden;
-    }
-
-    /* ── Page layout ──────────────────────────────────────── */
-    .page {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      max-width: 1200px;
-      margin: 0 auto;
-      background-color: var(--color-work);
-      overflow: hidden;
-    }
-
-    .page-inner {
-      height: 100%;
-      overflow-y: auto;
-      scrollbar-width: none;
-      scrollbar-gutter: stable;
-      padding: var(--pad-page-v) var(--pad-page-h);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .page-inner::-webkit-scrollbar { display: none; }
-
-    /* ── Header ───────────────────────────────────────────── */
-    .header {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--gap-cols);
-      align-items: flex-start;
-      margin-bottom: 96px;
-    }
-
-    .header h1 {
-      grid-column: 1 / 3;
-    }
-
-    h1 {
-      font-family: var(--font-display);
-      font-size: var(--size-h1);
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      line-height: 1.25;
-    }
-
-    h2 {
-      font-family: var(--font-body);
-      font-size: var(--size-h2);
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      line-height: 1.35;
-      color: var(--color-text);
-    }
-
-    h3 {
-      font-family: var(--font-body);
-      font-size: var(--size-h3);
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      line-height: 1.2;
-      color: var(--color-text);
-    }
-
-    nav {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-      padding-top: 6px;
-      gap: 8px;
-    }
-
-    nav a {
-      font-family: var(--font-body);
-      font-size: var(--size-h3);
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      color: var(--color-text);
-      text-decoration: none;
-      line-height: 1.2;
-      transition: opacity 0.15s;
-    }
-
-    nav a.active { text-decoration: underline; text-underline-offset: 3px; }
-    nav a:hover  { color: #C8341A; }
-
-    /* ── Two-column body ──────────────────────────────────── */
+    /* ── Work page — page-specific styles ────────────────── */
     .content {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -157,7 +26,6 @@
     .content .work-col  { grid-row: 2; margin-top: var(--gap-section); }
     .content .right-col { grid-row: 1 / 3; grid-column: 3; }
 
-    .section-label { margin-bottom: 16px; }
 
     /* ── Bio ──────────────────────────────────────────────── */
     .bio p {
@@ -210,28 +78,6 @@
       font-size: 13px;
       color: rgba(0,0,0,0.35);
       letter-spacing: 0.04em;
-    }
-
-    @keyframes imageLoadFade {
-      from {
-        opacity: 0;
-        filter: blur(8px);
-      }
-      to {
-        opacity: 1;
-        filter: blur(0px);
-      }
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .project-item {
@@ -323,45 +169,7 @@
       font-style: normal;
     }
 
-    /* ── Footer ───────────────────────────────────────────── */
-    footer {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding-top: 40px;
-      margin-top: 48px;
-      flex-wrap: wrap;
-      gap: 16px;
-      column-gap: 20px;
-    }
-
-    footer span,
-    footer a {
-      font-size: 12px;
-      letter-spacing: -0.2px;
-      color: var(--color-text);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    footer a:hover { opacity: 0.6; }
-
-    .footer-links { display: flex; gap: 20px; }
-
-    /* ── Responsive ───────────────────────────────────────── */
     @media (max-width: 800px) {
-      :root {
-        --size-h1:   28px;
-        --size-h2:   20px;
-        --size-h3:   17px;
-        --size-body: 15px;
-        --pad-page-h: 16px;
-        --size-nav: 16px;
-        --gap-cols: 40px;
-        --triangle-size: 72px;
-      }
-      .header  { grid-template-columns: 1fr; gap: var(--gap-section); }
-      .header h1 { grid-column: 1; }
       .content { grid-template-columns: 1fr; }
       .content .bio-col,
       .content .work-col,
