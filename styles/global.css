@@ -23,10 +23,11 @@
   --size-h2:   24px;
   --size-h3:   20px;
   --size-body: 16px;
-  --size-nav:  20px;
+  --size-nav:  24px;
 
   --pad-page-h:    80px;
   --pad-page-v:    56px;
+  --pad-page-top:  96px;
   --gap-section:   48px;
   --gap-cols:      80px;
   --triangle-size: 180px;
@@ -70,8 +71,7 @@ body {
   height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
-  scrollbar-gutter: stable;
-  padding: var(--pad-page-v) var(--pad-page-h);
+  padding: var(--pad-page-top) var(--pad-page-h) var(--pad-page-v);
   display: flex;
   flex-direction: column;
 }
@@ -99,7 +99,7 @@ p {
 }
 
 h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--size-h1);
   font-weight: 600;
   letter-spacing: -0.2px;
@@ -133,17 +133,17 @@ nav {
   flex-direction: column;
   text-align: left;
   padding-top: 6px;
-  gap: 8px;
+  gap: 4px;
 }
 
 nav a {
   font-family: var(--font-body);
-  font-size: var(--size-h3);
-  font-weight: 600;
-  letter-spacing: -0.2px;
+  font-size: var(--size-nav);
+  font-weight: 500;
+  letter-spacing: 0.2px;
   color: var(--color-text);
   text-decoration: none;
-  line-height: 1.2;
+  line-height: 32px;
   transition: opacity 0.15s;
 }
 
@@ -163,13 +163,10 @@ nav a:hover  { color: #C8341A; }
 /* ── Footer ───────────────────────────────────────────────── */
 footer {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
+  gap: 20px;
   padding-top: 40px;
   margin-top: 48px;
-  flex-wrap: wrap;
-  gap: 16px;
-  column-gap: 20px;
 }
 
 footer span,
@@ -182,7 +179,13 @@ footer a {
 }
 
 footer a:hover { opacity: 0.6; }
-.footer-links  { display: flex; gap: 20px; }
+.footer-credit { font-style: italic; margin-left: auto; }
+
+@media (max-width: 800px) {
+  footer         { flex-direction: column; gap: 12px; margin-top: 8px; padding-top: 8px; }
+  .footer-copy   { order: 1; margin-top: 32px; }
+  .footer-credit { margin-left: 0; order: 2; }
+}
 
 /* ── Animations ───────────────────────────────────────────── */
 @keyframes imageLoadFade {
@@ -203,11 +206,14 @@ footer a:hover { opacity: 0.6; }
     --size-h3:   17px;
     --size-body: 15px;
     --pad-page-h: 16px;
-    --size-nav:  16px;
+    --pad-page-top: var(--pad-page-v);
+    --size-nav:  24px;
     --gap-cols:  40px;
     --triangle-size: 72px;
   }
 
-  .header    { grid-template-columns: 1fr; gap: var(--gap-section); }
+  .header    { grid-template-columns: 1fr; gap: var(--gap-section); margin-bottom: var(--gap-section); }
   .header h1 { grid-column: 1; }
+  nav        { gap: 0; }
+  nav a      { line-height: 1.6; }
 }

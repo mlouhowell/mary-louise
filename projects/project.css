@@ -13,7 +13,7 @@
 .page {
   position: static;
   top: auto; right: auto; bottom: auto; left: auto;
-  padding: var(--pad-page-v) var(--pad-page-h);
+  padding: var(--pad-page-top) var(--pad-page-h) var(--pad-page-v);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

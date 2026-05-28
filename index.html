@@ -17,23 +17,17 @@
       flex: 1;
     }
 
-    .content .bio-col,
-    .content .work-col {
-      grid-column: 1 / 3;
-    }
-
-    .content .bio-col   { grid-row: 1; }
-    .content .work-col  { grid-row: 2; margin-top: var(--gap-section); }
-    .content .right-col { grid-row: 1 / 3; grid-column: 3; }
+    .content .work-col  { grid-column: 1 / 3; grid-row: 1; }
+    .content .right-col { grid-column: 3; grid-row: 1; }
 
 
     /* ── Bio ──────────────────────────────────────────────── */
     .bio p {
       font-family: var(--font-body);
-      font-size: var(--size-body);
-      font-weight: 400;
-      letter-spacing: -0.2px;
-      line-height: 1.5;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      line-height: 32px;
       color: var(--color-text);
     }
 
@@ -171,14 +165,10 @@
 
     @media (max-width: 800px) {
       .content { grid-template-columns: 1fr; }
-      .content .bio-col,
       .content .work-col,
       .content .right-col { grid-column: 1; grid-row: auto; }
-      .bio-col   { order: 1; grid-row: auto; }
-      .right-col { order: 2; margin-top: var(--gap-section); grid-row: auto; }
-      .work-col  { order: 3; margin-top: var(--gap-section); grid-row: auto; }
-
-      .right-col .quote:last-child { margin-bottom: 0; }
+      .right-col { order: 1; }
+      .work-col  { order: 2; margin-top: var(--gap-section); }
     }
 
     @keyframes mlw-palette-spin {
@@ -219,24 +209,11 @@
 
     <div class="content">
 
-      <div class="bio-col">
-        <h2 class="section-label">Welcome!</h2>
-        <div class="bio">
-          <p>I'm a product designer in SF interested in building tools that unlock human creativity and productivity. I'm also interested in using technology to improve our physical world.</p>
-        </div>
-      </div>
-
       <div class="right-col">
-        <h2 class="section-label">Quotes I like</h2>
-        <div class="quote">
-          <p>It is important to use your hands, that is what distinguishes you from a cow or a computer operator.</p>
-          <cite>— Paul Rand</cite>
+        <div class="bio">
+          <p>I'm a product designer in SF interested in building tools that unlock human creativity and productivity.</p>
         </div>
-        <div class="quote">
-          <p>Write about what you know. Being honest is what counts. Trying to make the ordinary — extraordinary.</p>
-          <cite>— Ricky Gervais</cite>
-        </div>
-        <div id="mlw-illus" style="position: relative;"></div>
+        <div id="mlw-illus" style="position: relative; margin-top: 40px;"></div>
       </div>
 
       <div class="work-col">
@@ -444,6 +421,7 @@
       var pageInner = document.querySelector('.page-inner');
       var content   = document.querySelector('.content');
       var rightCol  = document.querySelector('.right-col');
+      var workCol   = document.querySelector('.work-col');
       if (!pageInner || !content || !rightCol) return;
 
       var SCROLL_START = 60;
@@ -453,6 +431,7 @@
 
       function measure() {
         content.style.gridTemplateColumns = '';
+        if (workCol) workCol.style.marginRight = '';
         W    = content.offsetWidth;
         G    = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap-cols')) || 80;
         colW = (W - 2 * G) / 3;
@@ -468,6 +447,7 @@
         ticking = false;
         if (window.innerWidth <= 800) {
           content.style.gridTemplateColumns = '';
+          if (workCol) workCol.style.marginRight = '';
           rightCol.style.opacity = '';
           rightCol.style.pointerEvents = '';
           return;
@@ -480,6 +460,8 @@
         var lw = (W - 2 * G - rw) / 2;
 
         content.style.gridTemplateColumns = lw + 'px ' + lw + 'px ' + rw + 'px';
+        // Pull the work column right by the dead-gap amount so it fills the full width
+        if (workCol) workCol.style.marginRight = (-G * p) + 'px';
         rightCol.style.opacity        = 1 - Math.min(1, p * 2);
         rightCol.style.pointerEvents  = p > 0.5 ? 'none' : '';
       }
@@ -494,6 +476,7 @@
         window.addEventListener('resize', function () {
           if (window.innerWidth <= 800) {
             content.style.gridTemplateColumns = '';
+            if (workCol) workCol.style.marginRight = '';
             rightCol.style.opacity = '';
             rightCol.style.pointerEvents = '';
             return;
