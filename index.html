@@ -10,15 +10,9 @@
   <style>
     /* ── Work page — page-specific styles ────────────────── */
     .content {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      column-gap: var(--gap-cols);
-      row-gap: 0;
+      display: block;
       flex: 1;
     }
-
-    .content .work-col  { grid-column: 1 / 3; grid-row: 1; }
-    .content .right-col { grid-column: 3; grid-row: 1; }
 
 
     /* ── Bio ──────────────────────────────────────────────── */
@@ -32,7 +26,12 @@
     }
 
     /* ── Work / project preview ───────────────────────────── */
-    .work-section { margin-top: 0; }
+    .work-section {
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--gap-cols);
+    }
 
     .project-item {
       display: block;
@@ -164,33 +163,9 @@
     }
 
     @media (max-width: 800px) {
-      .content { grid-template-columns: 1fr; }
-      .content .work-col,
-      .content .right-col { grid-column: 1; grid-row: auto; }
-      .right-col { order: 1; }
-      .work-col  { order: 2; margin-top: var(--gap-section); }
+      .work-section { grid-template-columns: 1fr; }
     }
 
-    @keyframes mlw-palette-spin {
-      from { transform: translate(-50%, -50%) rotate(0deg); }
-      to   { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    .mlw-spin-text {
-      position: absolute;
-      top: calc(50% + 2px);
-      left: calc(38% - 2px);
-      width: 52%;
-      height: auto;
-      animation: mlw-palette-spin 14s linear infinite;
-      pointer-events: none;
-    }
-
-    @media (max-width: 800px) {
-      .mlw-spin-text {
-        width: 26%;
-        left: calc(19% - 2px);
-      }
-    }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -208,13 +183,6 @@
     </div>
 
     <div class="content">
-
-      <div class="right-col">
-        <div class="bio">
-          <p>I'm a product designer in SF interested in building tools that unlock human creativity and productivity.</p>
-        </div>
-        <div id="mlw-illus" style="position: relative; margin-top: 40px;"></div>
-      </div>
 
       <div class="work-col">
         <div class="work-section">
@@ -247,7 +215,7 @@
               </div>
               <div class="project-meta-bottom">
                 <span class="project-meta-date">2026</span>
-                <span class="project-meta-pill">Web App</span>
+                <span class="project-meta-pill">Microsite</span>
               </div>
             </div>
           </a>
@@ -255,7 +223,7 @@
           <a href="https://travels.mary-louise.com" target="_blank" class="project-item">
             <div class="project-thumb">
               <video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block;">
-                <source src="/projects/Travel/thumb.mp4" type="video/mp4">
+                <source src="/projects/Travel/thumb.mp4?v=3" type="video/mp4">
               </video>
             </div>
             <div class="project-meta">
@@ -265,7 +233,7 @@
               </div>
               <div class="project-meta-bottom">
                 <span class="project-meta-date">2026</span>
-                <span class="project-meta-pill">Travel Journal Microsite</span>
+                <span class="project-meta-pill">Microsite</span>
               </div>
             </div>
           </a>
@@ -288,7 +256,7 @@
 
           <a href="/projects/guac/" class="project-item">
             <div class="project-thumb">
-              <img src="/projects/guac/Images/Hero.png" alt="Guac Exhibition Booth">
+              <img src="/projects/guac/Images/Thumbnail.png" alt="Guac Exhibition Booth">
             </div>
             <div class="project-meta">
               <div class="project-meta-top">
@@ -380,32 +348,6 @@
   </script>
   <script>
     (function () {
-      function addPaletteSpinText() {
-        const el = document.getElementById('mlw-illus');
-        if (!el) return;
-        const ns = 'http://www.w3.org/2000/svg';
-        const svg = document.createElementNS(ns, 'svg');
-        svg.setAttribute('viewBox', '0 0 200 200');
-        svg.setAttribute('class', 'mlw-spin-text');
-        svg.setAttribute('aria-hidden', 'true');
-        svg.innerHTML =
-          '<defs>' +
-            '<path id="mlwCirclePath" d="M 100,100 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"/>' +
-          '</defs>' +
-          '<text font-family="Inter, system-ui, sans-serif" font-weight="500" font-size="13" fill="currentColor">' +
-            '<textPath href="#mlwCirclePath" textLength="238.76" lengthAdjust="spacingAndGlyphs">Pick your palette · Pick your palette ·</textPath>' +
-          '</text>';
-        el.appendChild(svg);
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', addPaletteSpinText);
-      } else {
-        addPaletteSpinText();
-      }
-    })();
-  </script>
-  <script>
-    (function () {
       try {
         const saved = sessionStorage.getItem('ml-settings');
         if (!saved) return;
@@ -432,77 +374,5 @@
     })();
   </script>
 
-  <script>
-    (function () {
-      if (window.innerWidth <= 800) return;
-
-      var pageInner = document.querySelector('.page-inner');
-      var content   = document.querySelector('.content');
-      var rightCol  = document.querySelector('.right-col');
-      var workCol   = document.querySelector('.work-col');
-      if (!pageInner || !content || !rightCol) return;
-
-      var SCROLL_START = 60;
-      var SCROLL_END   = 300;
-
-      var W, G, colW, ticking = false;
-
-      function measure() {
-        content.style.gridTemplateColumns = '';
-        if (workCol) workCol.style.marginRight = '';
-        W    = content.offsetWidth;
-        G    = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap-cols')) || 80;
-        colW = (W - 2 * G) / 3;
-        // Switch to pixel-based immediately so transitions are seamless
-        content.style.gridTemplateColumns = colW + 'px ' + colW + 'px ' + colW + 'px';
-      }
-
-      function ease(t) {
-        return 1 - Math.pow(1 - t, 3);
-      }
-
-      function render() {
-        ticking = false;
-        if (window.innerWidth <= 800) {
-          content.style.gridTemplateColumns = '';
-          if (workCol) workCol.style.marginRight = '';
-          rightCol.style.opacity = '';
-          rightCol.style.pointerEvents = '';
-          return;
-        }
-        var scroll = pageInner.scrollTop;
-        var raw    = (scroll - SCROLL_START) / (SCROLL_END - SCROLL_START);
-        var p      = ease(Math.max(0, Math.min(1, raw)));
-
-        var rw = colW * (1 - p);
-        var lw = (W - 2 * G - rw) / 2;
-
-        content.style.gridTemplateColumns = lw + 'px ' + lw + 'px ' + rw + 'px';
-        // Pull the work column right by the dead-gap amount so it fills the full width
-        if (workCol) workCol.style.marginRight = (-G * p) + 'px';
-        rightCol.style.opacity        = 1 - Math.min(1, p * 2);
-        rightCol.style.pointerEvents  = p > 0.5 ? 'none' : '';
-      }
-
-      function onScroll() {
-        if (!ticking) { ticking = true; requestAnimationFrame(render); }
-      }
-
-      requestAnimationFrame(function () {
-        measure();
-        pageInner.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', function () {
-          if (window.innerWidth <= 800) {
-            content.style.gridTemplateColumns = '';
-            if (workCol) workCol.style.marginRight = '';
-            rightCol.style.opacity = '';
-            rightCol.style.pointerEvents = '';
-            return;
-          }
-          measure(); render();
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
