@@ -133,7 +133,7 @@ nav {
   flex-direction: column;
   text-align: left;
   padding-top: 6px;
-  gap: 4px;
+  gap: 0;
 }
 
 nav a {
