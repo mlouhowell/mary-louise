@@ -21,55 +21,11 @@
 
     h1 { max-width: 640px; }
 
-    /* ── Infinite vertical scroll ─────────────────────── */
-    .exp-canvas-viewport {
+    .grid {
+      columns: 3;
+      column-gap: var(--gap-cols);
       flex: 1;
-      position: relative;
-      overflow: hidden;
-      cursor: grab;
-      touch-action: none;
-      user-select: none;
-      -webkit-user-select: none;
-      margin-bottom: calc(-1 * var(--pad-page-v));
     }
-    .exp-canvas-viewport:active { cursor: grabbing; }
-    .exp-canvas { position: absolute; inset: 0; }
-    .exp-col {
-      position: absolute;
-      top: 0;
-      will-change: transform;
-    }
-    .exp-col .experiment-item {
-      width: 100%;
-      margin-bottom: 52px;
-      animation: none;
-      cursor: pointer;
-    }
-    .exp-col .experiment-thumb img,
-    .exp-col .experiment-thumb video {
-      opacity: 1;
-      animation: none;
-      transition: none;
-      -webkit-user-drag: none;
-    }
-    .exp-hint {
-      position: absolute;
-      bottom: 18px; left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--font-body);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-      background: rgba(0,0,0,0.35);
-      padding: 6px 12px;
-      border-radius: 100px;
-      pointer-events: none;
-      transition: opacity 0.4s;
-      -webkit-backdrop-filter: blur(4px);
-      backdrop-filter: blur(4px);
-    }
-    .exp-hint.hidden { opacity: 0; }
 
     .experiment-item {
       display: flex;
@@ -370,6 +326,9 @@
       .exp-modal-title { font-size: var(--size-h2); }
     }
 
+    @media (max-width: 800px) {
+      .grid { columns: 1; column-gap: 0; }
+    }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -386,7 +345,7 @@
       </nav>
     </div>
 
-    <template id="exp-source">
+    <div class="grid">
 
       <a class="experiment-item" href="https://travels.mary-louise.com" target="_blank" rel="noopener" aria-label="View Travel Playing Cards" style="text-decoration:none;color:inherit;">
         <div class="experiment-thumb">
@@ -537,12 +496,9 @@
         </div>
       </div>
 
-    </template>
-
-    <div class="exp-canvas-viewport" id="exp-viewport">
-      <div class="exp-canvas" id="exp-canvas"></div>
-      <div class="exp-hint" id="exp-hint">Drag to explore</div>
     </div>
+
+    <footer></footer>
     </div><!-- /.page-inner -->
   </div>
 
@@ -729,7 +685,6 @@
 
         if (push) history.pushState({ slug }, '', '#' + slug);
       }
-      window.__openExp = openModal;
 
       function closeModal(push) {
         if (!modal.classList.contains('is-open')) return;
@@ -780,126 +735,6 @@
       // Direct link on load
       const initSlug = location.hash.slice(1);
       if (initSlug && EXPERIMENTS[initSlug]) openModal(initSlug, false);
-    })();
-  </script>
-
-  <!-- Infinite vertical-scroll masonry of experiment cards -->
-  <script>
-    (function () {
-      const viewport = document.getElementById('exp-viewport');
-      const canvas   = document.getElementById('exp-canvas');
-      const tpl      = document.getElementById('exp-source');
-      const hint     = document.getElementById('exp-hint');
-      if (!viewport || !canvas || !tpl) return;
-
-      const items = Array.from(tpl.content.querySelectorAll('.experiment-item'));
-      const VGAP  = 52;   // vertical gap between cards (matches old masonry)
-      const mod   = (n, m) => ((n % m) + m) % m;
-
-      let cols = [];      // [{ el, period }]
-      let camY = 0;
-
-      function prep(node) {
-        node.removeAttribute('tabindex');
-        node.querySelectorAll('img, video').forEach(m => {
-          m.draggable = false;
-          if (m.tagName === 'VIDEO') { m.muted = true; const p = m.play(); if (p) p.catch(() => {}); }
-        });
-        return node;
-      }
-
-      function build() {
-        canvas.innerHTML = '';
-        cols = [];
-        const vw = viewport.clientWidth, vh = viewport.clientHeight;
-        const GAP = parseFloat(getComputedStyle(document.documentElement)
-                      .getPropertyValue('--gap-cols')) || 80;
-        const NCOLS = vw <= 800 ? 1 : 3;
-        const colW  = (vw - (NCOLS - 1) * GAP) / NCOLS;
-
-        // Measure each card's height at the real column width.
-        const meas = document.createElement('div');
-        meas.style.cssText = 'position:absolute;visibility:hidden;width:' + colW + 'px;';
-        canvas.appendChild(meas);
-        const cardH = items.map(it => {
-          const n = prep(it.cloneNode(true));
-          meas.appendChild(n);
-          return n.offsetHeight;
-        });
-        canvas.removeChild(meas);
-
-        // Greedy masonry: drop each card into the shortest column.
-        const buckets = Array.from({ length: NCOLS }, () => []);
-        const heights = new Array(NCOLS).fill(0);
-        items.forEach((_, i) => {
-          let s = 0;
-          for (let j = 1; j < NCOLS; j++) if (heights[j] < heights[s]) s = j;
-          buckets[s].push(i);
-          heights[s] += cardH[i] + VGAP;
-        });
-
-        // Build each column, repeating its cards enough to loop seamlessly.
-        for (let j = 0; j < NCOLS; j++) {
-          const period = heights[j];                 // one full cycle of this column
-          const reps   = Math.ceil((vh + period) / period) + 1;
-          const colEl  = document.createElement('div');
-          colEl.className = 'exp-col';
-          colEl.style.left  = (j * (colW + GAP)) + 'px';
-          colEl.style.width = colW + 'px';
-          const frag = document.createDocumentFragment();
-          for (let k = 0; k < reps; k++)
-            for (const idx of buckets[j]) frag.appendChild(prep(items[idx].cloneNode(true)));
-          colEl.appendChild(frag);
-          canvas.appendChild(colEl);
-          cols.push({ el: colEl, period });
-        }
-        apply();
-      }
-
-      function apply() {
-        for (const c of cols)
-          c.el.style.transform = 'translateY(' + (-mod(camY, c.period)) + 'px)';
-      }
-
-      function dismissHint() {
-        if (hint && !hint.classList.contains('hidden')) hint.classList.add('hidden');
-      }
-
-      // Wheel / trackpad → vertical scroll
-      viewport.addEventListener('wheel', e => {
-        e.preventDefault();
-        camY += e.deltaY;
-        apply(); dismissHint();
-      }, { passive: false });
-
-      // Drag → vertical scroll
-      let active = false, suppress = false, ly = 0, doy = 0;
-      viewport.addEventListener('pointerdown', e => {
-        active = true; suppress = false;
-        ly = doy = e.clientY;
-        viewport.setPointerCapture(e.pointerId);
-      });
-      viewport.addEventListener('pointermove', e => {
-        if (!active) return;
-        camY -= (e.clientY - ly);
-        ly = e.clientY;
-        if (Math.abs(e.clientY - doy) > 5) { suppress = true; dismissHint(); }
-        apply();
-      });
-      const end = () => { active = false; };
-      viewport.addEventListener('pointerup', end);
-      viewport.addEventListener('pointercancel', end);
-
-      // Click: cancel if it was a drag; data-slug opens modal; links navigate natively
-      canvas.addEventListener('click', e => {
-        if (suppress) { e.preventDefault(); e.stopPropagation(); suppress = false; return; }
-        const slugEl = e.target.closest('[data-slug]');
-        if (slugEl) { e.preventDefault(); window.__openExp && window.__openExp(slugEl.dataset.slug, true); }
-      }, true);
-
-      let rt;
-      window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(build, 150); });
-      build();
     })();
   </script>
 
