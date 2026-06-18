@@ -5,7 +5,7 @@
   <link rel="icon" type="image/svg+xml" href="/Icons/Shamrock.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — Experiments</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/global.css">
   <style>
     /* ── Experiments page — page-specific styles ──────────── */
@@ -77,6 +77,7 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      position: relative;
     }
 
     .meta-top {
@@ -100,16 +101,20 @@
       color: var(--color-muted);
       flex-shrink: 0;
       line-height: 1.4;
+      position: absolute;
+      top: 10px;
+      right: 0;
     }
 
     .meta-bottom {
       display: flex;
       align-items: center;
       gap: 8px;
+      order: -1; /* move year + tag above the title */
     }
 
     .meta-date {
-      font-family: var(--font-body);
+      font-family: 'Geist Mono', monospace;
       font-size: 13px;
       font-weight: 400;
       letter-spacing: -0.2px;
@@ -117,7 +122,7 @@
     }
 
     .meta-pill {
-      font-family: var(--font-body);
+      font-family: 'Geist Mono', monospace;
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.07em;
