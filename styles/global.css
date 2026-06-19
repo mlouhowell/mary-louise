@@ -60,10 +60,6 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   overflow-x: hidden;
-  /* Stop iOS Safari from auto-inflating text (which bursts the scaled
-     retro windows on the homepage and changes intended type sizes). */
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
 }
 
 /* ── Page layout ──────────────────────────────────────────── */
