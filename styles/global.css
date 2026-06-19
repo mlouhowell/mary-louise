@@ -4,6 +4,11 @@
    Page-specific overrides stay in each page's <style> block.
    ============================================================ */
 
+/* Geist Mono powers the global top nav — imported here so every
+   page that links global.css gets it (project pages don't load it
+   in their own <head>). */
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+
 /* ── Design tokens ────────────────────────────────────────── */
 :root {
   --color-work:         #FFFFFF;
@@ -78,16 +83,29 @@ body {
 
 .page-inner::-webkit-scrollbar { display: none; }
 
-/* ── Header ───────────────────────────────────────────────── */
-.header {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap-cols);
-  align-items: flex-start;
-  margin-bottom: 96px;
+/* ── Top navigation (global) ──────────────────────────────── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  /* Bar spans the full viewport width with consistent 24px edge gutters on
+     every page, so the name/links sit near the edges regardless of the
+     page's own content max-width. */
+  padding: 20px 24px;
+  background: var(--page-bg);
+  border-bottom: 1px solid var(--color-subtle);
 }
 
-.header h1 { grid-column: 1 / 3; }
+/* Page / project title sits directly below the nav, on the left */
+.page-title {
+  margin-bottom: 64px;
+}
 
 /* ── Typography ───────────────────────────────────────────── */
 p {
@@ -127,28 +145,30 @@ h3 {
   margin: 0;
 }
 
-/* ── Nav ──────────────────────────────────────────────────── */
-nav {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  padding-top: 6px;
-  gap: 0;
-}
-
-nav a {
-  font-family: var(--font-body);
-  font-size: var(--size-nav);
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  color: var(--color-text);
+/* ── Nav links ────────────────────────────────────────────── */
+.site-name,
+.nav-links a {
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #A2A2A2;
   text-decoration: none;
-  line-height: 32px;
-  transition: opacity 0.15s;
+  line-height: 1.4;
+  transition: color 0.15s;
 }
 
-nav a.active { text-decoration: underline; text-underline-offset: 3px; }
-nav a:hover  { color: #C8341A; }
+.site-name { flex-shrink: 0; }
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+}
+
+.site-name:hover,
+.nav-links a:hover { color: var(--color-text); }
+.nav-links a.active { color: var(--color-text); }
 
 /* ── Section label ────────────────────────────────────────── */
 .section-label {
@@ -206,14 +226,13 @@ footer a:hover { opacity: 0.6; }
     --size-h3:   17px;
     --size-body: 15px;
     --pad-page-h: 16px;
-    --pad-page-top: var(--pad-page-v);
+    --pad-page-top: 64px; /* reserve room for the fixed single-line nav bar */
     --size-nav:  24px;
     --gap-cols:  40px;
     --triangle-size: 72px;
   }
 
-  .header    { grid-template-columns: 1fr; gap: var(--gap-section); margin-bottom: var(--gap-section); }
-  .header h1 { grid-column: 1; }
-  nav        { gap: 0; }
-  nav a      { line-height: 1.6; }
+  .site-nav   { gap: 16px; padding-top: 14px; padding-bottom: 14px; }
+  .nav-links  { gap: 16px; }
+  .page-title { margin-bottom: 40px; }
 }

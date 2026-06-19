@@ -6,7 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — Work</title>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css">
+  <!-- Retro-windows section fonts (EB Garamond ≈ ITC Garamond, Silkscreen ≈ Geist Pixel) -->
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/global.css?v=3">
+  <link rel="stylesheet" href="/styles/retro-windows.css?v=12">
   <style>
     /* ── Work page — page-specific styles ────────────────── */
     .content {
@@ -25,19 +28,27 @@
       color: var(--color-text);
     }
 
-    /* ── Work / project preview ───────────────────────────── */
+    /* ── Expansive container: this page scales up to 1700px ── */
+    .page { max-width: 1700px; }
+    .page-inner {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    /* ── Work / project preview — uniform two-column grid ──── */
     .work-section {
       margin-top: 0;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: var(--gap-cols);
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      align-items: start;
     }
 
     .project-item {
       display: block;
       text-decoration: none;
       color: inherit;
-      margin-bottom: 32px;
+      margin-bottom: 0;
     }
 
     .project-thumb {
@@ -52,7 +63,7 @@
     }
 
     .project-item:hover .project-thumb { opacity: 0.85; }
-    .project-item:hover .project-meta-name { color: #C8341A; }
+    .project-item:hover .project-card-name { color: #C8341A; }
 
     .project-thumb img {
       width: 100%;
@@ -89,74 +100,46 @@
     .work-col .project-item:nth-child(10) { animation-delay: 0.5s; }
 
     .project-meta {
-      padding: 10px 0 13px;
-      border-bottom: 1px solid var(--color-subtle);
+      padding: 16px 0 13px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
       position: relative;
     }
 
-    .project-meta-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .project-meta-name {
-      font-size: var(--size-body);
-      font-weight: 500;
-      letter-spacing: -0.2px;
-      color: var(--color-text);
-      line-height: 1.5;
+    .project-card-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 15px;
+      letter-spacing: -0.6px;
+      text-transform: uppercase;
+      color: #000000;
       transition: color 0.15s;
     }
 
-    .project-meta-arrow {
-      font-size: 13px;
-      color: var(--color-muted);
-      flex-shrink: 0;
-      line-height: 1.4;
-      position: absolute;
-      top: 10px;
-      right: 0;
-    }
-
-    .project-meta-bottom {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      order: -1; /* move year + tag above the title */
-    }
-
-    .project-meta-desc {
-      font-size: 13px;
+    .project-card-title {
+      font-family: 'Inter', sans-serif;
       font-weight: 400;
-      letter-spacing: -0.2px;
-      line-height: 1.5;
-      color: var(--color-muted);
+      font-size: 14px;
+      line-height: 14px;
+      letter-spacing: -0.3px;
+      color: #000000;
     }
 
-    .project-meta-date {
-      font-family: 'Geist Mono', monospace;
-      font-size: 13px;
+    .project-card-desc {
+      font-family: 'Inter', sans-serif;
       font-weight: 400;
-      letter-spacing: -0.2px;
-      color: var(--color-muted);
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: -0.3px;
+      color: #818181;
+      margin: 0;
     }
 
-    .project-meta-pill {
-      font-family: 'Geist Mono', monospace;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-      background: var(--color-pill-bg);
-      padding: 2px 6px;
-      border-radius: 3px;
-      line-height: 1.6;
+    .project-card-desc a {
+      color: inherit;
+      text-decoration: none;
     }
 
     /* ── Quotes ───────────────────────────────────────────── */
@@ -179,6 +162,7 @@
 
     @media (max-width: 800px) {
       .work-section { grid-template-columns: 1fr; }
+      .work-section .project-item { grid-column: 1 / -1; }
     }
 
   </style>
@@ -188,14 +172,71 @@
 
   <div class="page">
     <div class="page-inner">
-    <div class="header">
-      <h1>Hey, my name is ML</h1>
-      <nav>
+    <header class="site-nav">
+      <a href="/" class="site-name">ML Howell</a>
+      <nav class="nav-links">
         <a href="/" class="active">Work</a>
         <a href="/about/">About</a>
         <a href="/experiments/">Experiments</a>
       </nav>
-    </div>
+    </header>
+
+    <!-- ════════════════════════════════════════════════════════════
+         RETRO WINDOWS — self-contained intro section.
+         To remove: delete this <section>, the retro-windows.css <link>
+         and retro-windows.js <script> tags, and the two files.
+         ════════════════════════════════════════════════════════════ -->
+    <section class="retro-windows" id="retro-windows" aria-label="Intro">
+      <div class="retro-stage" id="retro-stage">
+
+        <!-- ML logo window -->
+        <div class="retro-window" data-window style="left: 16px; top: 16px; width: 232px; z-index: 2;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body retro-body--logo">
+            <div class="retro-ml" aria-hidden="true">ML</div>
+            <div class="retro-caption" data-type>(SHORT FOR MARY-LOUISE)</div>
+          </div>
+        </div>
+
+        <!-- Bio window -->
+        <div class="retro-window retro-window--bio" data-window style="left: 100px; top: 140px; z-index: 1;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body">
+            <p class="retro-bio" data-type>is a product designer/ design engineer with a love for prototyping, building microsites, and crafting with care.</p>
+          </div>
+        </div>
+
+        <!-- Location window -->
+        <div class="retro-window retro-window--loc" data-window style="left: 510px; top: 64px; z-index: 3;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body retro-body--loc">
+            <div class="retro-loc-label" data-type>BASED IN</div>
+            <div class="retro-loc-city" data-type>SAN FRANCISCO, CA</div>
+          </div>
+        </div>
+
+        <!-- Sun window -->
+        <div class="retro-window retro-window--sun" data-window style="left: 510px; top: 320px; z-index: 4;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body retro-body--sun">
+<svg class="retro-sun" viewBox="0 0 66 66" fill="black" shape-rendering="crispEdges" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g class="sun-static"><path d="M34.375 4.125H31.625V5.5H34.375V4.125Z"/><path d="M34.375 5.5H31.625V6.875H34.375V5.5Z"/><path d="M24.75 6.875H22V8.25H24.75V6.875Z"/><path d="M34.375 6.875H31.625V8.25H34.375V6.875Z"/><path d="M44 6.875H41.25V8.25H44V6.875Z"/><path d="M24.75 8.25H22V9.625H24.75V8.25Z"/><path d="M34.375 8.25H31.625V9.625H34.375V8.25Z"/><path d="M44 8.25H41.25V9.625H44V8.25Z"/><path d="M12.375 13.75H9.625V15.125H12.375V13.75Z"/><path d="M44 13.75H22V15.125H44V13.75Z"/><path d="M56.375 13.75H53.625V15.125H56.375V13.75Z"/><path d="M12.375 15.125H9.625V16.5H12.375V15.125Z"/><path d="M44 15.125H22V16.5H44V15.125Z"/><path d="M56.375 15.125H53.625V16.5H56.375V15.125Z"/><path d="M46.75 16.5H19.25V17.875H46.75V16.5Z"/><path d="M46.75 17.875H19.25V19.25H46.75V17.875Z"/><path d="M50.875 19.25H15.125V20.625H50.875V19.25Z"/><path d="M50.875 20.625H15.125V22H50.875V20.625Z"/><path d="M9.625 22H6.875V23.375H9.625V22Z"/><path d="M53.625 22H12.375V23.375H53.625V22Z"/><path d="M59.125 22H56.375V23.375H59.125V22Z"/><path d="M9.625 23.375H6.875V24.75H9.625V23.375Z"/><path d="M53.625 23.375H12.375V24.75H53.625V23.375Z"/><path d="M59.125 23.375H56.375V24.75H59.125V23.375Z"/><path d="M53.625 24.75H12.375V26.125H53.625V24.75Z"/><path d="M53.625 26.125H12.375V27.5H53.625V26.125Z"/><path d="M53.625 27.5H12.375V28.875H53.625V27.5Z"/><path d="M53.625 28.875H12.375V30.25H53.625V28.875Z"/><path d="M53.625 30.25H12.375V31.625H53.625V30.25Z"/><path d="M9.625 31.625H6.875V33H9.625V31.625Z"/><path d="M53.625 31.625H12.375V33H53.625V31.625Z"/><path d="M59.125 31.625H56.375V33H59.125V31.625Z"/><path d="M9.625 33H6.875V34.375H9.625V33Z"/><path d="M53.625 33H12.375V34.375H53.625V33Z"/><path d="M59.125 33H56.375V34.375H59.125V33Z"/><path d="M53.625 34.375H12.375V35.75H53.625V34.375Z"/><path d="M53.625 35.75H12.375V37.125H53.625V35.75Z"/><path d="M53.625 37.125H12.375V38.5H53.625V37.125Z"/><path d="M53.625 38.5H12.375V39.875H53.625V38.5Z"/><path d="M53.625 39.875H12.375V41.25H53.625V39.875Z"/><path d="M53.625 41.25H12.375V42.625H53.625V41.25Z"/><path d="M59.125 41.25H56.375V42.625H59.125V41.25Z"/><path d="M53.625 42.625H12.375V44H53.625V42.625Z"/><path d="M59.125 42.625H56.375V44H59.125V42.625Z"/><path d="M53.625 44H12.375V45.375H53.625V44Z"/><path d="M50.875 45.375H15.125V46.75H50.875V45.375Z"/><path d="M46.75 46.75H19.25V48.125H46.75V46.75Z"/><path d="M46.75 48.125H19.25V49.5H46.75V48.125Z"/><path d="M46.75 49.5H19.25V50.875H46.75V49.5Z"/><path d="M15.125 50.875H12.375V52.25H15.125V50.875Z"/><path d="M44 50.875H22V52.25H44V50.875Z"/><path d="M53.625 50.875H50.875V52.25H53.625V50.875Z"/><path d="M15.125 52.25H12.375V53.625H15.125V52.25Z"/><path d="M44 52.25H22V53.625H44V52.25Z"/><path d="M53.625 52.25H50.875V53.625H53.625V52.25Z"/><path d="M24.75 56.375H22V57.75H24.75V56.375Z"/><path d="M44 56.375H41.25V57.75H44V56.375Z"/><path d="M24.75 57.75H22V59.125H24.75V57.75Z"/><path d="M34.375 57.75H31.625V59.125H34.375V57.75Z"/><path d="M44 57.75H41.25V59.125H44V57.75Z"/><path d="M24.75 59.125H22V60.5H24.75V59.125Z"/><path d="M34.375 59.125H31.625V60.5H34.375V59.125Z"/><path d="M44 59.125H41.25V60.5H44V59.125Z"/><path d="M34.375 60.5H31.625V61.875H34.375V60.5Z"/></g><g class="sun-tips"><path d="M22 0H19.25V1.375H22V0Z"/><path d="M34.375 0H31.625V1.375H34.375V0Z"/><path d="M46.75 0H44V1.375H46.75V0Z"/><path d="M22 1.375H19.25V2.75H22V1.375Z"/><path d="M34.375 1.375H31.625V2.75H34.375V1.375Z"/><path d="M46.75 1.375H44V2.75H46.75V1.375Z"/><path d="M22 4.125H19.25V5.5H22V4.125Z"/><path d="M46.75 4.125H44V5.5H46.75V4.125Z"/><path d="M22 5.5H19.25V6.875H22V5.5Z"/><path d="M46.75 5.5H44V6.875H46.75V5.5Z"/><path d="M5.5 6.875H2.75V8.25H5.5V6.875Z"/><path d="M63.25 6.875H60.5V8.25H63.25V6.875Z"/><path d="M5.5 8.25H2.75V9.625H5.5V8.25Z"/><path d="M63.25 8.25H60.5V9.625H63.25V8.25Z"/><path d="M9.625 9.625H6.875V11H9.625V9.625Z"/><path d="M59.125 9.625H56.375V11H59.125V9.625Z"/><path d="M9.625 11H6.875V12.375H9.625V11Z"/><path d="M59.125 11H56.375V12.375H59.125V11Z"/><path d="M9.625 12.375H6.875V13.75H9.625V12.375Z"/><path d="M59.125 12.375H56.375V13.75H59.125V12.375Z"/><path d="M5.5 22H0V23.375H5.5V22Z"/><path d="M66 22H60.5V23.375H66V22Z"/><path d="M5.5 23.375H0V24.75H5.5V23.375Z"/><path d="M66 23.375H60.5V24.75H66V23.375Z"/><path d="M5.5 31.625H0V33H5.5V31.625Z"/><path d="M66 31.625H61.875V33H66V31.625Z"/><path d="M5.5 33H0V34.375H5.5V33Z"/><path d="M66 33H61.875V34.375H66V33Z"/><path d="M5.5 45.375H2.75V46.75H5.5V45.375Z"/><path d="M63.25 45.375H60.5V46.75H63.25V45.375Z"/><path d="M5.5 46.75H2.75V48.125H5.5V46.75Z"/><path d="M63.25 46.75H60.5V48.125H63.25V46.75Z"/><path d="M2.75 48.125H0V49.5H2.75V48.125Z"/><path d="M66 48.125H63.25V49.5H66V48.125Z"/><path d="M2.75 49.5H0V50.875H2.75V49.5Z"/><path d="M66 49.5H63.25V50.875H66V49.5Z"/><path d="M12.375 53.625H9.625V55H12.375V53.625Z"/><path d="M56.375 53.625H53.625V55H56.375V53.625Z"/><path d="M12.375 55H9.625V56.375H12.375V55Z"/><path d="M56.375 55H53.625V56.375H56.375V55Z"/><path d="M9.625 57.75H6.875V59.125H9.625V57.75Z"/><path d="M59.125 57.75H56.375V59.125H59.125V57.75Z"/><path d="M9.625 59.125H6.875V60.5H9.625V59.125Z"/><path d="M59.125 59.125H56.375V60.5H59.125V59.125Z"/><path d="M22 60.5H19.25V61.875H22V60.5Z"/><path d="M46.75 60.5H44V61.875H46.75V60.5Z"/><path d="M22 61.875H19.25V63.25H22V61.875Z"/><path d="M34.375 61.875H31.625V63.25H34.375V61.875Z"/><path d="M46.75 61.875H44V63.25H46.75V61.875Z"/><path d="M22 63.25H19.25V64.625H22V63.25Z"/><path d="M34.375 63.25H31.625V64.625H34.375V63.25Z"/><path d="M46.75 63.25H44V64.625H46.75V63.25Z"/><path d="M22 64.625H19.25V66H22V64.625Z"/><path d="M34.375 64.625H31.625V66H34.375V64.625Z"/><path d="M46.75 64.625H44V66H46.75V64.625Z"/></g></svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <div class="content">
 
@@ -206,15 +247,9 @@
               <img src="/projects/guac-products-2025/images/GuacProducts_Hero_2.png" alt="Guac Products">
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Guac Products</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2026</span>
-                <span class="project-meta-pill">Product</span>
-              </div>
-              <p class="project-meta-desc">Founding designer building AI-powered tools for grocery stores; helped grow Guac to $1M+ ARR across three multi-store chains.</p>
+              <div class="project-card-name">Guac</div>
+              <div class="project-card-title">iOS, Android, Web – 2026</div>
+              <p class="project-card-desc">Founding designer building AI-powered tools for grocery stores.</p>
             </div>
           </a>
 
@@ -225,15 +260,9 @@
               </video>
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Doodles</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2026</span>
-                <span class="project-meta-pill">Microsite</span>
-              </div>
-              <p class="project-meta-desc">Create your own AI-generated line-art doodles on an endless, ever-scrolling canvas.</p>
+              <div class="project-card-name">Doodles</div>
+              <div class="project-card-title">Microsite – 2026</div>
+              <p class="project-card-desc">AI-generated line-art doodles on an endless, scrolling canvas.</p>
             </div>
           </a>
 
@@ -244,15 +273,9 @@
               </video>
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Travel Playing Cards</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2026</span>
-                <span class="project-meta-pill">Microsite</span>
-              </div>
-              <p class="project-meta-desc">A deck of playing cards built from photos taken on my travels.</p>
+              <div class="project-card-name">Travels</div>
+              <div class="project-card-title">Microsite – 2026</div>
+              <p class="project-card-desc">A deck of playing cards built from photos taken on my travels.</p>
             </div>
           </a>
 
@@ -261,15 +284,9 @@
               <img src="/projects/postly/Images/Postly%20hero.png" alt="Postly">
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Postly</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2026</span>
-                <span class="project-meta-pill">Product</span>
-              </div>
-              <p class="project-meta-desc">A postcard app for adding photos and text to a canvas.</p>
+              <div class="project-card-name">Postly</div>
+              <div class="project-card-title">iOS App – 2026</div>
+              <p class="project-card-desc">A postcard app for adding photos and text to a canvas.</p>
             </div>
           </a>
 
@@ -278,15 +295,9 @@
               <img src="/projects/guac/Images/Thumbnail.png" alt="Guac Exhibition Booth">
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Guac Exhibition Booth</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2025</span>
-                <span class="project-meta-pill">Branding</span>
-              </div>
-              <p class="project-meta-desc">Founding designer directing the creative vision for Guac's booth at Groceryshop in Vegas.</p>
+              <div class="project-card-name">Guac</div>
+              <div class="project-card-title">Branding – 2025</div>
+              <p class="project-card-desc">Founding designer directing the creative vision for Guac's booth at Groceryshop in Vegas.</p>
             </div>
           </a>
 
@@ -295,15 +306,9 @@
               <img src="/projects/streetcleaningparking/Thumbnail.png" alt="Street Cleaning Parking">
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Street Cleaning Parking</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2024</span>
-                <span class="project-meta-pill">Product</span>
-              </div>
-              <p class="project-meta-desc">An app that reminds you when to move your car so you never get a street-cleaning ticket.</p>
+              <div class="project-card-name">Street Cleaning Parking</div>
+              <div class="project-card-title">iOS App – 2024</div>
+              <p class="project-card-desc">An app that reminds you when to move your car so you never get a street-cleaning ticket.</p>
             </div>
           </a>
 
@@ -312,15 +317,9 @@
               <img src="/projects/afreshdesignsystem/images/Thumbnail.png" alt="Afresh Design System">
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Afresh Design System</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2023</span>
-                <span class="project-meta-pill">Design Systems</span>
-              </div>
-              <p class="project-meta-desc">Rebuilt Afresh's component library into a design system teams could trust.</p>
+              <div class="project-card-name">Afresh</div>
+              <div class="project-card-title">Design systems – 2023</div>
+              <p class="project-card-desc">Rebuilt Afresh's component library into a design system teams could trust.</p>
             </div>
           </a>
 
@@ -329,15 +328,9 @@
               <img src="/projects/afresh-brand-refresh/Images/Thumbnail.png" alt="Afresh Refresh">
             </div>
             <div class="project-meta">
-              <div class="project-meta-top">
-                <span class="project-meta-name">Afresh Refresh</span>
-                <span class="project-meta-arrow">↗</span>
-              </div>
-              <div class="project-meta-bottom">
-                <span class="project-meta-date">2022</span>
-                <span class="project-meta-pill">Branding</span>
-              </div>
-              <p class="project-meta-desc">A brand refresh positioning Afresh as the premium choice for grocery retailers.</p>
+              <div class="project-card-name">Afresh</div>
+              <div class="project-card-title">Branding – 2022</div>
+              <p class="project-card-desc">A brand refresh positioning Afresh as the premium choice for grocery retailers.</p>
             </div>
           </a>
 
@@ -353,6 +346,19 @@
 
   <script src="/footer.js?v=1"></script>
   <script src="/settings-widget.js?v=51"></script>
+  <script src="/retro-windows.js?v=4"></script>
+  <script>
+    (function () {
+      // Render markdown-style links [text](url) in card descriptions as anchors.
+      document.querySelectorAll('.project-card-desc').forEach(el => {
+        if (el.innerHTML.indexOf('[') === -1) return;
+        el.innerHTML = el.innerHTML.replace(
+          /\[([^\]]+)\]\(([^)]+)\)/g,
+          '<a href="$2" target="_blank" rel="noopener">$1</a>'
+        );
+      });
+    })();
+  </script>
   <script>
     (function () {
       document.querySelectorAll('.project-thumb img').forEach(img => {

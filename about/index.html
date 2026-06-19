@@ -6,10 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — About</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="/styles/global.css?v=3">
   <style>
     /* ── About page — page-specific styles ───────────────── */
-    :root { --page-bg: var(--color-about); }
+    /* About-page blue at 50% (blended over white) */
+    :root { --color-about: #CEE3F1; --page-bg: var(--color-about); }
 
     body, .page { width: 100vw; }
 
@@ -232,14 +233,16 @@
 
   <div class="page">
     <div class="page-inner">
-    <div class="header">
-      <h1>ML is short for Mary-Louise :)</h1>
-      <nav>
+    <header class="site-nav">
+      <a href="/" class="site-name">ML Howell</a>
+      <nav class="nav-links">
         <a href="/">Work</a>
         <a href="/about/" class="active">About</a>
         <a href="/experiments/">Experiments</a>
       </nav>
-    </div>
+    </header>
+
+    <h1 class="page-title">Hello!</h1>
 
     <div class="content">
       <div class="bio">
