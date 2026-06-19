@@ -100,6 +100,11 @@
       position: relative;
     }
 
+    /* Plain-text fallback if the line-layout module can't run */
+    .bio-fallback { position: static; }
+    .bio-fallback p { margin: 0 0 16px; }
+    .bio-fallback p:last-child { margin-bottom: 0; }
+
     .doodles-bottom {
       grid-column: 2;
       grid-row: 2;
@@ -718,15 +723,39 @@
   </script>
 
   <script type="module">
-  import { prepareWithSegments, layoutNextLineRange, materializeLineRange }
-    from 'https://esm.sh/@chenglou/pretext'
+  const bioCopy   = document.getElementById('bio-copy')
+  const bioSource = document.getElementById('bio-text-source')
 
-  const PARA_GAP = 24
-  const IMG_GAP  = 14
+  // Always-on fallback: reveal the plain paragraphs if the line-layout
+  // module (fetched from esm.sh) is slow or fails to load on a given visit.
+  let fallbackShown = false
+  function showFallback() {
+    if (fallbackShown) return
+    fallbackShown = true
+    bioCopy.querySelectorAll('.bio-line').forEach(el => el.remove())
+    bioCopy.style.height = ''
+    bioSource.hidden = false
+    bioSource.classList.add('bio-fallback')
+  }
+  function hideFallback() {
+    if (!fallbackShown) return
+    fallbackShown = false
+    bioSource.hidden = true
+    bioSource.classList.remove('bio-fallback')
+  }
+  // Safety net: if no laid-out lines have rendered shortly after load, show plain text.
+  let bioSafety = setTimeout(() => {
+    if (!bioCopy.querySelector('.bio-line')) showFallback()
+  }, 2500)
 
-  const bioCopy = document.getElementById('bio-copy')
+  try {
+    const { prepareWithSegments, layoutNextLineRange, materializeLineRange }
+      = await import('https://esm.sh/@chenglou/pretext')
 
-  async function layoutBio() {
+    const PARA_GAP = 24
+    const IMG_GAP  = 14
+
+    async function layoutBio() {
     await document.fonts.ready
 
     const bioIllus = Array.from(bioCopy.querySelectorAll('.bio-illus'))
@@ -839,13 +868,23 @@
     } else {
       bioCopy.style.height = (y + 40) + 'px'
     }
+
+    // Real layout rendered — cancel the fallback and clear any plain text.
+    if (bioCopy.querySelector('.bio-line')) {
+      clearTimeout(bioSafety)
+      hideFallback()
+    }
   }
 
-  document.fonts.ready.then(layoutBio)
-  window.addEventListener('resize', layoutBio)
+    await layoutBio()
+    window.addEventListener('resize', layoutBio)
+    window.addEventListener('load', layoutBio)
 
-  const settingsObserver = new MutationObserver(layoutBio)
-  settingsObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
+    const settingsObserver = new MutationObserver(layoutBio)
+    settingsObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
+  } catch (e) {
+    showFallback()
+  }
   </script>
 
 </body>
