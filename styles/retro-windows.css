@@ -19,6 +19,11 @@
   width: 820px;
   height: 520px;
   margin: 0 auto;
+  /* Scoped to the intro only (this file loads on the homepage alone):
+     stop iOS from auto-inflating the window text, which otherwise paints
+     larger than its laid-out box and bursts the scaled-down windows. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ── Window shell ─────────────────────────────────────────── */
