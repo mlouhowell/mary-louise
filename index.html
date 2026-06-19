@@ -33,6 +33,9 @@
     .page-inner {
       padding-left: 24px;
       padding-right: 24px;
+      /* Clip the intro cluster's scaled-down layout box (transform leaves
+         the 820px box in place) so it never adds horizontal scroll. */
+      overflow-x: hidden;
     }
 
     /* ── Work / project preview — uniform two-column grid ──── */
@@ -346,7 +349,7 @@
 
   <script src="/footer.js?v=1"></script>
   <script src="/settings-widget.js?v=51"></script>
-  <script src="/retro-windows.js?v=4"></script>
+  <script src="/retro-windows.js?v=5"></script>
   <script>
     (function () {
       // Render markdown-style links [text](url) in card descriptions as anchors.

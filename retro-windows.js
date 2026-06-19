@@ -99,16 +99,28 @@
   /* ── Fit the fixed-size cluster to its column ───────────────
      Scales the canvas down on narrow / mobile screens so the
      windows stay grouped and overlapping rather than spilling
-     out; never scales up past 1:1. Uses zoom so the layout box
-     shrinks too and the canvas stays centered. */
+     out; never scales up past 1:1. Uses transform: scale (reliable
+     on iOS, unlike `zoom`), centering the box and reclaiming the
+     empty layout space the un-scaled box would otherwise reserve. */
   var STAGE_W = 820;
+  var STAGE_H = 520;
   function fitStage() {
     var avail = stage.parentElement ? stage.parentElement.clientWidth : STAGE_W;
     var s = Math.min(1, avail / STAGE_W);
-    stage.style.zoom = s;
+    if (s < 1) {
+      stage.style.transformOrigin = 'top center';
+      stage.style.transform = 'scale(' + s + ')';
+      stage.style.marginLeft = ((avail - STAGE_W) / 2) + 'px';
+      stage.style.marginBottom = (-(STAGE_H * (1 - s))) + 'px';
+    } else {
+      stage.style.transform = 'none';
+      stage.style.marginLeft = '';
+      stage.style.marginBottom = '';
+    }
   }
   fitStage();
   window.addEventListener('resize', fitStage);
+  window.addEventListener('load', fitStage);
 
   /* ── Load-in: stagger windows, then type their text ─────── */
   function reveal() {
