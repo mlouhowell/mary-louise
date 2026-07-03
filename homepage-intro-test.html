@@ -32,6 +32,7 @@
     :root {
       --periwinkle: #7395E7;
       --olive:      #949B37;
+      --rust:       #9A3827;
       --paper:      #F7F5F0;
       --ink:        #141414;
       --accent:     #7395E7;
@@ -75,12 +76,12 @@
       transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #stage.olive { background: var(--olive); }
+    #stage.rust  { background: var(--rust); }
     #stage.paper { background: var(--paper); transition-duration: 0.9s; }
 
     #ascii {
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      inset: 0;
       transition: opacity 0.6s ease;
     }
     #ascii.gone { opacity: 0; }
@@ -94,6 +95,9 @@
       justify-content: center;
       margin-bottom: 0;
     }
+    /* wider than the live 820px stage so the Find me window
+       clears the bio text */
+    .retro-stage { width: 900px; height: 560px; }
 
     /* Name window: train-board ticker (typed → hold → scroll off) */
     .retro-body--name { padding: 16px; }
@@ -141,7 +145,57 @@
     .retro-bio .ch { visibility: hidden; }
     .retro-bio.typed .ch { visibility: visible; }
 
-    .retro-body--sun canvas { display: block; }
+    /* Find me window */
+    .retro-body--find {
+      padding: 14px 16px 16px;
+      text-align: center;
+    }
+    .retro-find-label {
+      font-family: 'GT Mechanik Poly', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #000;
+      margin-bottom: 10px;
+    }
+    .retro-find-link {
+      display: block;
+      font-family: 'GT Mechanik Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #000;
+      text-decoration: none;
+    }
+    .retro-find-link:hover { color: #C8341A; text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ── Mobile: stacked windows with slight overlaps ── */
+    @media (max-width: 800px) {
+      .retro-windows {
+        align-items: flex-start;
+        overflow-y: auto;
+      }
+      .retro-stage {
+        width: 100%;
+        height: auto;
+        padding: 24px 0 80px;
+      }
+      .retro-stage .retro-window {
+        position: relative;
+        left: 0 !important;
+        top: 0 !important;
+        width: auto !important;
+      }
+      .retro-stage .retro-window:nth-child(1) { margin: 0 12% 0 4%; }
+      .retro-stage .retro-window:nth-child(2) { margin: -48px 4% 0 14%; }
+      .retro-stage .retro-window:nth-child(3) { margin: -44px 14% 0 4%; }
+
+      /* name ticker wraps to two lines on narrow screens */
+      .retro-name-clip { height: auto; min-height: 1.2em; font-size: 24px; }
+      .retro-name { white-space: normal; font-size: 24px; }
+      .retro-bio { font-size: 24px; }
+
+      .retro-body--find { text-align: left; }
+    }
 
     /* ── Footer (per design system) ──────────────────── */
     footer {
@@ -205,14 +259,16 @@
           </div>
         </div>
 
-        <!-- Mini sun window -->
-        <div class="retro-window retro-window--sun" data-window style="left: 620px; top: 250px; width: 200px; z-index: 4;">
+        <!-- Find me window -->
+        <div class="retro-window" data-window style="left: 595px; top: 360px; width: 280px; z-index: 0;">
           <div class="retro-titlebar" data-drag-handle>
             <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
             <span class="retro-lines" aria-hidden="true"></span>
           </div>
-          <div class="retro-body retro-body--sun">
-            <canvas id="mini-sun"></canvas>
+          <div class="retro-body retro-body--find">
+            <div class="retro-find-label">Find me</div>
+            <a class="retro-find-link" href="mailto:marylouisehowell@gmail.com">marylouisehowell@gmail.com</a>
+            <a class="retro-find-link" href="https://x.com/marlouiise" target="_blank" rel="noopener">@marlouiise</a>
           </div>
         </div>
 
@@ -227,16 +283,19 @@
     /* ═══ Timeline (ms) — tune everything here ═══════════ */
     const T = {
       waveFadeIn:   400,    // wave letters fade in
-      toOlive:      2600,   // bg starts tweening to olive, wave fades
-      sunStart:     3100,   // sun ray-reveal begins
+      toOlive:      1100,   // bg starts tweening to olive, wave fades
+      sunStart:     1600,   // sun ray-reveal begins
       sunReveal:    1300,   // duration of ray reveal
-      windows:      4500,   // retro windows start their native reveal
-      toPaper:      5600,   // bg fades to white, big sun fades
-      sunFadeOut:   600,
+      toRust:       3100,   // bg tweens to rust, sun fades
+      spiralStart:  3400,   // spiral reveal begins
+      spiralReveal: 2800,   // duration of spiral reveal
+      windows:      6000,   // retro windows pop in (right as spiral completes)
+      toPaper:      7100,   // bg fades to white, spiral fades
+      fadeOut:      600,    // sun/spiral fade-out duration
     }
 
     const WAVE = {
-      text: 'ML', columns: 24, rows: 12,
+      text: 'ML', rows: 12,
       amplitude: 40, frequency: 2,
       colSpacing: 28, rowSpacing: 32,
       fontSize: 16, color: '#F7F5F0', animSpeed: 2,
@@ -248,76 +307,98 @@
       fontSize: 18, letterSpacing: 24, color: '#141414',
     }
 
-    /* ═══ Canvas setup ═══════════════════════════════════ */
+    const SPIRAL = {
+      text: 'ML', turns: 4,
+      letterSpacing: 20, startRadius: 20, spiralGrowth: 30,
+      fontSize: 14, color: '#141414',
+    }
+
+    /* ═══ Canvas: full stage, rebuilt on resize ══════════ */
+    const stage = document.getElementById('stage')
     const canvas = document.getElementById('ascii')
     const ctx = canvas.getContext('2d')
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
-    const waveW = WAVE.columns * WAVE.colSpacing + WAVE.fontSize
-    const waveH = WAVE.rows * WAVE.rowSpacing + WAVE.amplitude * 2 + WAVE.fontSize * 2
-    const sunSize = (SUN.innerRadius + SUN.rayLength) * 2 + SUN.fontSize * 2
-    const W = Math.max(waveW, sunSize)
-    const H = Math.max(waveH, sunSize)
-    canvas.width = W * dpr
-    canvas.height = H * dpr
-    canvas.style.width = W + 'px'
-    canvas.style.height = H + 'px'
-    ctx.scale(dpr, dpr)
-
-    /* Wave letters */
+    let W = 0, H = 0
     const waveLetters = []
-    {
-      const chars = WAVE.text
-      let i = 0
-      const xOff = (W - waveW) / 2
-      for (let row = 0; row < WAVE.rows; row++) {
-        const rowOffset = (row - (WAVE.rows - 1) / 2) * WAVE.rowSpacing
-        const phaseOffset = (row / WAVE.rows) * Math.PI * 2
-        for (let col = 0; col < WAVE.columns; col++) {
-          const x = xOff + col * WAVE.colSpacing + WAVE.colSpacing / 2
-          const waveY = Math.sin((col / WAVE.columns) * Math.PI * 2 * WAVE.frequency + phaseOffset) * WAVE.amplitude
-          waveLetters.push({
-            x, baseY: H / 2 + rowOffset + waveY,
-            phase: (col / WAVE.columns) * Math.PI * 2 * WAVE.frequency,
-            char: chars[i % chars.length],
-          })
-          i++
-        }
-      }
-    }
-
-    /* Sun letters */
     const sunLetters = []
     let sunMaxStep = 0
-    {
-      const chars = SUN.text
-      const stepsOnRay = Math.floor(SUN.rayLength / SUN.letterSpacing)
-      let i = 0
-      for (let ray = 0; ray < SUN.rays; ray++) {
-        const angle = (ray / SUN.rays) * Math.PI * 2 - Math.PI / 2
-        for (let step = 0; step <= stepsOnRay; step++) {
-          const dist = SUN.innerRadius + step * SUN.letterSpacing
-          sunLetters.push({
-            x: W / 2 + Math.cos(angle) * dist,
-            y: H / 2 + Math.sin(angle) * dist,
-            step, char: chars[i % chars.length],
-          })
-          sunMaxStep = Math.max(sunMaxStep, step)
-          i++
+
+    function layout() {
+      W = stage.clientWidth
+      H = stage.clientHeight
+      canvas.width = W * dpr
+      canvas.height = H * dpr
+      canvas.style.width = W + 'px'
+      canvas.style.height = H + 'px'
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+      /* Wave letters — edge to edge */
+      waveLetters.length = 0
+      {
+        const chars = WAVE.text
+        const columns = Math.ceil(W / WAVE.colSpacing) + 1
+        let i = 0
+        for (let row = 0; row < WAVE.rows; row++) {
+          const rowOffset = (row - (WAVE.rows - 1) / 2) * WAVE.rowSpacing
+          const phaseOffset = (row / WAVE.rows) * Math.PI * 2
+          for (let col = 0; col < columns; col++) {
+            const x = col * WAVE.colSpacing
+            const frac = col / columns
+            const waveY = Math.sin(frac * Math.PI * 2 * WAVE.frequency + phaseOffset) * WAVE.amplitude
+            waveLetters.push({
+              x, baseY: H / 2 + rowOffset + waveY,
+              phase: frac * Math.PI * 2 * WAVE.frequency,
+              char: chars[i % chars.length],
+            })
+            i++
+          }
+        }
+      }
+
+      /* Sun letters — centered */
+      sunLetters.length = 0
+      sunMaxStep = 0
+      {
+        const chars = SUN.text
+        const stepsOnRay = Math.floor(SUN.rayLength / SUN.letterSpacing)
+        let i = 0
+        for (let ray = 0; ray < SUN.rays; ray++) {
+          const angle = (ray / SUN.rays) * Math.PI * 2 - Math.PI / 2
+          for (let step = 0; step <= stepsOnRay; step++) {
+            const dist = SUN.innerRadius + step * SUN.letterSpacing
+            sunLetters.push({
+              x: W / 2 + Math.cos(angle) * dist,
+              y: H / 2 + Math.sin(angle) * dist,
+              step, char: chars[i % chars.length],
+            })
+            sunMaxStep = Math.max(sunMaxStep, step)
+            i++
+          }
         }
       }
     }
+    layout()
+    window.addEventListener('resize', layout)
 
-    /* Mini sun (loops forever in its window) */
-    const mini = document.getElementById('mini-sun')
-    const mctx = mini.getContext('2d')
-    const MINI_PX = 140
-    const MINI_SCALE = MINI_PX / sunSize
-    mini.width = MINI_PX * dpr
-    mini.height = MINI_PX * dpr
-    mini.style.width = MINI_PX + 'px'
-    mini.style.height = MINI_PX + 'px'
-    mctx.scale(dpr * MINI_SCALE, dpr * MINI_SCALE)
+    /* Spiral points — size-independent, drawn at canvas center */
+    const spiralPoints = []
+    let spiralMinR = Infinity, spiralMaxR = 0
+    {
+      const chars = SPIRAL.text
+      const totalAngle = SPIRAL.turns * Math.PI * 2
+      let angle = 0, i = 0
+      while (angle < totalAngle) {
+        const r = SPIRAL.startRadius + (angle / (Math.PI * 2)) * SPIRAL.spiralGrowth
+        spiralPoints.push({ angle, r, char: chars[i % chars.length] })
+        spiralMinR = Math.min(spiralMinR, r)
+        spiralMaxR = Math.max(spiralMaxR, r)
+        i++
+        angle += SPIRAL.letterSpacing / Math.max(1, r)
+      }
+    }
+    const spiralRange = Math.max(1, spiralMaxR - spiralMinR)
+
 
     /* ═══ Draw helpers ═══════════════════════════════════ */
     function drawWave(elapsed, alpha) {
@@ -355,28 +436,23 @@
       ctx.globalAlpha = 1
     }
 
-    /* Mini sun: cyclic reveal like the original snippet */
-    const MINI_CYCLE = 2500
-    function drawMiniSun(elapsed) {
-      const t = elapsed % MINI_CYCLE
-      const revealMs = MINI_CYCLE * 0.65
-      const holdEnd = revealMs + MINI_CYCLE * 0.15
-      mctx.clearRect(0, 0, sunSize, sunSize)
-      mctx.font = `${SUN.fontSize}px 'GT Mechanik Mono', monospace`
-      mctx.fillStyle = SUN.color
-      mctx.textAlign = 'center'
-      mctx.textBaseline = 'middle'
-      for (const L of sunLetters) {
-        const turnOn = (L.step / Math.max(1, sunMaxStep)) * revealMs
-        let o
-        if (t < turnOn) o = 0
-        else if (t < holdEnd) o = 1
-        else o = Math.max(0, 1 - (t - holdEnd) / (MINI_CYCLE - holdEnd))
+    /* Spiral: reveals from the center out, then holds */
+    function drawSpiral(t, globalAlpha) {
+      ctx.font = `${SPIRAL.fontSize}px 'GT Mechanik Mono', monospace`
+      ctx.fillStyle = SPIRAL.color
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      for (const P of spiralPoints) {
+        const norm = (P.r - spiralMinR) / spiralRange
+        const turnOn = norm * T.spiralReveal * 0.9
+        let o = t < turnOn ? 0 : Math.min(1, (t - turnOn) / 320)
+        o *= globalAlpha
         if (o <= 0) continue
-        mctx.globalAlpha = o
-        mctx.fillText(L.char, L.x, L.y)
+        ctx.globalAlpha = o
+        ctx.fillText(P.char, W / 2 + Math.cos(P.angle - Math.PI / 2) * P.r,
+                             H / 2 + Math.sin(P.angle - Math.PI / 2) * P.r)
       }
-      mctx.globalAlpha = 1
+      ctx.globalAlpha = 1
     }
 
     /* ═══ Retro windows — behavior lifted from retro-windows.js,
@@ -557,8 +633,13 @@
     windows.forEach(initDrag)
 
     /* Fit the fixed-size cluster to the viewport (from retro-windows.js) */
-    const STAGE_W = 820
+    const STAGE_W = 900
     function fitStage() {
+      /* mobile uses the stacked CSS layout — no scaling */
+      if (mqMobile.matches) {
+        retroStage.style.transform = 'none'
+        return
+      }
       const avail = Math.min(window.innerWidth - 32, STAGE_W)
       const s = Math.min(1, avail / STAGE_W)
       retroStage.style.transformOrigin = 'center center'
@@ -589,7 +670,6 @@
     }
 
     /* ═══ Master timeline ════════════════════════════════ */
-    const stage = document.getElementById('stage')
     const timers = []
     let start = null
     let finished = false
@@ -604,13 +684,14 @@
       timers.forEach(clearTimeout)
       timers.length = 0
       if (rafId) cancelAnimationFrame(rafId)
-      stage.classList.remove('olive', 'paper')
+      stage.classList.remove('olive', 'rust', 'paper')
       canvas.classList.remove('gone')
       windows.forEach(w => { w.classList.remove('is-visible'); w.style.display = '' })
       bioChars.forEach(c => { c.style.visibility = '' })
       stopNameLoop()
 
       schedule(T.toOlive, () => stage.classList.add('olive'))
+      schedule(T.toRust, () => stage.classList.add('rust'))
       schedule(T.windows, reveal)
       schedule(T.toPaper, () => {
         stage.classList.add('paper')
@@ -634,12 +715,14 @@
 
       if (t >= T.sunStart) {
         let g = 1
-        if (t > T.toPaper) g = Math.max(0, 1 - (t - T.toPaper) / T.sunFadeOut)
+        if (t > T.toRust) g = Math.max(0, 1 - (t - T.toRust) / 400)
         if (g > 0) drawSun(t - T.sunStart, g)
       }
 
-      if (t >= T.windows) {
-        drawMiniSun(t - T.windows)
+      if (t >= T.spiralStart) {
+        let g = 1
+        if (t > T.toPaper) g = Math.max(0, 1 - (t - T.toPaper) / T.fadeOut)
+        if (g > 0) drawSpiral(t - T.spiralStart, g)
       }
 
       rafId = requestAnimationFrame(frame)
@@ -650,13 +733,13 @@
       if (finished) return
       timers.forEach(clearTimeout)
       timers.length = 0
-      stage.classList.add('olive', 'paper')
+      stage.classList.add('olive', 'rust', 'paper')
       canvas.classList.add('gone')
       revealed = true
       windows.forEach(w => w.classList.add('is-visible'))
       finishBio()
       startNameLoop()
-      start = performance.now() - (T.toPaper + T.sunFadeOut + 100)
+      start = performance.now() - (T.toPaper + T.fadeOut + 100)
       finished = true
     }
 
