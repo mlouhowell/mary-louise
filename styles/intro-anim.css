@@ -55,6 +55,11 @@ html.intro-lock .retro-windows { z-index: 600; }
 /* wider than the old 820px stage so the Find me window fits */
 .retro-stage { width: 900px; height: 560px; }
 
+/* desktop: extra breathing room before the project tiles */
+@media (min-width: 801px) {
+  .retro-windows { margin-bottom: 88px; }
+}
+
 /* ── Name window: train-board ticker ──────────────────────── */
 .retro-body--name { padding: 16px; }
 .retro-name-clip {
@@ -131,7 +136,7 @@ html.intro-lock .retro-windows { z-index: 600; }
   .retro-stage {
     width: 100%;
     height: auto;
-    padding: 8px 0 24px;
+    padding: 36px 0 24px;
   }
   .retro-stage .retro-window {
     position: relative;
