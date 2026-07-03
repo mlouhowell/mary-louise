@@ -136,7 +136,7 @@ html.intro-lock .retro-windows { z-index: 600; }
   .retro-stage {
     width: 100%;
     height: auto;
-    padding: 8px 0 24px;
+    padding: 36px 0 24px;
   }
   .retro-stage .retro-window {
     position: relative;
