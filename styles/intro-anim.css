@@ -1,0 +1,157 @@
+/* ============================================================
+   Intro animation — wave → sun → spiral → retro windows.
+   Overlay scenes + GT Mechanik window content. Paired with
+   /intro-anim.js; window chrome comes from retro-windows.css.
+
+   To remove: delete this file, /intro-anim.js, the
+   #intro-overlay div and the two matching tags in index.html,
+   and restore retro-windows.js + the old window markup.
+   ============================================================ */
+
+/* ── GT Mechanik (Trial — license before production!) ─────── */
+@font-face {
+  font-family: 'GT Mechanik Poly';
+  src: url('/fonts/GT-Mechanik/GT-Mechanik-Poly-Regular-Trial.woff2') format('woff2');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'GT Mechanik Poly';
+  src: url('/fonts/GT-Mechanik/GT-Mechanik-Poly-Medium-Trial.woff2') format('woff2');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'GT Mechanik Mono';
+  src: url('/fonts/GT-Mechanik/GT-Mechanik-Mono-Regular-Trial.woff2') format('woff2');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'GT Mechanik Mono';
+  src: url('/fonts/GT-Mechanik/GT-Mechanik-Mono-Medium-Trial.woff2') format('woff2');
+  font-weight: 500;
+}
+
+/* ── Fullscreen overlay the canvas scenes play on ─────────── */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: #7395E7;                 /* periwinkle (wave) */
+  transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.9s ease;
+}
+#intro-overlay.olive { background: #949B37; }
+#intro-overlay.rust  { background: #9A3827; }
+#intro-overlay.out   { opacity: 0; pointer-events: none; }
+#intro-overlay canvas { position: absolute; inset: 0; }
+
+/* lock scroll while the intro plays */
+html.intro-lock, html.intro-lock body { overflow: hidden; }
+
+/* windows pop in above the overlay's rust scene — but only while
+   the intro is running, so they don't sit above the nav on scroll */
+.retro-windows { position: relative; }
+html.intro-lock .retro-windows { z-index: 600; }
+
+/* wider than the old 820px stage so the Find me window fits */
+.retro-stage { width: 900px; height: 560px; }
+
+/* ── Name window: train-board ticker ──────────────────────── */
+.retro-body--name { padding: 16px; }
+.retro-name-clip {
+  overflow: hidden;
+  height: 1.2em;
+  font-size: 30px;
+}
+.retro-name {
+  font-family: 'GT Mechanik Poly', sans-serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #000;
+  white-space: nowrap;
+  display: inline-block;
+  will-change: transform;
+}
+
+/* idle caret: steady block that only blinks when .caret-blink is on */
+.retro-caret-idle::after {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 1px;
+  background: currentColor;
+  vertical-align: -0.12em;
+}
+.retro-caret-idle.caret-blink::after {
+  animation: retroBlink 0.8s steps(1) 2;
+}
+
+/* ── Bio window: GT Mechanik + accent words ───────────────── */
+.retro-bio {
+  font-family: 'GT Mechanik Poly', sans-serif;
+}
+.retro-bio .m {
+  font-family: 'GT Mechanik Mono', monospace;
+  color: #7395E7;
+}
+/* char-by-char typing: chars start hidden */
+.retro-bio .ch { visibility: hidden; }
+
+/* ── Find me window ───────────────────────────────────────── */
+.retro-body--find {
+  padding: 14px 16px 16px;
+  text-align: center;
+}
+.retro-find-label {
+  font-family: 'GT Mechanik Poly', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #000;
+  margin-bottom: 10px;
+}
+.retro-find-link {
+  display: block;
+  font-family: 'GT Mechanik Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #000;
+  text-decoration: none;
+}
+.retro-find-link:hover {
+  color: #C8341A;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Mobile: stacked windows with slight overlaps ─────────── */
+@media (max-width: 800px) {
+  .retro-stage {
+    width: 100%;
+    height: auto;
+    padding: 8px 0 24px;
+  }
+  .retro-stage .retro-window {
+    position: relative;
+    left: 0 !important;
+    top: 0 !important;
+    width: auto !important;
+  }
+  .retro-stage .retro-window:nth-child(1) { margin: 0 12% 0 0; }
+  .retro-stage .retro-window:nth-child(2) { margin: -48px 0 0 10%; }
+  .retro-stage .retro-window:nth-child(3) { margin: -44px 10% 0 0; }
+
+  /* name ticker wraps to two lines on narrow screens */
+  .retro-name-clip { height: auto; min-height: 1.2em; font-size: 24px; }
+  .retro-name { white-space: normal; font-size: 24px; }
+  .retro-bio { font-size: 24px; }
+
+  .retro-body--find { text-align: left; }
+}
+
+/* ── Reduced motion: no overlay scenes ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  #intro-overlay { display: none; }
+}
