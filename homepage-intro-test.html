@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Howell — Homepage intro test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* ── GT Mechanik (Trial) ─────────────────────────── */
+    @font-face {
+      font-family: 'GT Mechanik Poly';
+      src: url('fonts/GT-Mechanik/GT-Mechanik-Poly-Regular-Trial.woff2') format('woff2');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'GT Mechanik Poly';
+      src: url('fonts/GT-Mechanik/GT-Mechanik-Poly-Medium-Trial.woff2') format('woff2');
+      font-weight: 500;
+    }
+    @font-face {
+      font-family: 'GT Mechanik Mono';
+      src: url('fonts/GT-Mechanik/GT-Mechanik-Mono-Regular-Trial.woff2') format('woff2');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'GT Mechanik Mono';
+      src: url('fonts/GT-Mechanik/GT-Mechanik-Mono-Medium-Trial.woff2') format('woff2');
+      font-weight: 500;
+    }
+
+    :root {
+      --periwinkle: #7395E7;
+      --olive:      #949B37;
+      --paper:      #F7F5F0;
+      --ink:        #141414;
+      --accent:     #7395E7;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'GT Mechanik Poly', system-ui, sans-serif;
+      background: var(--paper);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ── Nav (always visible, white strip) ───────────── */
+    .site-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      background: var(--paper);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 100;
+      font-family: 'GT Mechanik Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.55);
+    }
+    .site-nav a { color: inherit; text-decoration: none; }
+    .site-nav .links { display: flex; gap: 28px; }
+
+    /* ── Stage (bg color animates) ───────────────────── */
+    #stage {
+      position: fixed;
+      inset: 44px 0 0 0;
+      background: var(--periwinkle);
+      transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #stage.olive { background: var(--olive); }
+    #stage.paper { background: var(--paper); transition-duration: 0.9s; }
+
+    #ascii {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.6s ease;
+    }
+    #ascii.gone { opacity: 0; }
+
+    /* ── Retro windows ───────────────────────────────── */
+    .win {
+      position: absolute;
+      background: #fff;
+      border: 1.5px solid var(--ink);
+      visibility: hidden;
+    }
+    /* stepped reveal: 1 = frame only, 2 = + chrome, 3 = + content */
+    .win.s1 { visibility: visible; }
+    .win.s1 .bar, .win.s1 .content { visibility: hidden; }
+    .win.s2 .bar { visibility: visible; }
+    .win.s2 .content { visibility: hidden; }
+    .win.s3 .bar, .win.s3 .content { visibility: visible; }
+
+    .bar {
+      position: relative;
+      height: 22px;
+      border-bottom: 1.5px solid var(--ink);
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0 3px,
+          var(--ink) 3px 4px
+        );
+      background-size: 100% 12px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-clip: content-box;
+      padding: 4px 8px;
+    }
+    .bar .x {
+      position: absolute;
+      top: 50%; left: 8px;
+      transform: translateY(-50%);
+      background: #fff;
+      padding: 0 3px;
+      font-family: 'GT Mechanik Mono', monospace;
+      font-size: 11px;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    /* Title window */
+    #win-title {
+      top: 18%; left: 13%;
+      width: min(460px, 44vw);
+      z-index: 12;
+    }
+    #win-title .content {
+      margin: 8px;
+      border: 1.5px solid var(--ink);
+      padding: 26px 34px;
+      font-family: 'GT Mechanik Poly', sans-serif;
+      font-weight: 500;
+      font-size: clamp(36px, 4.6vw, 62px);
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    /* Bio window */
+    #win-bio {
+      top: 31%; left: 22%;
+      width: min(560px, 56vw);
+      z-index: 11;
+    }
+    #win-bio .content {
+      padding: 34px 38px 40px;
+      font-size: clamp(20px, 2.3vw, 30px);
+      line-height: 1.45;
+      letter-spacing: 0.005em;
+      color: var(--ink);
+    }
+    #win-bio .content .m {
+      font-family: 'GT Mechanik Mono', monospace;
+      color: var(--accent);
+    }
+
+    /* Mini sun window */
+    #win-mini {
+      top: 46%; left: 72%;
+      width: min(240px, 22vw);
+      z-index: 13;
+    }
+    #win-mini .content {
+      margin: 8px;
+      border: 1.5px solid var(--ink);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #win-mini canvas { display: block; width: 100%; height: auto; }
+
+    /* ── Footer (per design system) ──────────────────── */
+    footer {
+      position: fixed;
+      bottom: 16px; left: 20px;
+      z-index: 300;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      line-height: 1;
+      color: #000;
+    }
+    footer a { color: inherit; text-decoration: none; }
+
+    /* ── Test controls hint ──────────────────────────── */
+    #hint {
+      position: fixed;
+      bottom: 16px; right: 20px;
+      z-index: 300;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: rgba(0,0,0,0.45);
+    }
+
+    @media (max-width: 800px) {
+      #win-title { top: 14%; left: 6%;  width: 68vw; }
+      #win-bio   { top: 27%; left: 12%; width: 80vw; }
+      #win-mini  { top: 62%; left: 58%; width: 34vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-nav">
+    <a href="/">ML Howell</a>
+    <nav class="links">
+      <a href="/">Work</a>
+      <a href="/about/">About</a>
+      <a href="/experiments/">Experiments</a>
+    </nav>
+  </header>
+
+  <div id="stage">
+    <canvas id="ascii"></canvas>
+
+    <div class="win" id="win-title">
+      <div class="bar"><span class="x">×</span></div>
+      <div class="content">Mary-Louise</div>
+    </div>
+
+    <div class="win" id="win-bio">
+      <div class="bar"><span class="x">×</span></div>
+      <div class="content">is a product designer with a love for <span class="m">building.</span> She has equal interest in designing <span class="m">creative tools</span> and products focused on making <span class="m">humans healthier.</span></div>
+    </div>
+
+    <div class="win" id="win-mini">
+      <div class="bar"><span class="x">×</span></div>
+      <div class="content"><canvas id="mini-sun"></canvas></div>
+    </div>
+  </div>
+
+  <footer><a href="https://mary-louise.com">By ML Howell</a> · V1.1 · July 2026</footer>
+  <div id="hint">click to skip · R to replay</div>
+
+  <script>
+    /* ═══ Timeline (ms) — tune everything here ═══════════ */
+    const T = {
+      waveFadeIn:   400,    // wave letters fade in
+      waveHold:     2200,   // wave runs on periwinkle
+      toOlive:      2600,   // bg starts tweening to olive, wave fades
+      sunStart:     3100,   // sun ray-reveal begins
+      sunReveal:    1300,   // duration of ray reveal
+      winTitle:     4500,   // title window draws
+      winBio:       4680,
+      winMini:      4860,
+      stepMs:       90,     // per retro draw step
+      toPaper:      5500,   // bg fades to white, big sun fades
+      sunFadeOut:   600,
+    }
+
+    const WAVE = {
+      text: 'ML', columns: 24, rows: 12,
+      amplitude: 40, frequency: 2,
+      colSpacing: 28, rowSpacing: 32,
+      fontSize: 16, color: '#F7F5F0', animSpeed: 2,
+    }
+
+    const SUN = {
+      text: 'ML', rays: 8,
+      innerRadius: 60, rayLength: 180,
+      fontSize: 18, letterSpacing: 24, color: '#141414',
+    }
+
+    /* ═══ Canvas setup ═══════════════════════════════════ */
+    const canvas = document.getElementById('ascii')
+    const ctx = canvas.getContext('2d')
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+    const waveW = WAVE.columns * WAVE.colSpacing + WAVE.fontSize
+    const waveH = WAVE.rows * WAVE.rowSpacing + WAVE.amplitude * 2 + WAVE.fontSize * 2
+    const sunSize = (SUN.innerRadius + SUN.rayLength) * 2 + SUN.fontSize * 2
+    const W = Math.max(waveW, sunSize)
+    const H = Math.max(waveH, sunSize)
+    canvas.width = W * dpr
+    canvas.height = H * dpr
+    canvas.style.width = W + 'px'
+    canvas.style.height = H + 'px'
+    ctx.scale(dpr, dpr)
+
+    /* Wave letters */
+    const waveLetters = []
+    {
+      const chars = WAVE.text
+      let i = 0
+      const xOff = (W - waveW) / 2
+      for (let row = 0; row < WAVE.rows; row++) {
+        const rowOffset = (row - (WAVE.rows - 1) / 2) * WAVE.rowSpacing
+        const phaseOffset = (row / WAVE.rows) * Math.PI * 2
+        for (let col = 0; col < WAVE.columns; col++) {
+          const x = xOff + col * WAVE.colSpacing + WAVE.colSpacing / 2
+          const waveY = Math.sin((col / WAVE.columns) * Math.PI * 2 * WAVE.frequency + phaseOffset) * WAVE.amplitude
+          waveLetters.push({
+            x, baseY: H / 2 + rowOffset + waveY,
+            phase: (col / WAVE.columns) * Math.PI * 2 * WAVE.frequency,
+            char: chars[i % chars.length],
+          })
+          i++
+        }
+      }
+    }
+
+    /* Sun letters */
+    const sunLetters = []
+    let sunMaxStep = 0
+    {
+      const chars = SUN.text
+      const stepsOnRay = Math.floor(SUN.rayLength / SUN.letterSpacing)
+      let i = 0
+      for (let ray = 0; ray < SUN.rays; ray++) {
+        const angle = (ray / SUN.rays) * Math.PI * 2 - Math.PI / 2
+        for (let step = 0; step <= stepsOnRay; step++) {
+          const dist = SUN.innerRadius + step * SUN.letterSpacing
+          sunLetters.push({
+            x: W / 2 + Math.cos(angle) * dist,
+            y: H / 2 + Math.sin(angle) * dist,
+            step, char: chars[i % chars.length],
+          })
+          sunMaxStep = Math.max(sunMaxStep, step)
+          i++
+        }
+      }
+    }
+
+    /* Mini sun (loops forever in its window) */
+    const mini = document.getElementById('mini-sun')
+    const mctx = mini.getContext('2d')
+    const MINI_SCALE = 0.42
+    const miniSize = sunSize * MINI_SCALE
+    mini.width = miniSize * dpr
+    mini.height = miniSize * dpr
+    mctx.scale(dpr * MINI_SCALE, dpr * MINI_SCALE)
+
+    /* ═══ Draw helpers ═══════════════════════════════════ */
+    function drawWave(elapsed, alpha) {
+      ctx.font = `${WAVE.fontSize}px 'GT Mechanik Mono', monospace`
+      ctx.fillStyle = WAVE.color
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      const animAmp = WAVE.amplitude * 0.4
+      const frac = ((elapsed / 1000) % WAVE.animSpeed) / WAVE.animSpeed
+      ctx.globalAlpha = alpha
+      for (const L of waveLetters) {
+        const dy = Math.sin(L.phase + frac * Math.PI * 2) * animAmp
+        ctx.fillText(L.char, L.x, L.baseY + dy)
+      }
+      ctx.globalAlpha = 1
+    }
+
+    function sunOpacity(step, t, revealMs) {
+      const turnOn = (step / Math.max(1, sunMaxStep)) * revealMs * 0.9
+      if (t < turnOn) return 0
+      return Math.min(1, (t - turnOn) / 180)
+    }
+
+    function drawSun(c, t, revealMs, globalAlpha) {
+      c.font = `${SUN.fontSize}px 'GT Mechanik Mono', monospace`
+      c.fillStyle = SUN.color
+      c.textAlign = 'center'
+      c.textBaseline = 'middle'
+      for (const L of sunLetters) {
+        const o = sunOpacity(L.step, t, revealMs) * globalAlpha
+        if (o <= 0) continue
+        c.globalAlpha = o
+        c.fillText(L.char, L.x, L.y)
+      }
+      c.globalAlpha = 1
+    }
+
+    /* Mini sun: cyclic reveal like the original snippet */
+    const MINI_CYCLE = 2500
+    function drawMiniSun(elapsed) {
+      const t = elapsed % MINI_CYCLE
+      const revealMs = MINI_CYCLE * 0.65
+      const holdEnd = revealMs + MINI_CYCLE * 0.15
+      mctx.clearRect(0, 0, sunSize, sunSize)
+      mctx.font = `${SUN.fontSize}px 'GT Mechanik Mono', monospace`
+      mctx.fillStyle = SUN.color
+      mctx.textAlign = 'center'
+      mctx.textBaseline = 'middle'
+      for (const L of sunLetters) {
+        const turnOn = (L.step / Math.max(1, sunMaxStep)) * revealMs
+        let o
+        if (t < turnOn) o = 0
+        else if (t < holdEnd) o = 1
+        else o = Math.max(0, 1 - (t - holdEnd) / (MINI_CYCLE - holdEnd))
+        if (o <= 0) continue
+        mctx.globalAlpha = o
+        mctx.fillText(L.char, L.x, L.y)
+      }
+      mctx.globalAlpha = 1
+    }
+
+    /* ═══ Windows ════════════════════════════════════════ */
+    function drawWindow(id, at, done) {
+      const el = document.getElementById(id)
+      schedule(at,             () => el.classList.add('s1'))
+      schedule(at + T.stepMs,  () => { el.classList.remove('s1'); el.classList.add('s2') })
+      schedule(at + T.stepMs*2,() => { el.classList.remove('s2'); el.classList.add('s3'); if (done) done() })
+    }
+
+    /* ═══ Master timeline ════════════════════════════════ */
+    const stage = document.getElementById('stage')
+    const timers = []
+    let start = null
+    let finished = false
+    let rafId = null
+
+    function schedule(at, fn) { timers.push(setTimeout(fn, at)) }
+
+    function run() {
+      // reset
+      finished = false
+      start = null
+      timers.forEach(clearTimeout)
+      timers.length = 0
+      if (rafId) cancelAnimationFrame(rafId)
+      stage.classList.remove('olive', 'paper')
+      canvas.classList.remove('gone')
+      canvas.style.opacity = ''
+      document.querySelectorAll('.win').forEach(w => w.classList.remove('s1','s2','s3'))
+
+      schedule(T.toOlive, () => stage.classList.add('olive'))
+      drawWindow('win-title', T.winTitle)
+      drawWindow('win-bio',   T.winBio)
+      drawWindow('win-mini',  T.winMini)
+      schedule(T.toPaper, () => {
+        stage.classList.add('paper')
+        canvas.classList.add('gone')
+      })
+      schedule(T.toPaper + 900, () => { finished = true })
+
+      rafId = requestAnimationFrame(frame)
+    }
+
+    function frame(ts) {
+      if (!start) start = ts
+      const t = ts - start
+      ctx.clearRect(0, 0, W, H)
+
+      // Wave phase
+      if (t < T.toOlive + 400) {
+        const fadeIn = Math.min(1, t / T.waveFadeIn)
+        const fadeOut = t > T.toOlive ? Math.max(0, 1 - (t - T.toOlive) / 400) : 1
+        drawWave(t, fadeIn * fadeOut)
+      }
+
+      // Sun phase (draws over, holds until paper fade)
+      if (t >= T.sunStart) {
+        let g = 1
+        if (t > T.toPaper) g = Math.max(0, 1 - (t - T.toPaper) / T.sunFadeOut)
+        if (g > 0) drawSun(ctx, t - T.sunStart, T.sunReveal, g)
+      }
+
+      // Mini sun loop (starts when its window content shows)
+      if (t >= T.winMini + T.stepMs * 2) {
+        drawMiniSun(t - (T.winMini + T.stepMs * 2))
+      }
+
+      rafId = requestAnimationFrame(frame)
+    }
+
+    /* Skip to final state */
+    function skip() {
+      if (finished) return
+      timers.forEach(clearTimeout)
+      timers.length = 0
+      stage.classList.add('olive', 'paper')
+      canvas.classList.add('gone')
+      document.querySelectorAll('.win').forEach(w => {
+        w.classList.remove('s1','s2')
+        w.classList.add('s3')
+      })
+      // jump timeline past the end so only the mini sun keeps drawing
+      start = performance.now() - (T.toPaper + T.sunFadeOut + 100)
+      finished = true
+    }
+
+    document.addEventListener('click', skip)
+    document.addEventListener('keydown', e => {
+      if (e.key === 'r' || e.key === 'R') run()
+    })
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      run(); skip()
+    } else {
+      // wait for fonts so canvas letters render in GT Mechanik
+      document.fonts.ready.then(run)
+    }
+  </script>
+
+</body>
+</html>
