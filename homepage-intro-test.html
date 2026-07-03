@@ -114,6 +114,20 @@
       will-change: transform;
     }
 
+    /* Idle caret: steady block that only blinks when .caret-blink is on */
+    .retro-caret-idle::after {
+      content: '';
+      display: inline-block;
+      width: 0.5em;
+      height: 1em;
+      margin-left: 1px;
+      background: currentColor;
+      vertical-align: -0.12em;
+    }
+    .retro-caret-idle.caret-blink::after {
+      animation: retroBlink 0.8s steps(1) 2;
+    }
+
     /* Bio + accents in GT Mechanik */
     .retro-bio {
       font-family: 'GT Mechanik Poly', sans-serif;
@@ -412,12 +426,16 @@
       bio.classList.remove('retro-caret')
     }
 
-    /* ── Name ticker: type → hold a beat → scroll off → repeat ── */
+    /* ── Name ticker: type once, sit idle (occasional caret blink),
+       then every few minutes scroll off and retype ── */
     const NAME = {
-      typeMs:   38,     // per character
-      holdMs:   1200,   // pause once fully typed
-      scrollMs: 850,    // slide-out duration
-      gapMs:    350,    // blank pause before retyping
+      typeMs:     38,       // per character
+      scrollMs:   850,      // slide-out duration
+      gapMs:      350,      // blank pause before retyping
+      blinkMinMs: 4000,     // idle: min gap between caret blinks
+      blinkMaxMs: 9000,     // idle: max gap between caret blinks
+      repeatMinMs: 120000,  // full animation repeats every 2–3 min
+      repeatMaxMs: 180000,
     }
     const nameTrack = document.getElementById('name-track')
     const NAME_TEXT = nameTrack.textContent
@@ -434,17 +452,24 @@
       nameTrack.style.transition = 'none'
       nameTrack.style.transform = 'translateX(0)'
       nameTrack.textContent = ''
-      nameTrack.classList.remove('retro-caret')
+      nameTrack.classList.remove('retro-caret', 'retro-caret-idle', 'caret-blink')
     }
+
+    function rand(min, max) { return min + Math.random() * (max - min) }
 
     function startNameLoop() {
       if (nameRunning) return
       nameRunning = true
-      if (reduce) { nameTrack.textContent = NAME_TEXT; return }
+      if (reduce) {
+        nameTrack.textContent = NAME_TEXT
+        nameTrack.classList.add('retro-caret-idle')
+        return
+      }
       ;(function cycle() {
         nameTrack.style.transition = 'none'
         nameTrack.style.transform = 'translateX(0)'
         nameTrack.textContent = ''
+        nameTrack.classList.remove('retro-caret-idle', 'caret-blink')
         nameTrack.classList.add('retro-caret')
         let i = 0
         ;(function step() {
@@ -453,8 +478,23 @@
             i++
             nameSchedule(NAME.typeMs, step)
           } else {
+            /* idle: steady caret that blinks once in a while */
             nameTrack.classList.remove('retro-caret')
-            nameSchedule(NAME.holdMs, () => {
+            nameTrack.classList.add('retro-caret-idle')
+            ;(function idleBlink() {
+              nameSchedule(rand(NAME.blinkMinMs, NAME.blinkMaxMs), () => {
+                nameTrack.classList.add('caret-blink')
+                nameSchedule(1700, () => {
+                  nameTrack.classList.remove('caret-blink')
+                  idleBlink()
+                })
+              })
+            })()
+            /* full animation again after 2–3 minutes */
+            nameSchedule(rand(NAME.repeatMinMs, NAME.repeatMaxMs), () => {
+              nameTimers.forEach(clearTimeout)
+              nameTimers = []
+              nameTrack.classList.remove('retro-caret-idle', 'caret-blink')
               nameTrack.style.transition = `transform ${NAME.scrollMs}ms cubic-bezier(0.5, 0, 0.9, 0.6)`
               nameTrack.style.transform = 'translateX(calc(-100% - 48px))'
               nameSchedule(NAME.scrollMs + NAME.gapMs, cycle)
