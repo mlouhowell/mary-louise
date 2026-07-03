@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — Homepage intro test</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/retro-windows.css?v=13">
   <style>
     /* ── GT Mechanik (Trial) ─────────────────────────── */
     @font-face {
@@ -84,98 +85,41 @@
     }
     #ascii.gone { opacity: 0; }
 
-    /* ── Retro windows ───────────────────────────────── */
-    .win {
+    /* ── Retro windows: center the stage, GT Mechanik text ── */
+    .retro-windows {
       position: absolute;
-      background: #fff;
-      border: 1.5px solid var(--ink);
-      visibility: hidden;
-    }
-    /* stepped reveal: 1 = frame only, 2 = + chrome, 3 = + content */
-    .win.s1 { visibility: visible; }
-    .win.s1 .bar, .win.s1 .content { visibility: hidden; }
-    .win.s2 .bar { visibility: visible; }
-    .win.s2 .content { visibility: hidden; }
-    .win.s3 .bar, .win.s3 .content { visibility: visible; }
-
-    .bar {
-      position: relative;
-      height: 22px;
-      border-bottom: 1.5px solid var(--ink);
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          transparent 0 3px,
-          var(--ink) 3px 4px
-        );
-      background-size: 100% 12px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-clip: content-box;
-      padding: 4px 8px;
-    }
-    .bar .x {
-      position: absolute;
-      top: 50%; left: 8px;
-      transform: translateY(-50%);
-      background: #fff;
-      padding: 0 3px;
-      font-family: 'GT Mechanik Mono', monospace;
-      font-size: 11px;
-      line-height: 1;
-      color: var(--ink);
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0;
     }
 
-    /* Title window */
-    #win-title {
-      top: 18%; left: 13%;
-      width: min(460px, 44vw);
-      z-index: 12;
-    }
-    #win-title .content {
-      margin: 8px;
-      border: 1.5px solid var(--ink);
-      padding: 26px 34px;
+    /* Title window text (replaces the ML logo treatment) */
+    .retro-name {
       font-family: 'GT Mechanik Poly', sans-serif;
       font-weight: 500;
-      font-size: clamp(36px, 4.6vw, 62px);
+      font-size: 58px;
+      line-height: 1.05;
       letter-spacing: -0.01em;
-      color: var(--ink);
+      color: #000;
+      white-space: nowrap;
     }
 
-    /* Bio window */
-    #win-bio {
-      top: 31%; left: 22%;
-      width: min(560px, 56vw);
-      z-index: 11;
+    /* Bio + accents in GT Mechanik */
+    .retro-bio {
+      font-family: 'GT Mechanik Poly', sans-serif;
     }
-    #win-bio .content {
-      padding: 34px 38px 40px;
-      font-size: clamp(20px, 2.3vw, 30px);
-      line-height: 1.45;
-      letter-spacing: 0.005em;
-      color: var(--ink);
-    }
-    #win-bio .content .m {
+    .retro-bio .m {
       font-family: 'GT Mechanik Mono', monospace;
       color: var(--accent);
     }
 
-    /* Mini sun window */
-    #win-mini {
-      top: 46%; left: 72%;
-      width: min(240px, 22vw);
-      z-index: 13;
-    }
-    #win-mini .content {
-      margin: 8px;
-      border: 1.5px solid var(--ink);
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #win-mini canvas { display: block; width: 100%; height: auto; }
+    /* char-by-char typing: chars start hidden */
+    .retro-bio .ch { visibility: hidden; }
+    .retro-bio.typed .ch { visibility: visible; }
+
+    .retro-body--sun canvas { display: block; }
 
     /* ── Footer (per design system) ──────────────────── */
     footer {
@@ -189,7 +133,6 @@
     }
     footer a { color: inherit; text-decoration: none; }
 
-    /* ── Test controls hint ──────────────────────────── */
     #hint {
       position: fixed;
       bottom: 16px; right: 20px;
@@ -197,12 +140,6 @@
       font-family: 'Space Mono', monospace;
       font-size: 10px;
       color: rgba(0,0,0,0.45);
-    }
-
-    @media (max-width: 800px) {
-      #win-title { top: 14%; left: 6%;  width: 68vw; }
-      #win-bio   { top: 27%; left: 12%; width: 80vw; }
-      #win-mini  { top: 62%; left: 58%; width: 34vw; }
     }
   </style>
 </head>
@@ -220,20 +157,45 @@
   <div id="stage">
     <canvas id="ascii"></canvas>
 
-    <div class="win" id="win-title">
-      <div class="bar"><span class="x">×</span></div>
-      <div class="content">Mary-Louise</div>
-    </div>
+    <!-- Retro windows — same structure/chrome as index.html -->
+    <section class="retro-windows" id="retro-windows" aria-label="Intro">
+      <div class="retro-stage" id="retro-stage">
 
-    <div class="win" id="win-bio">
-      <div class="bar"><span class="x">×</span></div>
-      <div class="content">is a product designer with a love for <span class="m">building.</span> She has equal interest in designing <span class="m">creative tools</span> and products focused on making <span class="m">humans healthier.</span></div>
-    </div>
+        <!-- Name window -->
+        <div class="retro-window" data-window style="left: 60px; top: 60px; width: 440px; z-index: 2;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body retro-body--logo">
+            <div class="retro-name">Mary-Louise</div>
+          </div>
+        </div>
 
-    <div class="win" id="win-mini">
-      <div class="bar"><span class="x">×</span></div>
-      <div class="content"><canvas id="mini-sun"></canvas></div>
-    </div>
+        <!-- Bio window -->
+        <div class="retro-window retro-window--bio" data-window style="left: 160px; top: 200px; z-index: 1;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body">
+            <p class="retro-bio" data-type-rich>is a product designer with a love for <span class="m">building.</span> She has equal interest in designing <span class="m">creative tools</span> and products focused on making <span class="m">humans healthier.</span></p>
+          </div>
+        </div>
+
+        <!-- Mini sun window -->
+        <div class="retro-window retro-window--sun" data-window style="left: 620px; top: 250px; width: 200px; z-index: 4;">
+          <div class="retro-titlebar" data-drag-handle>
+            <button class="retro-close" type="button" aria-label="Close window">&#10005;</button>
+            <span class="retro-lines" aria-hidden="true"></span>
+          </div>
+          <div class="retro-body retro-body--sun">
+            <canvas id="mini-sun"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
   </div>
 
   <footer><a href="https://mary-louise.com">By ML Howell</a> · V1.1 · July 2026</footer>
@@ -243,15 +205,11 @@
     /* ═══ Timeline (ms) — tune everything here ═══════════ */
     const T = {
       waveFadeIn:   400,    // wave letters fade in
-      waveHold:     2200,   // wave runs on periwinkle
       toOlive:      2600,   // bg starts tweening to olive, wave fades
       sunStart:     3100,   // sun ray-reveal begins
       sunReveal:    1300,   // duration of ray reveal
-      winTitle:     4500,   // title window draws
-      winBio:       4680,
-      winMini:      4860,
-      stepMs:       90,     // per retro draw step
-      toPaper:      5500,   // bg fades to white, big sun fades
+      windows:      4500,   // retro windows start their native reveal
+      toPaper:      5600,   // bg fades to white, big sun fades
       sunFadeOut:   600,
     }
 
@@ -331,10 +289,12 @@
     /* Mini sun (loops forever in its window) */
     const mini = document.getElementById('mini-sun')
     const mctx = mini.getContext('2d')
-    const MINI_SCALE = 0.42
-    const miniSize = sunSize * MINI_SCALE
-    mini.width = miniSize * dpr
-    mini.height = miniSize * dpr
+    const MINI_PX = 140
+    const MINI_SCALE = MINI_PX / sunSize
+    mini.width = MINI_PX * dpr
+    mini.height = MINI_PX * dpr
+    mini.style.width = MINI_PX + 'px'
+    mini.style.height = MINI_PX + 'px'
     mctx.scale(dpr * MINI_SCALE, dpr * MINI_SCALE)
 
     /* ═══ Draw helpers ═══════════════════════════════════ */
@@ -359,18 +319,18 @@
       return Math.min(1, (t - turnOn) / 180)
     }
 
-    function drawSun(c, t, revealMs, globalAlpha) {
-      c.font = `${SUN.fontSize}px 'GT Mechanik Mono', monospace`
-      c.fillStyle = SUN.color
-      c.textAlign = 'center'
-      c.textBaseline = 'middle'
+    function drawSun(t, globalAlpha) {
+      ctx.font = `${SUN.fontSize}px 'GT Mechanik Mono', monospace`
+      ctx.fillStyle = SUN.color
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
       for (const L of sunLetters) {
-        const o = sunOpacity(L.step, t, revealMs) * globalAlpha
+        const o = sunOpacity(L.step, t, T.sunReveal) * globalAlpha
         if (o <= 0) continue
-        c.globalAlpha = o
-        c.fillText(L.char, L.x, L.y)
+        ctx.globalAlpha = o
+        ctx.fillText(L.char, L.x, L.y)
       }
-      c.globalAlpha = 1
+      ctx.globalAlpha = 1
     }
 
     /* Mini sun: cyclic reveal like the original snippet */
@@ -397,12 +357,134 @@
       mctx.globalAlpha = 1
     }
 
-    /* ═══ Windows ════════════════════════════════════════ */
-    function drawWindow(id, at, done) {
-      const el = document.getElementById(id)
-      schedule(at,             () => el.classList.add('s1'))
-      schedule(at + T.stepMs,  () => { el.classList.remove('s1'); el.classList.add('s2') })
-      schedule(at + T.stepMs*2,() => { el.classList.remove('s2'); el.classList.add('s3'); if (done) done() })
+    /* ═══ Retro windows — behavior lifted from retro-windows.js,
+       reveal() triggered by the intro timeline instead of load ═══ */
+    const section = document.getElementById('retro-windows')
+    const retroStage = document.getElementById('retro-stage')
+    const windows = [].slice.call(section.querySelectorAll('[data-window]'))
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const mqMobile = window.matchMedia('(max-width: 800px)')
+
+    /* Rich typewriter: wrap every char in a span (keeps the accent
+       <span class="m"> coloring), then reveal chars one by one. */
+    const bio = section.querySelector('[data-type-rich]')
+    ;(function wrapChars(root) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
+      const textNodes = []
+      while (walker.nextNode()) textNodes.push(walker.currentNode)
+      textNodes.forEach(node => {
+        const frag = document.createDocumentFragment()
+        for (const ch of node.textContent) {
+          const s = document.createElement('span')
+          s.className = 'ch'
+          s.textContent = ch
+          frag.appendChild(s)
+        }
+        node.parentNode.replaceChild(frag, node)
+      })
+    })(bio)
+    const bioChars = [].slice.call(bio.querySelectorAll('.ch'))
+
+    function typeBio(speed) {
+      let i = 0
+      bio.classList.add('retro-caret')
+      ;(function step() {
+        if (i < bioChars.length) {
+          bioChars[i].style.visibility = 'visible'
+          i++
+          setTimeout(step, speed)
+        } else {
+          bio.classList.remove('retro-caret')
+        }
+      })()
+    }
+
+    function finishBio() {
+      bioChars.forEach(c => { c.style.visibility = 'visible' })
+      bio.classList.remove('retro-caret')
+    }
+
+    /* Close buttons */
+    ;[].slice.call(section.querySelectorAll('.retro-close')).forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation()
+        const win = btn.closest('[data-window]')
+        if (win) win.style.display = 'none'
+      })
+      btn.addEventListener('pointerdown', e => e.stopPropagation())
+    })
+
+    /* Dragging (clamped to the stage) */
+    let topZ = 10
+    function initDrag(win) {
+      const handle = win.querySelector('[data-drag-handle]')
+      if (!handle) return
+      handle.addEventListener('pointerdown', e => {
+        if (mqMobile.matches) return
+        if (e.button !== undefined && e.button !== 0) return
+        e.preventDefault()
+        e.stopPropagation()                      // don't trigger intro skip
+        const stageRect = retroStage.getBoundingClientRect()
+        const winRect = win.getBoundingClientRect()
+        const offsetX = e.clientX - winRect.left
+        const offsetY = e.clientY - winRect.top
+        win.style.left = (winRect.left - stageRect.left) + 'px'
+        win.style.top = (winRect.top - stageRect.top) + 'px'
+        win.style.zIndex = ++topZ
+        win.classList.add('is-dragging')
+        handle.setPointerCapture(e.pointerId)
+        function onMove(ev) {
+          const sRect = retroStage.getBoundingClientRect()
+          const x = ev.clientX - sRect.left - offsetX
+          const y = ev.clientY - sRect.top - offsetY
+          const maxX = retroStage.clientWidth - win.offsetWidth
+          const maxY = retroStage.clientHeight - win.offsetHeight
+          win.style.left = Math.max(0, Math.min(x, maxX)) + 'px'
+          win.style.top = Math.max(0, Math.min(y, maxY)) + 'px'
+        }
+        function onUp() {
+          win.classList.remove('is-dragging')
+          try { handle.releasePointerCapture(e.pointerId) } catch (err) {}
+          handle.removeEventListener('pointermove', onMove)
+          handle.removeEventListener('pointerup', onUp)
+          handle.removeEventListener('pointercancel', onUp)
+        }
+        handle.addEventListener('pointermove', onMove)
+        handle.addEventListener('pointerup', onUp)
+        handle.addEventListener('pointercancel', onUp)
+      })
+    }
+    windows.forEach(initDrag)
+
+    /* Fit the fixed-size cluster to the viewport (from retro-windows.js) */
+    const STAGE_W = 820
+    function fitStage() {
+      const avail = Math.min(window.innerWidth - 32, STAGE_W)
+      const s = Math.min(1, avail / STAGE_W)
+      retroStage.style.transformOrigin = 'center center'
+      retroStage.style.transform = s < 1 ? 'scale(' + s + ')' : 'none'
+    }
+    fitStage()
+    window.addEventListener('resize', fitStage)
+
+    /* Load-in: stagger windows, then type (same rhythm as live site) */
+    let revealed = false
+    function reveal() {
+      if (revealed) return
+      revealed = true
+      windows.forEach((win, idx) => {
+        if (reduce) {
+          win.classList.add('is-visible')
+          finishBio()
+          return
+        }
+        setTimeout(() => {
+          win.classList.add('is-visible')
+          if (win.querySelector('[data-type-rich]')) {
+            setTimeout(() => typeBio(16), 240)
+          }
+        }, idx * 130)
+      })
     }
 
     /* ═══ Master timeline ════════════════════════════════ */
@@ -415,21 +497,19 @@
     function schedule(at, fn) { timers.push(setTimeout(fn, at)) }
 
     function run() {
-      // reset
       finished = false
       start = null
+      revealed = false
       timers.forEach(clearTimeout)
       timers.length = 0
       if (rafId) cancelAnimationFrame(rafId)
       stage.classList.remove('olive', 'paper')
       canvas.classList.remove('gone')
-      canvas.style.opacity = ''
-      document.querySelectorAll('.win').forEach(w => w.classList.remove('s1','s2','s3'))
+      windows.forEach(w => { w.classList.remove('is-visible'); w.style.display = '' })
+      bioChars.forEach(c => { c.style.visibility = '' })
 
       schedule(T.toOlive, () => stage.classList.add('olive'))
-      drawWindow('win-title', T.winTitle)
-      drawWindow('win-bio',   T.winBio)
-      drawWindow('win-mini',  T.winMini)
+      schedule(T.windows, reveal)
       schedule(T.toPaper, () => {
         stage.classList.add('paper')
         canvas.classList.add('gone')
@@ -444,23 +524,20 @@
       const t = ts - start
       ctx.clearRect(0, 0, W, H)
 
-      // Wave phase
       if (t < T.toOlive + 400) {
         const fadeIn = Math.min(1, t / T.waveFadeIn)
         const fadeOut = t > T.toOlive ? Math.max(0, 1 - (t - T.toOlive) / 400) : 1
         drawWave(t, fadeIn * fadeOut)
       }
 
-      // Sun phase (draws over, holds until paper fade)
       if (t >= T.sunStart) {
         let g = 1
         if (t > T.toPaper) g = Math.max(0, 1 - (t - T.toPaper) / T.sunFadeOut)
-        if (g > 0) drawSun(ctx, t - T.sunStart, T.sunReveal, g)
+        if (g > 0) drawSun(t - T.sunStart, g)
       }
 
-      // Mini sun loop (starts when its window content shows)
-      if (t >= T.winMini + T.stepMs * 2) {
-        drawMiniSun(t - (T.winMini + T.stepMs * 2))
+      if (t >= T.windows) {
+        drawMiniSun(t - T.windows)
       }
 
       rafId = requestAnimationFrame(frame)
@@ -473,24 +550,25 @@
       timers.length = 0
       stage.classList.add('olive', 'paper')
       canvas.classList.add('gone')
-      document.querySelectorAll('.win').forEach(w => {
-        w.classList.remove('s1','s2')
-        w.classList.add('s3')
-      })
-      // jump timeline past the end so only the mini sun keeps drawing
+      revealed = true
+      windows.forEach(w => w.classList.add('is-visible'))
+      finishBio()
       start = performance.now() - (T.toPaper + T.sunFadeOut + 100)
       finished = true
     }
 
-    document.addEventListener('click', skip)
+    document.addEventListener('click', e => {
+      // clicks inside windows (drag, close) shouldn't skip once they're up
+      if (revealed && e.target.closest('.retro-window')) return
+      skip()
+    })
     document.addEventListener('keydown', e => {
       if (e.key === 'r' || e.key === 'R') run()
     })
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (reduce) {
       run(); skip()
     } else {
-      // wait for fonts so canvas letters render in GT Mechanik
       document.fonts.ready.then(run)
     }
   </script>
