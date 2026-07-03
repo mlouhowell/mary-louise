@@ -527,27 +527,24 @@
     fitStage()
     window.addEventListener('resize', fitStage)
 
-    /* Load-in: stagger windows, then type (same rhythm as live site) */
+    /* Load-in: all windows at once, then type */
     let revealed = false
     function reveal() {
       if (revealed) return
       revealed = true
-      windows.forEach((win, idx) => {
+      windows.forEach(win => {
+        win.classList.add('is-visible')
         if (reduce) {
-          win.classList.add('is-visible')
           finishBio()
           startNameLoop()
           return
         }
-        setTimeout(() => {
-          win.classList.add('is-visible')
-          if (win.querySelector('[data-type-rich]')) {
-            setTimeout(() => typeBio(16), 240)
-          }
-          if (win.querySelector('#name-track')) {
-            setTimeout(startNameLoop, 240)
-          }
-        }, idx * 130)
+        if (win.querySelector('[data-type-rich]')) {
+          setTimeout(() => typeBio(16), 240)
+        }
+        if (win.querySelector('#name-track')) {
+          setTimeout(startNameLoop, 240)
+        }
       })
     }
 
