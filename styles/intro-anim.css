@@ -44,8 +44,16 @@
 #intro-overlay.out   { opacity: 0; pointer-events: none; }
 #intro-overlay canvas { position: absolute; inset: 0; }
 
-/* lock scroll while the intro plays */
+/* lock scroll while the intro plays — .page-inner is the real
+   scroll container, not the body */
 html.intro-lock, html.intro-lock body { overflow: hidden; }
+html.intro-lock .page-inner { overflow: hidden; }
+
+/* Keep scrolling from chaining out of the page scroller at its
+   boundaries (bottom rubber-band read as "stuck" at the footer,
+   especially iOS Safari) */
+html, body { overscroll-behavior: none; }
+.page-inner { overscroll-behavior-y: contain; }
 
 /* windows pop in above the overlay's rust scene — but only while
    the intro is running, so they don't sit above the nav on scroll */
