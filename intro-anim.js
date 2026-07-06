@@ -486,8 +486,27 @@
     if (e.key === 'r' || e.key === 'R') run()
   })
 
-  if (reduce) {
+  /* "Work" nav → the project tiles. Arriving with #work skips the
+     intro and lands on the tiles; clicking it while already on the
+     homepage smooth-scrolls to them. */
+  var workEl = document.getElementById('work')
+  ;[].slice.call(document.querySelectorAll('a[href="#work"], a[href="/#work"]')).forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (!workEl) return
+      e.preventDefault()
+      if (!finished) skip()
+      workEl.scrollIntoView({ behavior: 'smooth' })
+      history.replaceState(null, '', '#work')
+    })
+  })
+
+  var wantsWork = location.hash === '#work' && workEl
+
+  if (reduce || wantsWork) {
     skip()
+    if (wantsWork) {
+      requestAnimationFrame(function () { workEl.scrollIntoView() })
+    }
   } else if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(run)
   } else {
