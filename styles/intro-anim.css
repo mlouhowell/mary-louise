@@ -44,6 +44,9 @@
 #intro-overlay.out   { opacity: 0; pointer-events: none; }
 #intro-overlay canvas { position: absolute; inset: 0; }
 
+/* "Work" anchor target: keep the tiles clear of the fixed nav */
+#work { scroll-margin-top: 72px; }
+
 /* lock scroll while the intro plays — .page-inner is the real
    scroll container, not the body */
 html.intro-lock, html.intro-lock body { overflow: hidden; }
