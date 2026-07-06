@@ -1,3 +1,13 @@
+/* Wheel input over the body (the gutters beside the page card) has
+   nothing to scroll — forward it to the real scroller, .page-inner. */
+(function () {
+  document.addEventListener('wheel', function (e) {
+    if (e.target !== document.body && e.target !== document.documentElement) return;
+    var s = document.querySelector('.page-inner');
+    if (s) s.scrollTop += e.deltaY;
+  }, { passive: true });
+})();
+
 (function () {
   var footer = document.querySelector('footer');
   if (!footer) return;
