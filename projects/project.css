@@ -9,7 +9,16 @@
   --gap-section: 56px; /* slightly more breathing room than main pages */
 }
 
-/* Project pages scroll normally — override the fixed viewport layout */
+/* Project pages scroll normally — override the fixed viewport layout.
+   These pages have no .page-inner, so the document itself must scroll:
+   undo the global html/body scroll lock. */
+html, body {
+  height: auto;
+  overflow: visible;
+}
+
+body { overflow-x: hidden; }
+
 .page {
   position: static;
   top: auto; right: auto; bottom: auto; left: auto;
