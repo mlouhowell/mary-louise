@@ -314,26 +314,41 @@
   function initDrag(win) {
     var handle = win.querySelector('[data-drag-handle]')
     if (!handle) return
+    // Windows can be dragged across the full page content column, not just the
+    // 820px stage. Horizontal bounds come from .page-inner; vertical stays in
+    // the stage band so windows don't fly off into the work grid.
+    var dragLayer = win.closest('.page-inner') || retroStage
     handle.addEventListener('pointerdown', function (e) {
       if (mqMobile.matches) return
       if (e.button !== undefined && e.button !== 0) return
       e.preventDefault()
       var stageRect = retroStage.getBoundingClientRect()
+      // On-screen scale of the stage (fitStage() shrinks it on narrow
+      // viewports); left/top are authored in the stage's unscaled units.
+      var scale = stageRect.width / retroStage.offsetWidth || 1
       var winRect = win.getBoundingClientRect()
       var offsetX = e.clientX - winRect.left
       var offsetY = e.clientY - winRect.top
-      win.style.left = (winRect.left - stageRect.left) + 'px'
-      win.style.top = (winRect.top - stageRect.top) + 'px'
+      // Full-width horizontal bounds (page content box), captured at drag start.
+      var layerRect = dragLayer.getBoundingClientRect()
+      var lcs = getComputedStyle(dragLayer)
+      var boundL = layerRect.left + (parseFloat(lcs.paddingLeft) || 0)
+      var boundR = layerRect.right - (parseFloat(lcs.paddingRight) || 0)
+      win.style.left = ((winRect.left - stageRect.left) / scale) + 'px'
+      win.style.top = ((winRect.top - stageRect.top) / scale) + 'px'
       win.style.zIndex = ++topZ
       win.classList.add('is-dragging')
       handle.setPointerCapture(e.pointerId)
       function onMove(ev) {
         var sRect = retroStage.getBoundingClientRect()
-        var x = ev.clientX - sRect.left - offsetX
-        var y = ev.clientY - sRect.top - offsetY
-        var maxX = retroStage.clientWidth - win.offsetWidth
+        var s = sRect.width / retroStage.offsetWidth || 1
+        var winW = win.offsetWidth * s
+        // Clamp the window's on-screen left edge within the page column,
+        // then convert back into the stage's local (unscaled) coordinates.
+        var screenX = Math.max(boundL, Math.min(ev.clientX - offsetX, boundR - winW))
+        var y = (ev.clientY - sRect.top - offsetY) / s
         var maxY = retroStage.clientHeight - win.offsetHeight
-        win.style.left = Math.max(0, Math.min(x, maxX)) + 'px'
+        win.style.left = ((screenX - sRect.left) / s) + 'px'
         win.style.top = Math.max(0, Math.min(y, maxY)) + 'px'
       }
       function onUp() {
@@ -429,7 +444,11 @@
     schedule(T.toOlive, function () { overlay.classList.add('olive') })
     schedule(T.toRust, function () { overlay.classList.add('rust') })
     schedule(T.windows, reveal)
-    schedule(T.toPaper, function () { overlay.classList.add('out') })
+    // The moment the animation is over and the overlay begins clearing,
+    // release the scroll lock so you can scroll straight to the work — no
+    // waiting for the windows to finish typing. The overlay is transparent
+    // and non-interactive (.out) during its fade, so scrolling is clean.
+    schedule(T.toPaper, function () { overlay.classList.add('out'); lockScroll(false) })
     schedule(T.toPaper + 900, finish)
 
     rafId = requestAnimationFrame(frame)

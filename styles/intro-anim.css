@@ -79,7 +79,7 @@ html.intro-lock .retro-windows { z-index: 600; }
   font-size: 30px;
 }
 .retro-name {
-  font-family: 'GT Mechanik Poly', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: 30px;
   line-height: 1.15;
@@ -104,12 +104,12 @@ html.intro-lock .retro-windows { z-index: 600; }
   animation: retroBlink 0.8s steps(1) 2;
 }
 
-/* ── Bio window: GT Mechanik + accent words ───────────────── */
+/* ── Bio window: Inter + accent words ─────────────────────── */
 .retro-bio {
-  font-family: 'GT Mechanik Poly', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 .retro-bio .m {
-  font-family: 'GT Mechanik Mono', monospace;
+  font-family: 'Inter', sans-serif;
   color: #7395E7;
 }
 /* char-by-char typing: chars start hidden */
@@ -119,20 +119,25 @@ html.intro-lock .retro-windows { z-index: 600; }
 .retro-body--find {
   padding: 14px 16px 16px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .retro-find-label {
-  font-family: 'GT Mechanik Poly', sans-serif;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
   font-size: 14px;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.1px;
   text-transform: uppercase;
   color: #000;
-  margin-bottom: 10px;
 }
 .retro-find-link {
   display: block;
-  font-family: 'GT Mechanik Mono', monospace;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 16px;
+  letter-spacing: -0.2px;
   color: #000;
   text-decoration: none;
 }
