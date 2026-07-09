@@ -80,67 +80,38 @@
     .experiment-item:nth-child(7) { animation-delay: 0.35s; }
 
     .experiment-meta {
-      padding: 10px 0 13px;
+      padding: 12px 0 13px;
       border-bottom: 1px solid var(--color-subtle);
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      flex-wrap: wrap;
+      align-items: baseline;
+      column-gap: 5px;
+      row-gap: 2px;
       position: relative;
     }
 
-    .meta-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-    }
+    /* Flatten the two rows so name / category / year read on one line,
+       matching the homepage project cards ("POSTLY IOS APP / 2026"). */
+    .meta-top, .meta-bottom { display: contents; }
 
-    .meta-name {
-      font-family: var(--font-body);
-      font-size: var(--size-body);
+    .meta-name, .meta-pill, .meta-date {
+      font-family: 'Inter', sans-serif;
       font-weight: 500;
-      letter-spacing: -0.2px;
-      color: var(--color-text);
-      line-height: 1.5;
-    }
-
-    .meta-arrow {
-      font-size: 13px;
-      color: var(--color-muted);
-      flex-shrink: 0;
-      line-height: 1.4;
-      position: absolute;
-      top: 10px;
-      right: 0;
-    }
-
-    .meta-bottom {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      order: -1; /* move year + tag above the title */
-    }
-
-    .meta-date {
-      font-family: 'Geist Mono', monospace;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: -0.2px;
-      color: var(--color-muted);
-    }
-
-    .meta-pill {
-      font-family: 'Geist Mono', monospace;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
+      font-size: 14px;
+      line-height: 14px;
+      letter-spacing: -0.1px;
       text-transform: uppercase;
-      color: var(--color-muted);
-      background: var(--color-pill-bg);
-      padding: 2px 6px;
-      border-radius: 3px;
-      line-height: 1.6;
+      color: var(--color-text);
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      transition: color 0.15s;
     }
+    .meta-name { order: 1; }
+    .meta-pill { order: 2; }
+    .meta-date { order: 3; }
+    .meta-date::before { content: "/ "; }
+    .meta-arrow { display: none; }
 
     /* ── Video thumbnail play button ────────────────── */
     .experiment-thumb-video {
@@ -207,10 +178,11 @@
     .experiment-item:hover .experiment-thumb {
       opacity: 0.85;
     }
-    .experiment-item:hover .meta-name {
+    .experiment-item:hover .meta-name,
+    .experiment-item:hover .meta-pill,
+    .experiment-item:hover .meta-date {
       color: #C8341A;
     }
-    .meta-name { transition: color 0.15s; }
     .experiment-item:focus-visible {
       outline: 2px solid #1A1A1A;
       outline-offset: 3px;
@@ -411,24 +383,6 @@
         </div>
       </div>
 
-      <a class="experiment-item" href="https://travels.mary-louise.com" target="_blank" rel="noopener" aria-label="View Travel Playing Cards" style="text-decoration:none;color:inherit;">
-        <div class="experiment-thumb">
-          <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
-            <source src="images/Travel-cards.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Travel Playing Cards</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Microsite</span>
-          </div>
-        </div>
-      </a>
-
       <div class="experiment-item" aria-label="Scratch Pad">
         <div class="experiment-thumb">
           <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
@@ -474,40 +428,6 @@
           <div class="meta-bottom">
             <span class="meta-date">2026</span>
             <span class="meta-pill">Web App</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="experiment-item" href="https://doodle.mary-louise.com" target="_blank" rel="noopener" aria-label="View Doodles" style="text-decoration:none;color:inherit;">
-        <div class="experiment-thumb">
-          <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
-            <source src="/projects/Doodles/thumb.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Doodles</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Microsite</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="experiment-item" href="/projects/postly/" aria-label="View Postly — Postcard App" style="text-decoration:none;color:inherit;">
-        <div class="experiment-thumb">
-          <img src="/projects/postly/Images/Postly%20hero.png" alt="Postly postcard app">
-        </div>
-        <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Postly</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">iOS App</span>
           </div>
         </div>
       </a>
