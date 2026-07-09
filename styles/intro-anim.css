@@ -110,7 +110,7 @@ html.intro-lock .retro-windows { z-index: 600; }
 }
 .retro-bio .m {
   font-family: 'Inter', sans-serif;
-  color: #7395E7;
+  color: #C8341A;
 }
 /* char-by-char typing: chars start hidden */
 .retro-bio .ch { visibility: hidden; }

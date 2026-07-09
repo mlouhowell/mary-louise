@@ -19,12 +19,12 @@
     waveFadeIn:   400,    // wave letters fade in
     toOlive:      1100,   // bg tweens to olive, wave fades
     sunStart:     1600,   // sun ray-reveal begins
-    sunReveal:    1300,   // duration of ray reveal
-    toRust:       3100,   // bg tweens to rust, sun fades
-    spiralStart:  3400,   // spiral reveal begins
-    spiralReveal: 2800,   // duration of spiral reveal
-    windows:      6000,   // retro windows pop in (right as spiral completes)
-    toPaper:      7100,   // overlay fades out, page revealed
+    sunReveal:    850,    // duration of ray reveal (sped up)
+    toRust:       2650,   // bg tweens to rust, sun fades
+    spiralStart:  2850,   // spiral reveal begins
+    spiralReveal: 1800,   // duration of spiral reveal (sped up; eased so the end snaps in)
+    windows:      4500,   // retro windows pop in (right as spiral completes)
+    toPaper:      5100,   // overlay fades out, page revealed
     fadeOut:      600,    // sun/spiral fade-out duration
   }
 
@@ -129,7 +129,7 @@
 
   /* ═══ Draw helpers ═══════════════════════════════════ */
   function drawWave(elapsed, alpha) {
-    ctx.font = WAVE.fontSize + "px 'GT Mechanik Mono', monospace"
+    ctx.font = WAVE.fontSize + "px 'Inter', sans-serif"
     ctx.fillStyle = WAVE.color
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
@@ -144,7 +144,7 @@
   }
 
   function drawSun(t, globalAlpha) {
-    ctx.font = SUN.fontSize + "px 'GT Mechanik Mono', monospace"
+    ctx.font = SUN.fontSize + "px 'Inter', sans-serif"
     ctx.fillStyle = SUN.color
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
@@ -160,14 +160,17 @@
   }
 
   function drawSpiral(t, globalAlpha) {
-    ctx.font = SPIRAL.fontSize + "px 'GT Mechanik Mono', monospace"
+    ctx.font = SPIRAL.fontSize + "px 'Inter', sans-serif"
     ctx.fillStyle = SPIRAL.color
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     for (var k = 0; k < spiralPoints.length; k++) {
       var P = spiralPoints[k]
       var norm = (P.r - spiralMinR) / spiralRange
-      var turnOn = norm * T.spiralReveal * 0.9
+      // Ease-out the reveal schedule so the outer ring (the tail of the
+      // spiral) turns on quickly instead of dragging out linearly.
+      var eased = 1 - Math.pow(1 - norm, 1.7)
+      var turnOn = eased * T.spiralReveal * 0.9
       var o = (t < turnOn ? 0 : Math.min(1, (t - turnOn) / 320)) * globalAlpha
       if (o <= 0) continue
       ctx.globalAlpha = o

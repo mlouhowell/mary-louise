@@ -158,7 +158,7 @@ h3 {
 /* ── Nav links ────────────────────────────────────────────── */
 .site-name,
 .nav-links a {
-  font-family: 'Geist Mono', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -177,7 +177,7 @@ h3 {
 }
 
 .site-name:hover,
-.nav-links a:hover { color: var(--color-text); }
+.nav-links a:hover { color: #C8341A; }
 .nav-links a.active { color: var(--color-text); }
 
 /* ── Section label ────────────────────────────────────────── */

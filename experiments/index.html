@@ -6,17 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — Experiments</title>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css?v=4">
+  <link rel="stylesheet" href="/styles/global.css?v=5">
   <style>
     /* ── Experiments page — page-specific styles ──────────── */
     :root {
       --page-bg:           var(--color-experiments);
-      --color-experiments: #000000;
-      --color-project-bg:  #000000;
-      --color-text:        #FFFFFF;
-      --color-muted:       rgba(255,255,255,0.5);
-      --color-subtle:      rgba(255,255,255,0.13);
-      --color-pill-bg:     rgba(255,255,255,0.12);
+      --color-experiments: #FFFFFF;
+      --color-project-bg:  #FFFFFF;
+      --color-text:        #1A1A1A;
+      --color-muted:       rgba(0,0,0,0.4);
+      --color-subtle:      rgba(0,0,0,0.13);
+      --color-pill-bg:     rgba(0,0,0,0.08);
     }
 
     h1 { max-width: 640px; }
@@ -36,7 +36,7 @@
 
     .experiment-thumb {
       width: 100%;
-      background: rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.06);
       overflow: hidden;
     }
 
@@ -54,7 +54,7 @@
 
     .experiment-thumb-placeholder {
       font-size: 13px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(0,0,0,0.3);
       letter-spacing: 0.04em;
       padding: 40px;
     }
@@ -612,11 +612,11 @@
   <script>
     (function () {
       var r = document.documentElement.style;
-      r.setProperty('--color-experiments', '#000000');
-      r.setProperty('--color-text',    '#FFFFFF');
-      r.setProperty('--color-muted',   'rgba(255,255,255,0.5)');
-      r.setProperty('--color-subtle',  'rgba(255,255,255,0.13)');
-      r.setProperty('--color-pill-bg', 'rgba(255,255,255,0.12)');
+      r.setProperty('--color-experiments', '#FFFFFF');
+      r.setProperty('--color-text',    '#1A1A1A');
+      r.setProperty('--color-muted',   'rgba(0,0,0,0.4)');
+      r.setProperty('--color-subtle',  'rgba(0,0,0,0.13)');
+      r.setProperty('--color-pill-bg', 'rgba(0,0,0,0.08)');
     })();
   </script>
 
