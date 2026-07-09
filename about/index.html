@@ -12,20 +12,36 @@
     /* About-page blue at 50% (blended over white) */
     :root { --color-about: #FFFFFF; --page-bg: var(--color-about); }
 
-    body, .page { width: 100vw; }
+    body, .page { width: 100%; }
+    /* Match the homepage page frame: wide container, 24px side padding */
+    .page { max-width: 1700px; }
+    .page-inner { overflow-x: hidden; padding-left: 24px; padding-right: 24px; }
 
     h1 { max-width: 560px; }
+    /* Match the homepage intro-window ("modal") text style */
+    .page-title {
+      margin-bottom: 32px;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
 
     .content {
       flex: 1;
       display: flex;
       flex-direction: column;
+      margin-top: 40px;
     }
 
     .bio {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: var(--gap-cols);
+      /* Homepage-style grid (equal 1fr columns, 24px gap) but three columns.
+         minmax(0, 1fr) keeps all three equal so the fixed-width board can't
+         inflate its own track. Text spans the first two; whiteboard in the
+         third, scaled in JS to fit its column. */
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 24px;
       align-items: start;
     }
 
@@ -34,7 +50,12 @@
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto 1fr;
       gap: 16px;
-      grid-column: 2;
+      grid-column: 3;
+      /* Render at full intrinsic width so the freeze / layout / drag / draw
+         math measures correctly; a transform (applied in JS after layout)
+         scales it down to fit the column. The negative margins that collapse
+         its footprint are set in JS from the actual column width. */
+      width: 480px;
       align-self: start;
       padding: 20px;
       background-color: #FFFFFF;
@@ -96,14 +117,40 @@
     }
 
     .bio-copy {
-      grid-column: 1;
+      grid-column: 1 / 3;
       position: relative;
     }
 
     /* Plain-text fallback if the line-layout module can't run */
-    .bio-fallback { position: static; }
-    .bio-fallback p { margin: 0 0 16px; }
+    .bio-fallback { position: static; overflow-wrap: break-word; }
+    .bio-fallback p {
+      margin: 0 0 16px;
+      font-size: 21px;
+      line-height: 32px;
+      letter-spacing: 0;
+    }
     .bio-fallback p:last-child { margin-bottom: 0; }
+    .bio-fallback a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: opacity 0.15s;
+    }
+    .bio-fallback a:hover { opacity: 0.6; }
+    /* Lead paragraph — matches the page title style */
+    .bio-fallback .bio-lead {
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 32px;
+      letter-spacing: 0;
+    }
+
+    /* Desktop: flow the body text into two columns across the first two grid
+       columns (the third column holds the whiteboard). */
+    @media (min-width: 801px) {
+      .bio-fallback { column-count: 2; column-gap: 24px; }
+      .bio-fallback p { break-inside: avoid; }
+    }
 
     .doodles-bottom {
       grid-column: 2;
@@ -221,9 +268,9 @@
 
     @media (max-width: 800px) {
       .page-inner { overflow-x: hidden; }
-      .bio        { grid-template-columns: 1fr; }
+      .bio        { grid-template-columns: minmax(0, 1fr); }
       .bio-copy         { grid-column: 1; min-width: 0; }
-      .bio-right        { grid-column: 1; grid-template-columns: 1fr; max-width: 100%; overflow: visible; position: relative; padding-bottom: 20px; }
+      .bio-right        { grid-column: 1; grid-template-columns: 1fr; width: auto; max-width: 100%; min-width: 0; margin-right: 0; margin-top: 48px; overflow: visible; position: relative; padding-bottom: 20px; }
       #board-marker-wrap { bottom: -15px !important; }
       .bio-photo-wrap   { width: 126px; grid-column: auto; grid-row: auto; margin-left: -10px; }
       .resume-section   { margin-top: 40px; margin-left: 0px; position: relative; z-index: 2; width: calc(100% + 20px); font-size: 11px; padding: 14px 11px 12px; }
@@ -247,16 +294,16 @@
       </nav>
     </header>
 
-    <h1 class="page-title">Hello!</h1>
 
     <div class="content">
       <div class="bio">
         <div class="bio-copy" id="bio-copy">
           <div id="bio-text-source" hidden>
-            <p>I'm Irish and British and moved to the US when I was 8. I feel really grateful to live in San Francisco, my favorite city.</p>
-            <p>Most recently, I was the founding product and brand designer at Guac, a YC startup solving grocery food waste with AI. I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
-            <p>Previously, I was a designer at Afresh, a grocery forecasting startup, where I focused on brand design, design systems, and user onboarding.</p>
-            <p>In my free time I like to balance all the sitting with triathlon training. I hope to do my first Alcatraz swim this summer.</p>
+            <p class="bio-lead">Hey there, my name is ML. I'm a product designer in San Francisco with eight years experience across product and brand. Most recently, I was the founding designer at <a href="https://guac.com" target="_blank" rel="noopener">Guac</a>, a YC startup solving grocery food waste with AI.</p>
+            <p>At Guac I designed products that helped grocers predict demand, such as how many cases of strawberries to order or how many sandwiches to make, and led design from 0 to 1 across five products.</p>
+            <p>I'm Irish and British and moved to the US when I was 8. Gratitude and excitement fuel my urge to get better at design every day.</p>
+            <p>In my free time I like to balance all the sitting with triathlon training and hope to do my first Alcatraz swim this summer.</p>
+            <p>I post regularly on <a href="https://x.com/marlouiise" target="_blank" rel="noopener">X</a>. Say hello at <a href="mailto:marylouisehowell@gmail.com">marylouisehowell@gmail.com</a> or find me on <a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank" rel="noopener">LinkedIn</a>.</p>
           </div>
         </div>
         <div class="bio-right">
@@ -392,6 +439,8 @@
       var board = document.querySelector('.bio-right');
       if (!board) return;
 
+      var currentScale = 1;
+
       board.style.position = 'relative';
 
       // Flatten doodles container so cards are independently draggable
@@ -503,13 +552,45 @@
         wasMobile = isMobile;
       }
 
+      // Uniformly scale the finished board down to fit its narrower column,
+      // preserving every proportion. Run AFTER layout() so all the freeze math
+      // above measured the board at its intrinsic (unscaled) size. offsetHeight
+      // is unaffected by transform, so the negative margin collapses the
+      // vertical footprint to the scaled height.
+      function applyScale() {
+        if (window.innerWidth <= 800) {
+          currentScale = 1;
+          board.dataset.scale = '1';
+          board.style.transform = '';
+          board.style.transformOrigin = '';
+          board.style.marginRight = '';
+          board.style.marginBottom = '';
+          return;
+        }
+        // Scale the intrinsic-width board down to one of the three equal grid
+        // columns. Column width mirrors the grid: (content - 2*gap) / 3.
+        var pi  = document.querySelector('.page-inner');
+        var pcs = getComputedStyle(pi);
+        var availW = pi.clientWidth - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight);
+        var colW = (availW - 2 * 24) / 3;
+        var iw   = board.offsetWidth;            // intrinsic (unaffected by transform)
+        var s    = Math.min(1, colW / iw);       // scale down only, never upscale the photo
+        currentScale = s;
+        board.dataset.scale = String(s);
+        board.style.transformOrigin = 'top left';
+        board.style.transform  = 'scale(' + s + ')';
+        board.style.marginRight  = (-iw * (1 - s)) + 'px';
+        board.style.marginBottom = (-board.offsetHeight * (1 - s)) + 'px';
+      }
+
       layout();
+      applyScale();
       board.style.opacity = '1';
 
       var resizeTimer;
       window.addEventListener('resize', function () {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(layout, 100);
+        resizeTimer = setTimeout(function () { layout(); applyScale(); }, 100);
       });
 
       var active = null, sx = 0, sy = 0, sl = 0, st = 0;
@@ -526,8 +607,11 @@
 
       function drag(cx, cy) {
         if (!active) return;
-        active.style.left = (sl + cx - sx) + 'px';
-        active.style.top  = (st + cy - sy) + 'px';
+        // Pointer deltas are in screen px; divide by the board's scale so the
+        // dragged element tracks the cursor 1:1 in the board's own coordinates.
+        var s = currentScale || 1;
+        active.style.left = (sl + (cx - sx) / s) + 'px';
+        active.style.top  = (st + (cy - sy) / s) + 'px';
       }
 
       function drop() {
@@ -673,7 +757,10 @@
       function pt(e) {
         var r  = canvas.getBoundingClientRect();
         var src = e.touches ? e.touches[0] : e;
-        return { x: src.clientX - r.left, y: src.clientY - r.top };
+        // The canvas rect is scaled by the board transform; divide out the
+        // current scale to map the pointer back to intrinsic canvas pixels.
+        var s = parseFloat(board.dataset.scale) || 1;
+        return { x: (src.clientX - r.left) / s, y: (src.clientY - r.top) / s };
       }
 
       function startStroke(e) {
@@ -876,12 +963,11 @@
     }
   }
 
-    await layoutBio()
-    window.addEventListener('resize', layoutBio)
-    window.addEventListener('load', layoutBio)
-
-    const settingsObserver = new MutationObserver(layoutBio)
-    settingsObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
+    // Render the body as plain paragraphs flowed into two CSS columns (see the
+    // .bio-fallback @media rule) rather than the single-column line engine, so
+    // the text fills the first two grid columns. layoutBio stays defined but
+    // unused; the bio has no inline images, so nothing is lost but line-breaking.
+    showFallback()
   } catch (e) {
     showFallback()
   }
