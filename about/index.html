@@ -6,16 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Howell — About</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css?v=5">
+  <link rel="stylesheet" href="/styles/global.css?v=9">
   <style>
     /* ── About page — page-specific styles ───────────────── */
     /* About-page blue at 50% (blended over white) */
     :root { --color-about: #FFFFFF; --page-bg: var(--color-about); }
 
     body, .page { width: 100%; }
-    /* Match the homepage page frame: wide container, 24px side padding */
-    .page { max-width: 1700px; }
-    .page-inner { overflow-x: hidden; padding-left: 24px; padding-right: 24px; }
+    /* Full-width frame; content is centered at 1652px via the scroller's
+       padding (identical to a 1700px max-width page with 24px gutters), so the
+       footer can span the full window while the content stays capped. */
+    .page { max-width: none; }
+    .page-inner {
+      overflow-x: hidden;
+      padding-left: max(24px, calc((100% - 1652px) / 2));
+      padding-right: max(24px, calc((100% - 1652px) / 2));
+    }
 
     h1 { max-width: 560px; }
     /* Match the homepage intro-window ("modal") text style */
@@ -134,9 +140,9 @@
       color: inherit;
       text-decoration: underline;
       text-underline-offset: 2px;
-      transition: opacity 0.15s;
+      transition: color 0.15s;
     }
-    .bio-fallback a:hover { opacity: 0.6; }
+    .bio-fallback a:hover { color: #C8341A; }
     /* Lead paragraph — matches the page title style */
     .bio-fallback .bio-lead {
       font-size: 21px;
@@ -252,10 +258,10 @@
       color: inherit;
       text-decoration: underline;
       text-underline-offset: 2px;
-      transition: opacity 0.15s;
+      transition: color 0.15s;
     }
 
-    .resume-link:hover { opacity: 0.6; }
+    .resume-link:hover { color: #C8341A; }
 
     .resume-date {
       font-family: var(--font-body);
@@ -389,7 +395,7 @@
   </div>
 
 
-  <script src="/footer.js?v=3"></script>
+  <script src="/footer.js?v=4"></script>
   <script src="/settings-widget.js?v=51"></script>
   <script>
     (function () {

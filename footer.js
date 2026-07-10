@@ -38,11 +38,30 @@
   var footer = document.querySelector('footer');
   if (!footer) return;
   footer.innerHTML =
-    '<span class="footer-copy">2026 © ML Howell V2.1</span>' +
-    '<a href="mailto:marylouisehowell@gmail.com">Email</a>' +
-    '<a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank">LinkedIn</a>' +
-    '<a href="https://twitter.com/marlouiise" target="_blank">X</a>' +
-    '<a href="https://github.com/mlouhowell" target="_blank">GitHub</a>' +
-    '<a href="/ML Howell Resume.pdf" target="_blank">Resume</a>' +
-    '<span class="footer-credit">This site was designed and built by me with a little help from Claude</span>';
+    '<div class="footer-cols">' +
+      '<div class="footer-col footer-col--pages">' +
+        '<span class="footer-head">Pages</span>' +
+        '<a href="/#work">Work</a>' +
+        '<a href="/about/">About</a>' +
+        '<a href="/experiments/">Experiments</a>' +
+      '</div>' +
+      '<div class="footer-col">' +
+        '<span class="footer-head">Social</span>' +
+        '<a href="https://x.com/marlouiise" target="_blank" rel="noopener">X</a>' +
+        '<a href="https://www.linkedin.com/in/marylouisehowell/" target="_blank" rel="noopener">Linkedin</a>' +
+        '<a href="https://github.com/mlouhowell" target="_blank" rel="noopener">Github</a>' +
+      '</div>' +
+      '<div class="footer-col">' +
+        '<span class="footer-head">Contact</span>' +
+        '<a href="mailto:marylouisehowell@gmail.com">marylouisehowell@gmail.com</a>' +
+      '</div>' +
+      '<div class="footer-col">' +
+        '<span class="footer-head">Download</span>' +
+        '<a href="/ML Howell Resume.pdf" target="_blank">Resume</a>' +
+      '</div>' +
+      '<div class="footer-col">' +
+        '<span class="footer-head">2026 © ML Howell V3.1</span>' +
+        '<span class="footer-credit">This site was made by me, with a little help from Claude</span>' +
+      '</div>' +
+    '</div>';
 })();

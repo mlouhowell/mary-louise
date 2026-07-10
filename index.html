@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
   <!-- Retro-windows section fonts (EB Garamond ≈ ITC Garamond, Silkscreen ≈ Geist Pixel) -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css?v=5">
+  <link rel="stylesheet" href="/styles/global.css?v=9">
   <link rel="stylesheet" href="/styles/retro-windows.css?v=13">
   <link rel="stylesheet" href="/styles/intro-anim.css?v=10">
   <style>
@@ -29,11 +29,13 @@
       color: var(--color-text);
     }
 
-    /* ── Expansive container: this page scales up to 1700px ── */
-    .page { max-width: 1700px; }
+    /* ── Full-width frame; content centered at 1652px via the scroller's
+         padding (identical to a 1700px page with 24px gutters), so the footer
+         can span the full window while content stays capped. ── */
+    .page { max-width: none; }
     .page-inner {
-      padding-left: 24px;
-      padding-right: 24px;
+      padding-left: max(24px, calc((100% - 1652px) / 2));
+      padding-right: max(24px, calc((100% - 1652px) / 2));
       /* Clip the intro cluster's scaled-down layout box (transform leaves
          the 820px box in place) so it never adds horizontal scroll. */
       overflow-x: hidden;
@@ -324,7 +326,7 @@
   </div>
 
 
-  <script src="/footer.js?v=3"></script>
+  <script src="/footer.js?v=4"></script>
   <script src="/settings-widget.js?v=51"></script>
   <script src="/intro-anim.js?v=5"></script>
   <script>
