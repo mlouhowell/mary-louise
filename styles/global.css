@@ -192,29 +192,62 @@ h3 {
 
 /* ── Footer ───────────────────────────────────────────────── */
 footer {
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-  padding-top: 40px;
+  display: block;
+  box-sizing: border-box;
+  /* Full-bleed: break out of the page's max-width/padding so the top stroke
+     runs edge-to-edge, then pad the content to the nav's 24px edge gutters. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
   margin-top: 48px;
+  border-top: 1px solid #d6d6d6;
+  padding: 37px 24px 40px;
 }
 
-footer span,
-footer a {
+.footer-cols {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* all five columns share equal width */
+
+.footer-head {
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
-  letter-spacing: -0.2px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--color-text);
+  line-height: 1.25;
+}
+
+.footer-col a,
+.footer-credit {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #A2A2A2;
   text-decoration: none;
+  line-height: 1.25;
   transition: color 0.15s;
 }
 
-footer a:hover { opacity: 0.6; }
-.footer-credit { font-style: italic; margin-left: auto; }
+.footer-col a:hover { color: #C8341A; }
+.footer-credit { max-width: 180px; line-height: 1.35; }
 
 @media (max-width: 800px) {
-  footer         { flex-direction: column; gap: 12px; margin-top: 8px; padding-top: 8px; }
-  .footer-copy   { order: 1; margin-top: 32px; }
-  .footer-credit { margin-left: 0; order: 2; }
+  footer { padding-top: 28px; }
+  /* Stack every section in a single column (per the mobile Figma) */
+  .footer-cols { flex-direction: column; gap: 24px; }
+  .footer-col { gap: 8px; }
 }
 
 /* ── Animations ───────────────────────────────────────────── */
