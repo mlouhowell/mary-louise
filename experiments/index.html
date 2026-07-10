@@ -83,21 +83,15 @@
     .experiment-item:nth-child(7) { animation-delay: 0.35s; }
 
     .experiment-meta {
-      padding: 12px 0 13px;
-      border-bottom: 1px solid var(--color-subtle);
+      padding: 12px 0 0;
       display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      column-gap: 5px;
-      row-gap: 2px;
+      flex-direction: column;
+      gap: 3px;
       position: relative;
     }
 
-    /* Flatten the two rows so name / category / year read on one line,
-       matching the homepage project cards ("POSTLY IOS APP / 2026"). */
-    .meta-top, .meta-bottom { display: contents; }
-
-    .meta-name, .meta-pill, .meta-date {
+    /* Short uppercase title (NAME / YEAR), matching the homepage card title */
+    .experiment-title {
       font-family: 'Inter', sans-serif;
       font-weight: 500;
       font-size: 14px;
@@ -105,16 +99,19 @@
       letter-spacing: -0.1px;
       text-transform: uppercase;
       color: var(--color-text);
-      background: none;
-      padding: 0;
-      border-radius: 0;
       transition: color 0.15s;
     }
-    .meta-name { order: 1; }
-    .meta-pill { order: 2; }
-    .meta-date { order: 3; }
-    .meta-date::before { content: "/ "; }
-    .meta-arrow { display: none; }
+
+    /* Grey explainer sentence, matching the homepage card subcopy */
+    .experiment-desc {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: -0.2px;
+      color: #A2A2A2;
+      margin: 0;
+    }
 
     /* ── Video thumbnail play button ────────────────── */
     .experiment-thumb-video {
@@ -181,9 +178,7 @@
     .experiment-item:hover .experiment-thumb {
       opacity: 0.85;
     }
-    .experiment-item:hover .meta-name,
-    .experiment-item:hover .meta-pill,
-    .experiment-item:hover .meta-date {
+    .experiment-item:hover .experiment-title {
       color: #C8341A;
     }
     .experiment-item:focus-visible {
@@ -340,14 +335,8 @@
           <img src="images/Good-vibes.jpg" alt="Good Vibes cycle calendar app">
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Good Vibes</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Web App Beta</span>
-          </div>
+          <div class="experiment-title">Good Vibes (Beta) / 2026</div>
+          <p class="experiment-desc">A cycle calendar synced with Oura.</p>
         </div>
       </a>
 
@@ -358,14 +347,8 @@
           </video>
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Pixel Perfect Icons</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Microsite</span>
-          </div>
+          <div class="experiment-title">Pixel Perfect Icons / 2026</div>
+          <p class="experiment-desc">A pixel emoji maker with a variable grid and palette.</p>
         </div>
       </a>
 
@@ -376,46 +359,30 @@
           </video>
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Clover Playing Card</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Motion</span>
-          </div>
+          <div class="experiment-title">Clover Playing Card / 2026</div>
+          <p class="experiment-desc">A looping motion study of a playing card.</p>
         </div>
       </div>
 
-      <div class="experiment-item" aria-label="Scratch Pad">
+      <a class="experiment-item" href="https://scratchpad.mary-louise.com/" target="_blank" rel="noopener" aria-label="View Scratchpad" style="text-decoration:none;color:inherit;">
         <div class="experiment-thumb">
           <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
             <source src="images/Scratchpad.mp4" type="video/mp4">
           </video>
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Scratchpad</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">Coming soon</span>
-            <span class="meta-pill">Web App</span>
-          </div>
+          <div class="experiment-title">Scratchpad (Beta) / 2026</div>
+          <p class="experiment-desc">A minimal tool for quick writing.</p>
         </div>
-      </div>
+      </a>
 
       <div class="experiment-item" data-slug="movie-trailer" role="button" tabindex="0" aria-label="Play Movie Trailer">
         <div class="experiment-thumb experiment-thumb-video">
           <img src="images/movie-trailer-thumb.png" alt="Movie Trailer">
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Movie Trailer</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">AI Image Generation</span>
-          </div>
+          <div class="experiment-title">Movie Trailer / 2026</div>
+          <p class="experiment-desc">AI horror movie trailer.</p>
         </div>
       </div>
 
@@ -424,14 +391,8 @@
           <img src="images/Storyboard.png" alt="Storyboarding Tool">
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Storyboarding Tool</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Web App</span>
-          </div>
+          <div class="experiment-title">Storyboarding Tool / 2026</div>
+          <p class="experiment-desc">A web app for sketching out storyboards.</p>
         </div>
       </a>
 
@@ -440,14 +401,8 @@
           <img src="images/Movie%20club.jpeg" alt="Movie Club Posters">
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Movie Club Posters</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">Illustration</span>
-          </div>
+          <div class="experiment-title">Movie Club Posters / 2026</div>
+          <p class="experiment-desc">Poster illustrations for a movie club.</p>
         </div>
       </div>
 
@@ -456,14 +411,8 @@
           <img src="images/midjourney-thumb.png" alt="Midjourney Experiments">
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Midjourney Experiments</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2026</span>
-            <span class="meta-pill">AI Image Generation</span>
-          </div>
+          <div class="experiment-title">Midjourney Experiments / 2026</div>
+          <p class="experiment-desc">A collection of Midjourney image explorations.</p>
         </div>
       </div>
 
@@ -472,14 +421,8 @@
           <img src="images/Icon_set.png" alt="Pixel Art Icon Set">
         </div>
         <div class="experiment-meta">
-          <div class="meta-top">
-            <span class="meta-name">Pixel Art Icon Set</span>
-            <span class="meta-arrow">↗</span>
-          </div>
-          <div class="meta-bottom">
-            <span class="meta-date">2024</span>
-            <span class="meta-pill">Illustration</span>
-          </div>
+          <div class="experiment-title">Pixel Art Icon Set / 2024</div>
+          <p class="experiment-desc">A hand-made set of pixel-art icons.</p>
         </div>
       </div>
 
