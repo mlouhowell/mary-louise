@@ -1,0 +1,100 @@
+/* ============================================================
+   Embed pages — a live site framed inside mary-louise.com
+   instead of opening in a new tab. Shared by every project
+   whose "page" is really another site of mine.
+   ============================================================ */
+
+/* Full-bleed: the frame and its chrome run edge-to-edge, so this
+   page opts out of the fixed, padded, max-width card that
+   global.css gives .page (same escape hatch project.css uses). */
+.page {
+  position: static;
+  top: auto; right: auto; bottom: auto; left: auto;
+  max-width: none;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+/* Nav is fixed, so nothing sits under it by default. Its height is
+   measured at runtime into --nav-h (padding differs on mobile). */
+.embed-main {
+  padding-top: var(--nav-h, 58px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Chrome bar ───────────────────────────────────────────── */
+.embed-bar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 56px;
+  padding: 16px;
+  background: #F9F8F6;
+  border-bottom: 1px solid var(--color-subtle);
+}
+
+.embed-url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.embed-url-text {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #A2A2A2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Icon buttons ─────────────────────────────────────────── */
+.embed-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #A2A2A2;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.embed-action:hover { color: #C8341A; }
+
+/* Lucide ships 24x24 / 2px stroke — scale down and lighten the
+   stroke so these sit right next to the 12px nav type. */
+.embed-action svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5;
+}
+
+/* ── The framed site ──────────────────────────────────────── */
+.embed-frame {
+  display: block;
+  width: 100%;
+  height: calc(100vh - var(--nav-h, 58px) - 56px);
+  border: 0;
+}
+
+/* Footer sits flush under the frame, no gap. */
+.embed-page footer { margin-top: 0; }
+
+@media (max-width: 800px) {
+  .embed-bar { padding: 12px 16px; }
+}
