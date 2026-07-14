@@ -7,6 +7,7 @@
   --page-bg:    var(--color-project-bg); /* white */
   --size-label: 11px;
   --gap-section: 56px; /* slightly more breathing room than main pages */
+  --gap-label:   20px; /* a label belongs to the image below it — a tight gap */
 }
 
 /* Project pages scroll normally — override the fixed viewport layout.
@@ -53,9 +54,17 @@ body { overflow-x: hidden; }
 /* ── Content sections ─────────────────────────────────────── */
 
 
+/* Full width, matching the images — text and image share the same left and
+   right edges rather than the copy stopping short. */
 .section {
-  max-width: 720px;
   margin-bottom: var(--gap-section);
+}
+
+/* A section that's just a label sits directly above the image it names, so it
+   should read as attached to it — half the gap. Sections with body copy keep
+   the full gap, since they're standalone blocks rather than captions. */
+.section:not(:has(p)) {
+  margin-bottom: var(--gap-label);
 }
 
 .section h2 { margin-bottom: 12px; }
