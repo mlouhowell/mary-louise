@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guac Exhibition Booth — ML Howell</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css?v=9">
-  <link rel="stylesheet" href="/projects/project.css?v=5">
+  <link rel="stylesheet" href="/styles/global.css?v=10">
+  <link rel="stylesheet" href="/projects/project.css?v=19">
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
-  <div class="page">
+  <div class="page has-toc">
     <header class="site-nav">
       <a href="/" class="site-name">ML Howell</a>
       <nav class="nav-links">
@@ -22,11 +22,44 @@
       </nav>
     </header>
 
+    <div class="project-layout">
+    <aside class="project-toc" aria-label="Contents">
+      <a href="/#work" class="toc-index">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"></polyline><path d="M20 4v7a4 4 0 0 1-4 4H4"></path></svg>
+        Back to work
+      </a>
+      <nav class="toc-list"></nav>
+    </aside>
+
+    <div class="project-body">
+
     <div class="hero-image">
       <img src="Images/Hero.png" alt="Guac Exhibition Booth hero">
     </div>
 
     <h1 class="page-title">Guac Exhibition Booth, 2025</h1>
+
+    <div class="project-meta">
+      <div class="meta-col">
+        <div class="meta-label">Timeline</div>
+        <div class="meta-value">Two Months</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Brand Designer</div>
+        <div class="meta-value">Project Manager</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label">Team</div>
+        <div class="meta-value">Euro Wang</div>
+        <div class="meta-value">Nika F.</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label">Tools</div>
+        <div class="meta-value">Figma</div>
+        <div class="meta-value">Illustrator</div>
+      </div>
+    </div>
 
     <div class="section">
       <h3 class="section-label">Intro</h3>
@@ -66,17 +99,9 @@
       <img src="Images/Image%208.png" alt="Booth photo 8">
     </div>
 
-    <div class="section">
-      <h3 class="section-label">Swag</h3>
-    </div>
-
     <div class="img-row col-2">
       <div class="img-row-item" style="aspect-ratio: auto; height: auto;"><img src="Images/Swag_Image%209.png" alt="Swag item 1" style="height: auto; object-fit: initial;"></div>
       <div class="img-row-item"><img src="Images/Swag_image%2010.png" alt="Swag item 2"></div>
-    </div>
-
-    <div class="section">
-      <h3 class="section-label">Social</h3>
     </div>
 
     <div class="img-full">
@@ -97,10 +122,14 @@
       <img src="Images/newspaper_image%2014.png" alt="Grocery circular spread">
     </div>
 
+    </div><!-- .project-body -->
+    </div><!-- .project-layout -->
+
     <footer></footer>
   </div>
 
-  <script src="/footer.js?v=4"></script>
+  <script src="/footer.js?v=5"></script>
+  <script src="/projects/project-toc.js?v=1"></script>
   <script src="/settings-widget.js?v=51"></script>
   <script>
     (function () {

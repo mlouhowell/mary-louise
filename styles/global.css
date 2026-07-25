@@ -250,6 +250,49 @@ footer {
   .footer-col { gap: 8px; }
 }
 
+/* ── Copy-email feedback ──────────────────────────────────────
+   Email links copy to the clipboard instead of opening a mail
+   client (see the handler in /footer.js). The link flashes in the
+   accent colour and a small retro-window toast pops above it. */
+.is-copied { color: #C8341A !important; }
+
+.copy-toast {
+  position: fixed;
+  z-index: 9999;
+  transform: translate(-50%, -100%);
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #C8341A;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: copyToastIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.copy-toast.is-leaving {
+  animation: copyToastOut 0.2s ease-in both;
+}
+
+@keyframes copyToastIn {
+  from { opacity: 0; transform: translate(-50%, calc(-100% + 6px)) scale(0.94); }
+  to   { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
+@keyframes copyToastOut {
+  from { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, calc(-100% - 4px)) scale(0.98); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-toast, .copy-toast.is-leaving { animation-duration: 0.01ms; }
+}
+
 /* ── Animations ───────────────────────────────────────────── */
 @keyframes imageLoadFade {
   from { opacity: 0; filter: blur(8px); }

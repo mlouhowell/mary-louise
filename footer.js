@@ -65,3 +65,67 @@
       '</div>' +
     '</div>';
 })();
+
+/* Email links copy the address to the clipboard instead of firing up a
+   mail client. Delegated from the document so it covers every mailto on
+   the site (homepage "Find me" window, footer, about page) without each
+   one needing its own markup. Falls back to the normal mailto: behaviour
+   if the clipboard isn't available. */
+(function () {
+  var TOAST_MS = 1100;
+
+  function showToast(el, text) {
+    var old = document.querySelector('.copy-toast');
+    if (old) old.remove();
+
+    var r = el.getBoundingClientRect();
+    var toast = document.createElement('span');
+    toast.className = 'copy-toast';
+    toast.textContent = text;
+    toast.style.left = (r.left + r.width / 2) + 'px';
+    toast.style.top = (r.top - 8) + 'px';
+    document.body.appendChild(toast);
+
+    el.classList.add('is-copied');
+    setTimeout(function () {
+      el.classList.remove('is-copied');
+      toast.classList.add('is-leaving');
+      toast.addEventListener('animationend', function () { toast.remove(); });
+    }, TOAST_MS);
+  }
+
+  function copy(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    // Older Safari / non-secure contexts: hidden textarea + execCommand.
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      ok ? resolve() : reject();
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    // Let modified clicks (new tab/window) and non-left clicks behave normally.
+    if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var link = e.target.closest && e.target.closest('a[href^="mailto:"]');
+    if (!link) return;
+
+    var address = decodeURIComponent(link.getAttribute('href').slice(7).split('?')[0]);
+    if (!address) return;
+
+    e.preventDefault();
+    copy(address).then(
+      function () { showToast(link, 'Copied!'); },
+      function () { window.location.href = link.getAttribute('href'); }
+    );
+  });
+})();

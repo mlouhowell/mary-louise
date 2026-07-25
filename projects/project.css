@@ -69,7 +69,17 @@ body { overflow-x: hidden; }
 
 .section h2 { margin-bottom: 12px; }
 
+/* Section titles on project pages */
+.section-label {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 16px;
+  margin-bottom: 16px;
+}
+
 .section p {
+  color: #4D4D4D;
+  letter-spacing: 0;
   margin-bottom: 12px;
 }
 
@@ -116,6 +126,109 @@ body { overflow-x: hidden; }
   font-size: 13px;
   color: rgba(0,0,0,0.3);
   letter-spacing: 0.04em;
+}
+
+/* ── Table of contents ────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+/* The TOC is pinned to the left edge of the screen and stays put while
+   the page scrolls. The content sits centered in the middle and its
+   width grows a little with the viewport. */
+.has-toc { max-width: none; }
+
+.project-layout { display: block; }
+
+.project-body {
+  width: clamp(560px, 52vw, 900px);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* The page title and all text sections share one narrower column,
+   centered under the full-width image blocks and left-aligned. */
+.project-body .page-title,
+.project-body .project-meta,
+.project-body .section {
+  max-width: 680px;
+  margin-inline: auto;
+}
+
+/* Project meta bar under the hero title (timeline / role / team / tools) */
+.project-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: var(--gap-section);
+}
+
+/* Labels match the site nav text; values match project body copy. */
+.meta-label {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: #A2A2A2;
+  margin-bottom: 12px;
+}
+
+.meta-value {
+  font-size: var(--size-body);
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: #4D4D4D;
+}
+
+.project-toc {
+  position: fixed;
+  left: 40px;
+  top: 96px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.toc-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--size-body);
+  letter-spacing: 0;
+  color: #12121266; /* the grey */
+  text-decoration: none;
+  margin-bottom: 28px;
+  transition: color 0.15s;
+}
+.toc-index:hover { color: #121212; }
+.toc-index svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+.toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toc-link {
+  font-size: var(--size-body);
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: #12121266; /* the grey */
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.toc-link:hover { color: #121212aa; }
+.toc-link.active { color: #121212; }
+
+/* Anchor jumps clear the fixed nav bar */
+.project-body .section { scroll-margin-top: 96px; }
+
+/* Not enough room for the left gutter — drop the TOC. */
+@media (max-width: 1080px) {
+  .project-toc { display: none; }
+}
+
+@media (max-width: 800px) {
+  .project-body { width: auto; }
 }
 
 /* ── Two-col layout ───────────────────────────────────────── */
