@@ -180,6 +180,22 @@ h3 {
 .nav-links a:hover { color: #C8341A; }
 .nav-links a.active { color: var(--color-text); }
 
+/* ── Body copy links ──────────────────────────────────────────
+   In-content links match the surrounding text and are underlined,
+   picking up the accent colour on hover like the rest of the site. */
+.section p a,
+.bio-fallback a,
+.resume-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+
+.section p a:hover,
+.bio-fallback a:hover,
+.resume-link:hover { color: #C8341A; }
+
 /* ── Section label ────────────────────────────────────────── */
 .section-label {
   font-size: var(--size-body);
