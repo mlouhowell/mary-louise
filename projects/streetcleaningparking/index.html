@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Street Cleaning Parking — ML Howell</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/global.css?v=10">
+  <link rel="stylesheet" href="/styles/global.css?v=11">
   <link rel="stylesheet" href="/projects/project.css?v=19">
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -33,8 +33,8 @@
 
     <div class="project-body">
 
-    <div style="position:relative; width:100%; aspect-ratio:16/9; margin-bottom:var(--gap-section);">
-      <iframe src="https://www.youtube.com/embed/7oCGFm-w7KI" title="Street Cleaning Parking" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%;"></iframe>
+    <div class="hero-image">
+      <img src="Parking%20app%20hero.png" alt="Street Cleaning Parking app hero">
     </div>
 
     <h1 class="page-title">Street Cleaning Parking iOS App</h1>
@@ -60,91 +60,101 @@
 
     <div class="section">
       <h3 class="section-label">Intro</h3>
-      <p>Street Cleaning Parking helps users remember when to move their car to avoid street cleaning tickets: park, tap to set reminders, and customise notifications.</p>
+      <p>Street Cleaning Parking is a mobile app to help people in San Francisco avoid street cleaning tickets. It uses your bluetooth location to tell you the street cleaning schedule and allows you to setup notifications to remind yourself to move your car.</p>
     </div>
 
     <div class="section">
       <h3 class="section-label">The Problem</h3>
-      <p>Pablo and I purchased a car in 2023 and struggled with varying street cleaning rules in our San Francisco neighbourhood. Each street had different parking regulations, making it difficult to track requirements. Making a mistake was $90.</p>
+      <p>Pablo and I purchased a car in 2023 and struggled with varying street cleaning rules in our neighbourhood. Each street had different street cleaning hours, and because the streets were so busy with cars, we&rsquo;d often have to park two or three streets away from our home. This made it difficult to remember what the cleaning schedule was for each street, and getting a ticket was $90.</p>
     </div>
 
     <div class="img-full">
-      <img src="Image 1.png" alt="Street Cleaning Parking image 1">
-    </div>
-
-    <div class="img-full">
-      <img src="Image 2.png" alt="Street Cleaning Parking image 2">
-    </div>
-
-    <div class="section">
-      <h3 class="section-label">Low Fidelity Explorations</h3>
-      <p>Initial wireframes outlined a three-step process: selecting a street on a map, receiving a modal popup, and setting a notification.</p>
-    </div>
-
-    <div class="img-full">
-      <img src="Image 3.png" alt="Street Cleaning Parking image 3">
+      <img src="Image%201.png" alt="Street cleaning signage in San Francisco">
     </div>
 
     <div class="section">
       <h3 class="section-label">MVP Designs</h3>
-      <p>The minimum viable product featured a map screen and bottom modal. Two automatic notifications were set, one hour and ten minutes before street cleaning times, to minimise user actions.</p>
+      <p>The first version of the app featured a map and a way to setup automatic notifications. Because we wanted to first understand if this would be useful to build, we allowed two notifications to be setup: one hour before you needed to move your car, and ten minutes before you needed to move your car.</p>
     </div>
 
     <div class="img-full">
-      <img src="Image 4.png" alt="Street Cleaning Parking image 4">
+      <img src="Main%20flow.png" alt="MVP main flow screens">
+    </div>
+
+    <div class="img-full">
+      <img src="Notifications.png" alt="MVP notification screens">
     </div>
 
     <div class="section">
-      <h3 class="section-label">Feedback</h3>
-      <p>After releasing to 300 beta users, we collected responses via Google Sheet and identified three key themes for improvement, later implementing custom notifications, calendar integration, and search functionality.</p>
+      <h3 class="section-label">Improvements</h3>
+      <p>After releasing to 300 beta users, we collected responses via Google Sheet and identified three key themes for improvement: custom times for notifications, calendar integration to add a reminder to your calendar, and search functionality (so users could plan out parking before arriving at an address).</p>
+      <p>Along with these updates we also improved the UI to make setting up reminders clearer. Adding a calendar UI to the customize reminders page allowed users to visualize when the cleaning was happening.</p>
     </div>
 
     <div class="img-full">
-      <img src="Image 5.png" alt="Street Cleaning Parking image 5">
-    </div>
-
-    <div class="img-full">
-      <img src="Image 6.png" alt="Street Cleaning Parking image 6">
+      <img src="Main%20flow%202.png" alt="Improved main flow screens">
     </div>
 
     <div class="section">
-      <h3 class="section-label">App Store Launch</h3>
-      <p>We considered a paid subscription model versus free access. We implemented a free trial, simplified the onboarding flow to one page, and received iOS App Store approval after four weeks.</p>
+      <h3 class="section-label">Onboarding</h3>
+      <p>I created a fun animation for our onboarding screen to teach people how the app worked on the first page.</p>
     </div>
 
     <div class="img-full">
-      <img src="Image 9.png" alt="Street Cleaning Parking image 9">
+      <img src="Onboarding.png" alt="Onboarding screens">
+    </div>
+
+    <div class="section">
+      <p>We considered a paid subscription model versus free access and ended up going with a free trial to begin, along with $4.99 monthly thereafter.</p>
+    </div>
+
+    <div class="section">
+      <h3 class="section-label">Website + Brand</h3>
+      <p>I established some basic brand guidelines for us to use and Pablo created a simple landing page to advertise the mobile app. We also experimented with a web page for showing off user parking ticket stats.</p>
     </div>
 
     <div class="img-full">
-      <img src="Image 10.png" alt="Street Cleaning Parking image 10">
-    </div>
-
-    <div class="img-row col-2">
-      <div class="img-row-item"><img src="Image 11.png" alt="Street Cleaning Parking image 11"></div>
-      <div class="img-row-item"><img src="Image 12.png" alt="Street Cleaning Parking image 12"></div>
+      <img src="Website%201.png" alt="Street Cleaning Parking landing page">
     </div>
 
     <div class="img-full">
-      <img src="Image 13.jpg" alt="Street Cleaning Parking image 13">
+      <img src="Website%202.png" alt="Parking ticket stats web page">
     </div>
 
     <div class="img-full">
-      <img src="Image 14.png" alt="Street Cleaning Parking image 14">
+      <img src="Design%20system.png" alt="Street Cleaning Parking design system">
+    </div>
+
+    <div class="section">
+      <h3 class="section-label">Advertisements</h3>
+      <p>We created some paper ads that looked like tickets and put them on cars in our neighbourhood. Then it rained and people were not happy. Lesson learned: don&rsquo;t put advertisements on cars!</p>
     </div>
 
     <div class="img-full">
-      <img src="Image 15.gif" alt="Street Cleaning Parking image 15">
+      <img src="Image%2013.jpg" alt="Paper ticket advertisement on a car">
+    </div>
+
+    <div class="img-full">
+      <img src="Image%2015.gif" alt="Paper ticket advertisement animation">
     </div>
 
     <div class="section">
       <h3 class="section-label">Impact</h3>
-      <p>By 2024, we avoided tickets entirely. The app reached 448 downloads and has helped San Francisco residents since January.</p>
+      <p>By 2024, we almost avoided tickets entirely (we just got one). The app reached 448 downloads and has helped San Francisco residents since launch!</p>
+    </div>
+
+    <div class="section">
+      <h3 class="section-label">We got on the news</h3>
+      <p>Somehow word got out and we were featured in an SF Standard article <a href="https://sfstandard.com/2023/12/20/san-francisco-new-app-avoid-parking-tickets/" target="_blank" rel="noopener">here</a> and on ABC News (below).</p>
+    </div>
+
+    <div style="position:relative; width:100%; aspect-ratio:16/9; margin-bottom:var(--gap-section);">
+      <iframe src="https://abc7news.com/video/embed?pid=14216793" title="ABC7 News: Parking app made by SF couple helps you avoid fines" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%;"></iframe>
     </div>
 
     <div class="section">
       <h3 class="section-label">Future Considerations</h3>
-      <p>Potential features include gamification through "ticket streaks," family account sharing, and expansion to additional cities.</p>
+      <p>Potential features include gamification through &ldquo;ticket streaks,&rdquo; family account sharing, and expansion to additional cities.</p>
     </div>
 
     </div><!-- .project-body -->
