@@ -97,6 +97,18 @@ body { overflow-x: hidden; }
 
 .img-full img { width: 100%; display: block; }
 
+/* ── Image caption ─────────────────────────────────────────────
+   Sits directly under the image it describes, so it pulls up against
+   the image's section gap rather than adding a second one. */
+.img-caption {
+  margin-top: calc(var(--gap-section) * -1 + 10px);
+  margin-bottom: var(--gap-section);
+  font-size: 14px;
+  line-height: 18px;
+  color: rgba(0,0,0,0.55);
+  text-align: center;
+}
+
 .img-row {
   display: grid;
   gap: 24px;
