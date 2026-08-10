@@ -267,6 +267,9 @@
     .exp-modal-body {
       padding: 40px 56px 56px;
     }
+    /* Image-only modals: no copy, just the gallery with matched bottom spacing */
+    .exp-modal-body[hidden] { display: none; }
+    .exp-modal-panel.is-imgs-only .exp-modal-imgs { margin-bottom: 24px; }
 
     .exp-modal-title {
       font-family: var(--font-display);
@@ -329,6 +332,16 @@
     </header>
 
     <div class="grid">
+
+      <div class="experiment-item" data-slug="blue-and-gold" role="button" tabindex="0" aria-label="View Blue and Gold">
+        <div class="experiment-thumb">
+          <img src="images/reve/reve-thumb.webp" alt="Marble caryatids holding glowing moon globes above a gilded balustrade">
+        </div>
+        <div class="experiment-meta">
+          <div class="experiment-title">Blue &amp; Gold / 2026</div>
+          <p class="experiment-desc">A series of cobalt-and-gilt classical scenes.</p>
+        </div>
+      </div>
 
       <a class="experiment-item" href="https://goodvibes.mary-louise.com" target="_blank" rel="noopener" aria-label="View Good Vibes" style="text-decoration:none;color:inherit;">
         <div class="experiment-thumb">
@@ -523,6 +536,22 @@
   <script>
     (function () {
       const EXPERIMENTS = {
+        'blue-and-gold': {
+          title: 'Blue & Gold',
+          desc:  '',
+          imgs: [
+            'images/reve/reve-01.webp',
+            'images/reve/reve-02.webp',
+            'images/reve/reve-03.webp',
+            'images/reve/reve-04.webp',
+            'images/reve/reve-05.webp',
+            'images/reve/reve-06.webp',
+            'images/reve/reve-07.webp',
+            'images/reve/reve-08.webp',
+          ],
+          alt:   'Blue and gold classical scene',
+          link:  null,
+        },
         'movie-trailer': {
           title: 'Movie Trailer',
           youtube: 'NI3RVZXV_lk',
@@ -573,6 +602,7 @@
       const modalTitle = modal.querySelector('.exp-modal-title');
       const modalDesc  = modal.querySelector('.exp-modal-desc');
       const modalLink  = modal.querySelector('.exp-modal-link');
+      const modalBody  = modal.querySelector('.exp-modal-body');
 
       let prevFocus = null;
       let scrollTop = 0;
@@ -604,6 +634,13 @@
         } else {
           modalLink.setAttribute('hidden', '');
         }
+
+        // Image-only modals: hide the copy block entirely when there's nothing to say
+        const imgsOnly = !data.desc && !data.link;
+        modalBody.toggleAttribute('hidden', imgsOnly);
+        panel.classList.toggle('is-imgs-only', imgsOnly);
+        // The visible <h2> is the accessible name; fall back to aria-label when it's hidden
+        modal.setAttribute('aria-label', data.title);
 
         scrollTop = document.querySelector('.page-inner')?.scrollTop || 0;
         document.body.style.overflow = 'hidden';
