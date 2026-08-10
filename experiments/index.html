@@ -272,9 +272,10 @@
     .exp-modal-body {
       padding: 40px 56px 56px;
     }
-    /* Image-only modals: no copy, just the gallery with matched bottom spacing */
+    /* Media-only modals: no copy, just the gallery or video with matched bottom spacing */
     .exp-modal-body[hidden] { display: none; }
-    .exp-modal-panel.is-imgs-only .exp-modal-imgs { margin-bottom: 24px; }
+    .exp-modal-panel.is-imgs-only .exp-modal-imgs,
+    .exp-modal-panel.is-imgs-only .exp-modal-video { margin-bottom: 24px; }
 
     .exp-modal-title {
       font-family: var(--font-display);
@@ -550,7 +551,7 @@
         'movie-trailer': {
           title: 'The Weary',
           youtube: 'NI3RVZXV_lk',
-          desc:  'A movie trailer I made using Runway and Eleven Labs for a Runway pitch competition.',
+          desc:  '',
           link:  null,
         },
         'movie-club': {
