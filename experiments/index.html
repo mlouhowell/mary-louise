@@ -51,6 +51,11 @@
       overflow: hidden;
     }
 
+    /* Thumbnails on white artwork need an edge so they don't bleed into the page */
+    .experiment-thumb.has-edge {
+      border: 1px solid rgba(0,0,0,0.10);
+    }
+
     .experiment-thumb img {
       width: 100%;
       height: auto;
@@ -339,7 +344,7 @@
         </div>
         <div class="experiment-meta">
           <div class="experiment-title">Blue &amp; Gold / 2026</div>
-          <p class="experiment-desc">A series of cobalt-and-gilt classical scenes.</p>
+          <p class="experiment-desc">Reve Image Experiments</p>
         </div>
       </div>
 
@@ -354,7 +359,7 @@
       </a>
 
       <a class="experiment-item" href="https://pixmoji.mary-louise.com" target="_blank" rel="noopener" aria-label="View Pixel Perfect Icons" style="text-decoration:none;color:inherit;">
-        <div class="experiment-thumb">
+        <div class="experiment-thumb has-edge">
           <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
             <source src="images/Pixmoji.mp4" type="video/mp4">
           </video>
@@ -365,15 +370,13 @@
         </div>
       </a>
 
-      <div class="experiment-item" aria-label="Clover Playing Card">
+      <div class="experiment-item" data-slug="midjourney" role="button" tabindex="0" aria-label="View Ireland">
         <div class="experiment-thumb">
-          <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
-            <source src="images/Clover-card.mp4" type="video/mp4">
-          </video>
+          <img src="images/midjourney-thumb.webp" alt="Irish countryside with dry stone walls and a wooden gate">
         </div>
         <div class="experiment-meta">
-          <div class="experiment-title">Clover Playing Card / 2026</div>
-          <p class="experiment-desc">A looping motion study of a playing card.</p>
+          <div class="experiment-title">Ireland / 2026</div>
+          <p class="experiment-desc">Midjourney Image Experiments</p>
         </div>
       </div>
 
@@ -389,29 +392,19 @@
         </div>
       </a>
 
-      <div class="experiment-item" data-slug="movie-trailer" role="button" tabindex="0" aria-label="Play Movie Trailer">
+      <div class="experiment-item" data-slug="movie-trailer" role="button" tabindex="0" aria-label="Play The Weary">
         <div class="experiment-thumb experiment-thumb-video">
-          <img src="images/movie-trailer-thumb.png" alt="Movie Trailer">
+          <img src="images/movie-trailer-thumb.png" alt="The Weary">
         </div>
         <div class="experiment-meta">
-          <div class="experiment-title">Movie Trailer / 2026</div>
-          <p class="experiment-desc">AI horror movie trailer.</p>
+          <div class="experiment-title">The Weary / 2026</div>
+          <p class="experiment-desc">Horror movie trailer made with Runway and Eleven Labs</p>
         </div>
       </div>
 
-      <a class="experiment-item" href="/projects/storyboarding-tool/" aria-label="View Storyboarding Tool" style="text-decoration:none;color:inherit;">
-        <div class="experiment-thumb">
-          <img src="images/Storyboard.png" alt="Storyboarding Tool">
-        </div>
-        <div class="experiment-meta">
-          <div class="experiment-title">Storyboarding Tool / 2026</div>
-          <p class="experiment-desc">A web app for sketching out storyboards.</p>
-        </div>
-      </a>
-
       <div class="experiment-item" data-slug="movie-club" role="button" tabindex="0" aria-label="View Movie Club Posters">
         <div class="experiment-thumb">
-          <img src="images/Movie%20club.jpeg" alt="Movie Club Posters">
+          <img src="images/movie-club.webp" alt="Movie Club Posters">
         </div>
         <div class="experiment-meta">
           <div class="experiment-title">Movie Club Posters / 2026</div>
@@ -419,23 +412,25 @@
         </div>
       </div>
 
-      <div class="experiment-item" data-slug="midjourney" role="button" tabindex="0" aria-label="View Midjourney Experiments">
-        <div class="experiment-thumb">
-          <img src="images/midjourney-thumb.png" alt="Midjourney Experiments">
-        </div>
-        <div class="experiment-meta">
-          <div class="experiment-title">Midjourney Experiments / 2026</div>
-          <p class="experiment-desc">A collection of Midjourney image explorations.</p>
-        </div>
-      </div>
-
       <div class="experiment-item" data-slug="pixel-art" role="button" tabindex="0" aria-label="View Pixel Art Icon Set">
-        <div class="experiment-thumb">
+        <div class="experiment-thumb has-edge">
           <img src="images/Icon_set.png" alt="Pixel Art Icon Set">
         </div>
         <div class="experiment-meta">
           <div class="experiment-title">Pixel Art Icon Set / 2024</div>
           <p class="experiment-desc">A hand-made set of pixel-art icons.</p>
+        </div>
+      </div>
+
+      <div class="experiment-item" aria-label="Clover Playing Card">
+        <div class="experiment-thumb">
+          <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
+            <source src="images/Clover-card.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="experiment-meta">
+          <div class="experiment-title">Clover Playing Card / 2026</div>
+          <p class="experiment-desc">A looping motion study of a playing card.</p>
         </div>
       </div>
 
@@ -553,7 +548,7 @@
           link:  null,
         },
         'movie-trailer': {
-          title: 'Movie Trailer',
+          title: 'The Weary',
           youtube: 'NI3RVZXV_lk',
           desc:  'A movie trailer I made using Runway and Eleven Labs for a Runway pitch competition.',
           link:  null,
@@ -561,7 +556,7 @@
         'movie-club': {
           title: 'Movie Club Posters',
           desc:  '',
-          img:   'images/Movie%20club.jpeg',
+          img:   'images/movie-club.webp',
           alt:   'Movie Club Posters',
           link:  null,
         },
@@ -573,7 +568,7 @@
           link:  null,
         },
         'midjourney': {
-          title: 'Midjourney Experiments',
+          title: 'Ireland',
           desc:  '',
           imgs: [
             '/projects/midjourney-experiments/0_0.png',
