@@ -160,14 +160,17 @@
     }
 
     /* ── Modal video embed ───────────────────────────── */
+    /* 16:9 is fixed — stretching a YouTube embed would just letterbox inside
+       itself, so the auto margins centre it in the leftover height instead. */
     .exp-modal-video {
       width: calc(100% - 48px);
-      margin: 0 24px;
+      margin: auto 24px;
       aspect-ratio: 16 / 9;
       background: #000;
       display: none;
       border-radius: 4px;
       overflow: hidden;
+      flex: 0 0 auto;
     }
     .exp-modal-video iframe {
       width: 100%;
@@ -209,17 +212,22 @@
       background: rgba(0,0,0,0.5);
     }
 
+    /* Fixed height, not max-height: every modal is the same size regardless of
+       how much media it holds. Short content leaves space, long content scrolls. */
     .exp-modal-panel {
       position: relative;
       background: #fff;
       width: 100%;
       max-width: 880px;
-      max-height: 92vh;
+      height: 92vh;
       overflow-y: auto;
       margin: 24px;
       scrollbar-width: none;
       border-radius: 8px;
+      display: flex;
+      flex-direction: column;
     }
+    .exp-modal-header { flex: 0 0 auto; }
     .exp-modal-panel::-webkit-scrollbar { display: none; }
 
     .exp-modal-header {
@@ -259,6 +267,14 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
+      flex: 1 0 auto;
+    }
+
+    /* A lone image gets the full panel width instead of one grid column,
+       and centres in whatever height is left over. */
+    .exp-modal-imgs.is-single {
+      grid-template-columns: 1fr;
+      align-content: center;
     }
 
     .exp-modal-imgs img {
@@ -272,10 +288,9 @@
     .exp-modal-body {
       padding: 40px 56px 56px;
     }
-    /* Media-only modals: no copy, just the gallery or video with matched bottom spacing */
+    /* Media-only modals: no copy, just the gallery or video */
     .exp-modal-body[hidden] { display: none; }
-    .exp-modal-panel.is-imgs-only .exp-modal-imgs,
-    .exp-modal-panel.is-imgs-only .exp-modal-video { margin-bottom: 24px; }
+    .exp-modal-panel.is-imgs-only .exp-modal-imgs { margin-bottom: 24px; }
 
     .exp-modal-title {
       font-family: var(--font-display);
@@ -311,7 +326,7 @@
       .exp-modal-panel {
         margin: 0;
         max-width: 100%;
-        max-height: 88vh;
+        height: 88vh;
       }
       .exp-modal-imgs { grid-template-columns: 1fr; }
       .exp-modal-body { padding: 28px 24px 40px; }
@@ -610,10 +625,15 @@
         modalImgs.innerHTML = '';
         if (data.youtube) {
           modalVideo.style.display = 'block';
+          // The grid grows to fill; leaving it in place would eat the free
+          // space the video's auto margins need to centre in.
+          modalImgs.style.display   = 'none';
           modalVideoIframe.src     = 'https://www.youtube.com/embed/' + data.youtube + '?autoplay=1&rel=0';
         } else {
           modalVideo.style.display = 'none';
+          modalImgs.style.display  = '';
           const srcs = data.imgs || [data.img];
+          modalImgs.classList.toggle('is-single', srcs.length === 1);
           srcs.forEach(function (src) {
             const img = document.createElement('img');
             img.src = src;
