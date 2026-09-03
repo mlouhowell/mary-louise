@@ -178,6 +178,11 @@
       border: none;
       display: block;
     }
+    /* Local mp4s aren't locked to 16:9 — the box takes the clip's own ratio */
+    .exp-modal-video.is-local { aspect-ratio: var(--exp-aspect, 16 / 9); background: #FAFAFA; }
+    .exp-modal-video video { width: 100%; height: 100%; display: none; }
+    .exp-modal-video.is-local iframe { display: none; }
+    .exp-modal-video.is-local video  { display: block; }
 
     /* ── Experiment cards ────────────────────────────── */
     .experiment-item {
@@ -354,7 +359,7 @@
 
     <div class="grid">
 
-      <div class="experiment-item" aria-label="Grok Flowers">
+      <div class="experiment-item" data-slug="grok-flowers" role="button" tabindex="0" aria-label="View Grok Flowers">
         <div class="experiment-thumb has-edge">
           <video autoplay muted loop playsinline style="width:100%;height:auto;display:block;">
             <source src="images/Grok-flowers.mp4" type="video/mp4">
@@ -362,7 +367,7 @@
         </div>
         <div class="experiment-meta">
           <div class="experiment-title">Grok Flowers / 2026</div>
-          <p class="experiment-desc">A flower avatar that shows status through motion, not spinners.</p>
+          <p class="experiment-desc">Agent motion experiments using Fable 5.1</p>
         </div>
       </div>
 
@@ -492,7 +497,7 @@
           </svg>
         </button>
       </div>
-      <div class="exp-modal-video"><iframe src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+      <div class="exp-modal-video"><iframe src="" allow="autoplay; encrypted-media" allowfullscreen></iframe><video autoplay muted loop playsinline></video></div>
       <div class="exp-modal-imgs"></div>
       <div class="exp-modal-body">
         <h2 class="exp-modal-title" id="exp-modal-title"></h2>
@@ -571,6 +576,13 @@
   <script>
     (function () {
       const EXPERIMENTS = {
+        'grok-flowers': {
+          title: 'Grok Flowers',
+          desc:  'Agent motion experiments using Fable 5.1',
+          video: 'images/Grok-flowers.mp4',
+          aspect: '842 / 688',
+          link:  null,
+        },
         'blue-and-gold': {
           title: 'Blue & Gold',
           desc:  '',
@@ -633,6 +645,7 @@
       const closeBtn   = modal.querySelector('.exp-modal-close');
       const modalVideo = modal.querySelector('.exp-modal-video');
       const modalVideoIframe = modalVideo.querySelector('iframe');
+      const modalVideoLocal  = modalVideo.querySelector('video');
       const modalImgs  = modal.querySelector('.exp-modal-imgs');
       const modalTitle = modal.querySelector('.exp-modal-title');
       const modalDesc  = modal.querySelector('.exp-modal-desc');
@@ -647,7 +660,14 @@
         if (!data) return;
 
         modalImgs.innerHTML = '';
-        if (data.youtube) {
+        modalVideo.classList.toggle('is-local', !!data.video);
+        if (data.video) {
+          modalVideo.style.display = 'block';
+          modalImgs.style.display  = 'none';
+          modalVideo.style.setProperty('--exp-aspect', data.aspect || '16 / 9');
+          modalVideoLocal.src = data.video;
+          modalVideoLocal.play().catch(function () {});
+        } else if (data.youtube) {
           modalVideo.style.display = 'block';
           // The grid grows to fill; leaving it in place would eat the free
           // space the video's auto margins need to centre in.
@@ -696,6 +716,9 @@
       function closeModal(push) {
         if (!modal.classList.contains('is-open')) return;
         modalVideoIframe.src = '';
+        modalVideoLocal.pause();
+        modalVideoLocal.removeAttribute('src');
+        modalVideoLocal.load();
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
