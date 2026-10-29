@@ -61,7 +61,6 @@
       '</div>' +
       '<div class="footer-col">' +
         '<span class="footer-head">2026 © ML Howell V3.1</span>' +
-        '<span class="footer-credit">This site was made by me, with a little help from Claude</span>' +
       '</div>' +
     '</div>';
 })();

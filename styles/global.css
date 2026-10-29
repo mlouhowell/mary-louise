@@ -245,8 +245,7 @@ footer {
   line-height: 1.25;
 }
 
-.footer-col a,
-.footer-credit {
+.footer-col a {
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 400;
@@ -257,7 +256,6 @@ footer {
 }
 
 .footer-col a:hover { color: #C8341A; }
-.footer-credit { max-width: 180px; line-height: 1.35; }
 
 @media (max-width: 800px) {
   footer { padding-top: 28px; }
