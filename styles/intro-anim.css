@@ -1,5 +1,5 @@
 /* ============================================================
-   Intro animation — wave → sun → spiral → retro windows.
+   Intro animation — spiral → retro windows.
    Overlay scenes + GT Mechanik window content. Paired with
    /intro-anim.js; window chrome comes from retro-windows.css.
 
@@ -35,12 +35,10 @@
   position: fixed;
   inset: 0;
   z-index: 500;
-  background: #7395E7;                 /* periwinkle (wave) */
+  background: #9A3827;                 /* rust (spiral) */
   transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.9s ease;
 }
-#intro-overlay.olive { background: #949B37; }
-#intro-overlay.rust  { background: #9A3827; }
 #intro-overlay.out   { opacity: 0; pointer-events: none; }
 #intro-overlay canvas { position: absolute; inset: 0; }
 

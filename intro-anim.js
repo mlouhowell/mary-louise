@@ -1,5 +1,5 @@
 /* ============================================================
-   Intro animation — wave → sun → spiral scenes on a fullscreen
+   Intro animation — spiral scene (on rust) on a fullscreen
    overlay, then the retro windows pop in and the overlay fades
    to reveal the page. Replaces retro-windows.js (drag/close/
    typing behaviors are carried over here).
@@ -16,29 +16,11 @@
 
   /* ═══ Timeline (ms) — tune everything here ═══════════ */
   var T = {
-    waveFadeIn:   400,    // wave letters fade in
-    toOlive:      1100,   // bg tweens to olive, wave fades
-    sunStart:     1600,   // sun ray-reveal begins
-    sunReveal:    850,    // duration of ray reveal (sped up)
-    toRust:       2650,   // bg tweens to rust, sun fades
-    spiralStart:  2850,   // spiral reveal begins
-    spiralReveal: 1800,   // duration of spiral reveal (sped up; eased so the end snaps in)
-    windows:      4500,   // retro windows pop in (right as spiral completes)
-    toPaper:      5100,   // overlay fades out, page revealed
-    fadeOut:      600,    // sun/spiral fade-out duration
-  }
-
-  var WAVE = {
-    text: 'ML', rows: 12,
-    amplitude: 40, frequency: 2,
-    colSpacing: 28, rowSpacing: 32,
-    fontSize: 16, color: '#F7F5F0', animSpeed: 2,
-  }
-
-  var SUN = {
-    text: 'ML', rays: 8,
-    innerRadius: 60, rayLength: 180,
-    fontSize: 18, letterSpacing: 24, color: '#141414',
+    spiralStart:  200,    // spiral reveal begins (overlay opens on rust)
+    spiralReveal: 1800,   // duration of spiral reveal (eased so the end snaps in)
+    windows:      1850,   // retro windows pop in (right as spiral completes)
+    toPaper:      2450,   // overlay fades out, page revealed
+    fadeOut:      600,    // spiral fade-out duration
   }
 
   var SPIRAL = {
@@ -55,9 +37,6 @@
   var dpr = Math.min(window.devicePixelRatio || 1, 2)
 
   var W = 0, H = 0
-  var waveLetters = []
-  var sunLetters = []
-  var sunMaxStep = 0
 
   function layout() {
     W = window.innerWidth
@@ -67,45 +46,6 @@
     canvas.style.width = W + 'px'
     canvas.style.height = H + 'px'
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-
-    /* Wave letters — edge to edge */
-    waveLetters.length = 0
-    var chars = WAVE.text
-    var columns = Math.ceil(W / WAVE.colSpacing) + 1
-    var i = 0
-    for (var row = 0; row < WAVE.rows; row++) {
-      var rowOffset = (row - (WAVE.rows - 1) / 2) * WAVE.rowSpacing
-      var phaseOffset = (row / WAVE.rows) * Math.PI * 2
-      for (var col = 0; col < columns; col++) {
-        var frac = col / columns
-        waveLetters.push({
-          x: col * WAVE.colSpacing,
-          baseY: H / 2 + rowOffset + Math.sin(frac * Math.PI * 2 * WAVE.frequency + phaseOffset) * WAVE.amplitude,
-          phase: frac * Math.PI * 2 * WAVE.frequency,
-          char: chars[i % chars.length],
-        })
-        i++
-      }
-    }
-
-    /* Sun letters — centered */
-    sunLetters.length = 0
-    sunMaxStep = 0
-    var stepsOnRay = Math.floor(SUN.rayLength / SUN.letterSpacing)
-    var j = 0
-    for (var ray = 0; ray < SUN.rays; ray++) {
-      var angle = (ray / SUN.rays) * Math.PI * 2 - Math.PI / 2
-      for (var step = 0; step <= stepsOnRay; step++) {
-        var dist = SUN.innerRadius + step * SUN.letterSpacing
-        sunLetters.push({
-          x: W / 2 + Math.cos(angle) * dist,
-          y: H / 2 + Math.sin(angle) * dist,
-          step: step, char: SUN.text[j % SUN.text.length],
-        })
-        sunMaxStep = Math.max(sunMaxStep, step)
-        j++
-      }
-    }
   }
   layout()
   window.addEventListener('resize', layout)
@@ -128,37 +68,6 @@
   var spiralRange = Math.max(1, spiralMaxR - spiralMinR)
 
   /* ═══ Draw helpers ═══════════════════════════════════ */
-  function drawWave(elapsed, alpha) {
-    ctx.font = WAVE.fontSize + "px 'Inter', sans-serif"
-    ctx.fillStyle = WAVE.color
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    var animAmp = WAVE.amplitude * 0.4
-    var frac = ((elapsed / 1000) % WAVE.animSpeed) / WAVE.animSpeed
-    ctx.globalAlpha = alpha
-    for (var k = 0; k < waveLetters.length; k++) {
-      var L = waveLetters[k]
-      ctx.fillText(L.char, L.x, L.baseY + Math.sin(L.phase + frac * Math.PI * 2) * animAmp)
-    }
-    ctx.globalAlpha = 1
-  }
-
-  function drawSun(t, globalAlpha) {
-    ctx.font = SUN.fontSize + "px 'Inter', sans-serif"
-    ctx.fillStyle = SUN.color
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    for (var k = 0; k < sunLetters.length; k++) {
-      var L = sunLetters[k]
-      var turnOn = (L.step / Math.max(1, sunMaxStep)) * T.sunReveal * 0.9
-      var o = (t < turnOn ? 0 : Math.min(1, (t - turnOn) / 180)) * globalAlpha
-      if (o <= 0) continue
-      ctx.globalAlpha = o
-      ctx.fillText(L.char, L.x, L.y)
-    }
-    ctx.globalAlpha = 1
-  }
-
   function drawSpiral(t, globalAlpha) {
     ctx.font = SPIRAL.fontSize + "px 'Inter', sans-serif"
     ctx.fillStyle = SPIRAL.color
@@ -437,15 +346,13 @@
     timers.length = 0
     if (rafId) cancelAnimationFrame(rafId)
     overlay.style.display = ''
-    overlay.classList.remove('olive', 'rust', 'out')
+    overlay.classList.remove('out')
     windows.forEach(function (w) { w.classList.remove('is-visible'); w.style.display = '' })
     bioChars.forEach(function (c) { c.style.visibility = '' })
     stopNameLoop()
     lockScroll(true)
     window.scrollTo(0, 0)
 
-    schedule(T.toOlive, function () { overlay.classList.add('olive') })
-    schedule(T.toRust, function () { overlay.classList.add('rust') })
     schedule(T.windows, reveal)
     // The moment the animation is over and the overlay begins clearing,
     // release the scroll lock so you can scroll straight to the work — no
@@ -469,18 +376,6 @@
     if (!start) start = ts
     var t = ts - start
     ctx.clearRect(0, 0, W, H)
-
-    if (t < T.toOlive + 400) {
-      var fadeIn = Math.min(1, t / T.waveFadeIn)
-      var fadeOut = t > T.toOlive ? Math.max(0, 1 - (t - T.toOlive) / 400) : 1
-      drawWave(t, fadeIn * fadeOut)
-    }
-
-    if (t >= T.sunStart) {
-      var g = 1
-      if (t > T.toRust) g = Math.max(0, 1 - (t - T.toRust) / 400)
-      if (g > 0) drawSun(t - T.sunStart, g)
-    }
 
     if (t >= T.spiralStart) {
       var g2 = 1
