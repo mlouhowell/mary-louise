@@ -43,7 +43,7 @@
     .name {
       font-family: 'Inter Display', 'Inter', sans-serif;
       font-weight: 600;
-      font-size: clamp(40px, 6vw, 88px);
+      font-size: clamp(28px, 3vw, 40px);
       line-height: 0.95;
       letter-spacing: -0.03em;
     }
@@ -86,12 +86,14 @@
     .x:hover .x-handle { color: var(--color-accent); }
 
     /* ── 2×2 project grid, sized to fill the screen ──── */
+    /* Thumbs keep their real 16:9 shape (nothing cropped); the grid's
+       width is capped so both rows still fit on one screen. */
     .grid {
-      flex: 1;
-      min-height: 0;
+      width: 100%;
+      max-width: calc((100dvh - 320px) * 16 / 9 + var(--gap));
+      margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
       gap: 32px var(--gap);
     }
     .card {
@@ -106,8 +108,7 @@
     .card:nth-child(3) { animation-delay: 0.12s; }
     .card:nth-child(4) { animation-delay: 0.18s; }
     .thumb {
-      flex: 1;
-      min-height: 220px;
+      aspect-ratio: 16 / 9;
       background: rgba(0,0,0,0.06);
       overflow: hidden;
       position: relative;
@@ -118,7 +119,7 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -156,10 +157,6 @@
       .card { animation: none; }
     }
 
-    /* Desktop: lock to one screen so it presents cleanly */
-    @media (min-width: 900px) {
-      html, body { height: 100%; overflow: hidden; }
-    }
 
     /* Phone: name, then QR card, then projects stacked */
     @media (max-width: 899px) {
@@ -168,8 +165,7 @@
       .x { flex-direction: row-reverse; justify-content: flex-end; }
       .x-text { text-align: left; }
       .x-qr { width: 88px; height: 88px; }
-      .grid { grid-template-columns: 1fr; grid-template-rows: none; gap: 28px; }
-      .thumb { flex: none; aspect-ratio: 4 / 3; min-height: 0; }
+      .grid { grid-template-columns: 1fr; max-width: none; gap: 28px; }
       .meta { flex-direction: column; gap: 4px; }
       .desc { text-align: left; }
     }
@@ -203,7 +199,7 @@
     </a>
 
     <a class="card" href="https://designersthatread.com" target="_blank" rel="noopener">
-      <div class="thumb">
+      <div class="thumb" style="background:#E9E7D5">
         <video autoplay muted loop playsinline preload="auto" aria-label="Designers That Read preview">
           <source src="/experiments/images/designers-that-read.mp4" type="video/mp4">
         </video>
