@@ -33,10 +33,10 @@
 
     /* ── Header: name left, X + QR right ─────────────── */
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--gap);
+      align-items: end;
       padding-bottom: 24px;
       border-bottom: 1px solid var(--color-subtle);
     }
@@ -61,7 +61,7 @@
       gap: 18px;
       color: inherit;
       text-decoration: none;
-      flex-shrink: 0;
+      justify-self: end;
     }
     .x-qr {
       width: 56px;
@@ -88,10 +88,17 @@
     /* ── 2×2 project grid, sized to fill the screen ──── */
     /* Thumbs keep their real 16:9 shape (nothing cropped); the grid's
        width is capped so both rows still fit on one screen. */
-    .grid {
+    /* One shared column: header and grid use the same edges and the
+       same 2-column track, so everything lines up. */
+    .wrap {
       width: 100%;
-      max-width: calc((100dvh - 320px) * 16 / 9 + var(--gap));
+      max-width: calc((100dvh - 280px) * 16 / 9 + var(--gap));
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px var(--gap);
@@ -161,17 +168,20 @@
     /* Phone: name, then QR card, then projects stacked */
     @media (max-width: 899px) {
       body { padding: 24px 16px 32px; gap: 24px; }
-      header { flex-direction: column; align-items: flex-start; gap: 20px; }
+      header { grid-template-columns: 1fr; row-gap: 20px; }
+      .x { justify-self: start; }
+      .wrap { max-width: none; gap: 24px; }
       .x { flex-direction: row-reverse; justify-content: flex-end; }
       .x-text { text-align: left; }
       .x-qr { width: 48px; height: 48px; }
-      .grid { grid-template-columns: 1fr; max-width: none; gap: 28px; }
+      .grid { grid-template-columns: 1fr; gap: 28px; }
       .meta { flex-direction: column; gap: 4px; }
       .desc { text-align: left; }
     }
   </style>
 </head>
 <body>
+<div class="wrap">
 
   <header>
     <div>
@@ -232,6 +242,8 @@
       </div>
     </a>
   </main>
+
+</div>
 
 </body>
 </html>
