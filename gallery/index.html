@@ -10,14 +10,15 @@
   <script defer src="/_vercel/insights/script.js"></script>
   <style>
     /* Standalone gallery-night page: same type and tokens as the
-       portfolio, but no site nav/footer so nobody wanders off. */
+       portfolio, but no site nav/footer so nobody wanders off.
+       Projects drift sideways in an endless row; the card in the
+       middle is biggest and sharpest, the edges shrink and blur. */
     :root {
       --color-text:   #1A1A1A;
       --color-grey:   #A2A2A2;
-      --color-subtle: rgba(0,0,0,0.13);
       --color-accent: #C8341A;
-      --gutter: 24px;
       --gap: 24px;
+      --w: 480px;            /* centre card width, set by JS */
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { background: #FFFFFF; color: var(--color-text); }
@@ -27,18 +28,25 @@
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      padding: 32px var(--gutter) var(--gutter);
-      gap: 28px;
+      padding: 32px 0 24px;
+      overflow-x: hidden;
     }
 
-    /* ── Header: name left, X + QR right ─────────────── */
+    /* ── Header: centred name, X + QR underneath ─────── */
     header {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: var(--gap);
-      align-items: end;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--color-subtle);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 16px;
+    }
+    .kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--color-grey);
+      margin-bottom: 10px;
     }
     .name {
       font-family: 'Inter Display', 'Inter', sans-serif;
@@ -47,28 +55,16 @@
       line-height: 0.95;
       letter-spacing: -0.03em;
     }
-    .kicker {
-      font-family: 'Geist Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: var(--color-grey);
-      margin-bottom: 14px;
-    }
     .x {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 12px;
+      margin-top: 18px;
       color: inherit;
       text-decoration: none;
-      justify-self: end;
     }
-    .x-qr {
-      width: 44px;
-      height: 44px;
-      display: block;
-    }
-    .x-text { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+    .x-qr { width: 44px; height: 44px; display: block; }
+    .x-text { display: flex; flex-direction: column; gap: 4px; text-align: left; }
     .x-label {
       font-family: 'Geist Mono', monospace;
       font-size: 12px;
@@ -85,35 +81,45 @@
     }
     .x:hover .x-handle { color: var(--color-accent); }
 
-    /* ── 2×2 project grid, sized to fill the screen ──── */
-    /* Thumbs keep their real 16:9 shape (nothing cropped); the grid's
-       width is capped so both rows still fit on one screen. */
-    /* One shared column: header and grid use the same edges and the
-       same 2-column track, so everything lines up. */
-    .wrap {
-      width: 100%;
-      max-width: calc((100dvh - 280px) * 16 / 9 + var(--gap));
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
+    /* ── Drifting row ─────────────────────────────────── */
+    .stage {
+      flex: 1;
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+      touch-action: pan-y;          /* horizontal swipes drive the row */
+      user-select: none;
+      -webkit-user-select: none;
+      animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px var(--gap);
+    /* Without JS: a plain scrollable row. */
+    .track {
+      display: flex;
+      gap: var(--gap);
+      height: 100%;
+      align-items: center;
+      overflow-x: auto;
+      padding: 0 24px;
     }
     .card {
+      flex: none;
+      width: var(--w);
       display: flex;
       flex-direction: column;
-      min-height: 0;
       color: inherit;
       text-decoration: none;
-      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      -webkit-user-drag: none;
     }
-    .card:nth-child(2) { animation-delay: 0.06s; }
-    .card:nth-child(3) { animation-delay: 0.12s; }
-    .card:nth-child(4) { animation-delay: 0.18s; }
+    /* With JS: every card is placed absolutely around the centre. */
+    .stage.is-live .track { display: block; overflow: visible; padding: 0; }
+    .stage.is-live .card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      will-change: transform, filter, opacity;
+    }
+    .stage.is-dragging { cursor: grabbing; }
+
     .thumb {
       aspect-ratio: 16 / 9;
       background: rgba(0,0,0,0.06);
@@ -128,6 +134,8 @@
       height: 100%;
       object-fit: contain;
       display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .card:hover .thumb img,
@@ -144,6 +152,7 @@
       font-size: 14px;
       line-height: 16px;
       letter-spacing: -0.1px;
+      white-space: nowrap;
       transition: color 0.15s;
     }
     .card:hover .title { color: var(--color-accent); }
@@ -160,89 +169,215 @@
       to   { opacity: 1; transform: none; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .card { animation: none; }
+      .stage { animation: none; }
     }
 
-
-    /* Phone: name, then QR card, then projects stacked */
-    @media (max-width: 899px) {
-      body { padding: 24px 16px 32px; gap: 24px; }
-      header { grid-template-columns: 1fr; row-gap: 20px; }
-      .x { justify-self: start; }
-      .wrap { max-width: none; gap: 24px; }
-      .x { flex-direction: row-reverse; justify-content: flex-end; }
-      .x-text { text-align: left; }
-      .x-qr { width: 40px; height: 40px; }
-      .grid { grid-template-columns: 1fr; gap: 28px; }
+    @media (max-width: 699px) {
+      body { padding: 24px 0 24px; }
       .meta { flex-direction: column; gap: 4px; }
       .desc { text-align: left; }
     }
   </style>
 </head>
 <body>
-<div class="wrap">
 
   <header>
-    <div>
-      <div class="kicker">Selected projects · 2026</div>
-      <h1 class="name">ML Howell</h1>
-    </div>
+    <div class="kicker">Selected projects · 2026</div>
+    <h1 class="name">ML Howell</h1>
     <a class="x" href="https://x.com/marlouiise" target="_blank" rel="noopener">
+      <img class="x-qr" src="/gallery/x-qr.svg" alt="QR code linking to x.com/marlouiise">
       <div class="x-text">
         <span class="x-label">Find me on X</span>
         <span class="x-handle">@marlouiise</span>
       </div>
-      <img class="x-qr" src="/gallery/x-qr.svg" alt="QR code linking to x.com/marlouiise">
     </a>
   </header>
 
-  <main class="grid">
-    <a class="card" href="/projects/pick-n-mix/?from=gallery">
-      <div class="thumb has-edge">
-        <img src="/experiments/images/pick-n-mix.webp?v=2" alt="Pick N Mix grid of Swedish candies">
-      </div>
-      <div class="meta">
-        <span class="title">Pick n mix</span>
-        <span class="desc">A short history of Swedish candy</span>
-      </div>
-    </a>
+  <main class="stage">
+    <div class="track">
+      <a class="card" href="/projects/pick-n-mix/?from=gallery" draggable="false">
+        <div class="thumb has-edge">
+          <img src="/experiments/images/pick-n-mix.webp?v=2" alt="Pick N Mix grid of Swedish candies" draggable="false">
+        </div>
+        <div class="meta">
+          <span class="title">Pick n mix</span>
+          <span class="desc">A short history of Swedish candy</span>
+        </div>
+      </a>
 
-    <a class="card" href="/projects/designers-that-read/?from=gallery">
-      <div class="thumb">
-        <img src="/gallery/designers-that-read.jpg" alt="Painting of a woman reading a book in a field under a stormy sky" style="object-fit:cover;object-position:center bottom">
-      </div>
-      <div class="meta">
-        <span class="title">Designers that read</span>
-        <span class="desc">Monthly book club for designers in SF</span>
-      </div>
-    </a>
+      <a class="card" href="/projects/designers-that-read/?from=gallery" draggable="false">
+        <div class="thumb">
+          <img src="/gallery/designers-that-read.jpg" alt="Painting of a woman reading a book in a field under a stormy sky" style="object-fit:cover;object-position:center bottom" draggable="false">
+        </div>
+        <div class="meta">
+          <span class="title">Designers that read</span>
+          <span class="desc">Monthly book club for designers in SF</span>
+        </div>
+      </a>
 
-    <a class="card" href="/projects/doodles/?from=gallery">
-      <div class="thumb">
-        <video autoplay muted loop playsinline preload="auto" aria-label="Doodles preview">
-          <source src="/projects/doodles/thumb.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="meta">
-        <span class="title">Doodles</span>
-        <span class="desc">Line-art doodles on an endless canvas</span>
-      </div>
-    </a>
+      <a class="card" href="/projects/doodles/?from=gallery" draggable="false">
+        <div class="thumb">
+          <video autoplay muted loop playsinline preload="auto" aria-label="Doodles preview">
+            <source src="/projects/doodles/thumb.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="meta">
+          <span class="title">Doodles</span>
+          <span class="desc">Line-art doodles on an endless canvas</span>
+        </div>
+      </a>
 
-    <a class="card" href="/projects/travels/?from=gallery">
-      <div class="thumb">
-        <video autoplay muted loop playsinline preload="auto" aria-label="Travels preview">
-          <source src="/projects/Travel/thumb.mp4?v=6" type="video/mp4">
-        </video>
-      </div>
-      <div class="meta">
-        <span class="title">Travels</span>
-        <span class="desc">A deck of cards from photos on my travels</span>
-      </div>
-    </a>
+      <a class="card" href="/projects/travels/?from=gallery" draggable="false">
+        <div class="thumb">
+          <video autoplay muted loop playsinline preload="auto" aria-label="Travels preview">
+            <source src="/projects/Travel/thumb.mp4?v=6" type="video/mp4">
+          </video>
+        </div>
+        <div class="meta">
+          <span class="title">Travels</span>
+          <span class="desc">A deck of cards from photos on my travels</span>
+        </div>
+      </a>
+    </div>
   </main>
 
-</div>
+<script>
+(function () {
+  /* ── Tuning ───────────────────────────────────────── */
+  var SECONDS_PER_CARD = 7;    // drift speed
+  var SHRINK = 0.2;            // scale lost per card away from centre
+  var MIN_SCALE = 0.55;        // edge cards bottom out here
+  var BLUR_START = 1.1;        // cards from centre before blur kicks in
+  var BLUR_PER_CARD = 4;       // px of blur per card beyond that
+  var MAX_BLUR = 12;
+  var COPIES = 3;              // the 4 projects repeat this many times
+
+  var stage = document.querySelector('.stage');
+  var track = stage.querySelector('.track');
+  var originals = Array.prototype.slice.call(track.children);
+
+  // Repeat the set so the loop never shows a gap. Clones are hidden
+  // from screen readers and keyboard focus.
+  for (var c = 1; c < COPIES; c++) {
+    originals.forEach(function (card) {
+      var clone = card.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      clone.tabIndex = -1;
+      track.appendChild(clone);
+    });
+  }
+  var cards = Array.prototype.slice.call(track.children);
+  var videos = cards.map(function (card) {
+    var v = card.querySelector('video');
+    if (v) { v.muted = true; }
+    return v;
+  });
+  var K = cards.length;
+  stage.classList.add('is-live');
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var gap = 24, W = 480;
+
+  function measure() {
+    var vw = window.innerWidth;
+    var room = stage.clientHeight - 72;               // leave space for labels
+    var byWidth = vw < 700 ? vw * 0.72 : vw * 0.34;
+    W = Math.max(200, Math.min(byWidth, room * 16 / 9));
+    gap = vw < 700 ? 16 : 24;
+    stage.style.setProperty('--w', W + 'px');
+  }
+
+  // Scale for a card `v` cards from centre.
+  function scaleAt(v) { return Math.max(MIN_SCALE, 1 - SHRINK * Math.abs(v)); }
+
+  // Horizontal offset of a card's centre. Integrating the (shrinking)
+  // card width keeps the gap between neighbours constant.
+  var U0 = (1 - MIN_SCALE) / SHRINK;
+  function offsetAt(v) {
+    var a = Math.abs(v), d;
+    if (a <= U0) d = (W + gap) * a - W * SHRINK * a * a / 2;
+    else d = (W + gap) * U0 - W * SHRINK * U0 * U0 / 2 + (W * MIN_SCALE + gap) * (a - U0);
+    return v < 0 ? -d : d;
+  }
+
+  var p = 0;                                           // position, in cards
+  var speed = reduceMotion ? 0 : 1 / SECONDS_PER_CARD;
+  var currentSpeed = speed;
+  var hovering = false, dragging = false;
+
+  function render() {
+    var half = window.innerWidth / 2;
+    for (var k = 0; k < K; k++) {
+      var v = ((k - p) % K + K) % K;
+      if (v >= K / 2) v -= K;
+      var a = Math.abs(v);
+      var x = offsetAt(v);
+      var s = scaleAt(v);
+      var blur = Math.min(MAX_BLUR, Math.max(0, a - BLUR_START) * BLUR_PER_CARD);
+      var fade = 1 - 0.45 * Math.min(1, Math.max(0, (a - 1) / 2));
+      var el = cards[k];
+      el.style.transform = 'translate(-50%, -50%) translateX(' + x.toFixed(1) + 'px) scale(' + s.toFixed(4) + ')';
+      el.style.filter = blur > 0.05 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none';
+      el.style.opacity = fade.toFixed(3);
+      el.style.zIndex = String(100 - Math.round(a * 10));
+
+      // Only play videos that are on screen.
+      var vid = videos[k];
+      if (vid) {
+        var onScreen = Math.abs(x) < half + W;
+        if (onScreen && vid.paused) { var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); }
+        else if (!onScreen && !vid.paused) vid.pause();
+      }
+    }
+  }
+
+  var last = performance.now();
+  function frame(now) {
+    var dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (!dragging) {
+      var target = hovering ? 0 : speed;
+      currentSpeed += (target - currentSpeed) * Math.min(1, dt * 4);   // ease in/out of pauses
+      p += currentSpeed * dt;
+    }
+    render();
+    requestAnimationFrame(frame);
+  }
+
+  // ── Hover pauses (mouse only) ──
+  stage.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hovering = true; });
+  stage.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hovering = false; });
+
+  // ── Drag / swipe ──
+  var startX = 0, startP = 0, moved = false, activeId = null;
+  stage.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return;
+    activeId = e.pointerId; startX = e.clientX; startP = p; moved = false; dragging = true;
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!dragging || e.pointerId !== activeId) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 5) { moved = true; stage.classList.add('is-dragging'); }
+    p = startP - dx / (W + gap);
+  });
+  function endDrag(e) {
+    if (!dragging || e.pointerId !== activeId) return;
+    dragging = false; activeId = null; currentSpeed = 0;
+    stage.classList.remove('is-dragging');
+  }
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+  // A drag shouldn't count as a click on the card under it.
+  stage.addEventListener('click', function (e) {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+
+  measure();
+  window.addEventListener('resize', measure);
+  render();
+  requestAnimationFrame(frame);
+})();
+</script>
 
 </body>
 </html>
