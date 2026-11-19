@@ -35,9 +35,10 @@
     /* ── Header: centred name, X + QR underneath ─────── */
     header {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       align-items: center;
-      text-align: center;
+      justify-content: center;
+      gap: 16px 40px;
       padding: 0 16px;
     }
     .kicker {
@@ -59,7 +60,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 18px;
       color: inherit;
       text-decoration: none;
     }
@@ -182,8 +182,10 @@
 <body>
 
   <header>
-    <div class="kicker">Selected projects · 2026</div>
-    <h1 class="name">ML Howell</h1>
+    <div>
+      <div class="kicker">Selected projects · 2026</div>
+      <h1 class="name">ML Howell</h1>
+    </div>
     <a class="x" href="https://x.com/marlouiise" target="_blank" rel="noopener">
       <img class="x-qr" src="/gallery/x-qr.svg" alt="QR code linking to x.com/marlouiise">
       <div class="x-text">
@@ -244,7 +246,6 @@
 <script>
 (function () {
   /* ── Tuning ───────────────────────────────────────── */
-  var SECONDS_PER_CARD = 7;    // drift speed
   var SHRINK = 0.2;            // scale lost per card away from centre
   var MIN_SCALE = 0.55;        // edge cards bottom out here
   var BLUR_START = 1.1;        // cards from centre before blur kicks in
@@ -275,7 +276,6 @@
   var K = cards.length;
   stage.classList.add('is-live');
 
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var gap = 24, W = 480;
 
   function measure() {
@@ -301,9 +301,7 @@
   }
 
   var p = 0;                                           // position, in cards
-  var speed = reduceMotion ? 0 : 1 / SECONDS_PER_CARD;
-  var currentSpeed = speed;
-  var hovering = false, dragging = false;
+  var dragging = false;
 
   function render() {
     var half = window.innerWidth / 2;
@@ -331,22 +329,24 @@
     }
   }
 
-  var last = performance.now();
-  function frame(now) {
-    var dt = Math.min(0.1, (now - last) / 1000);
-    last = now;
-    if (!dragging) {
-      var target = hovering ? 0 : speed;
-      currentSpeed += (target - currentSpeed) * Math.min(1, dt * 4);   // ease in/out of pauses
-      p += currentSpeed * dt;
-    }
-    render();
-    requestAnimationFrame(frame);
+  // No auto-drift: the row only moves when you scroll, drag or swipe.
+  var pending = false;
+  function requestRender() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function () { pending = false; render(); });
   }
 
-  // ── Hover pauses (mouse only) ──
-  stage.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hovering = true; });
-  stage.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hovering = false; });
+  // ── Scroll: trackpad sideways swipes, or a mouse wheel ──
+  // The page itself never scrolls, so whichever axis is bigger moves
+  // the row. preventDefault stops the browser's back/forward swipe.
+  window.addEventListener('wheel', function (e) {
+    var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (e.deltaMode === 1) d *= 16;                    // lines → px
+    e.preventDefault();
+    p += d / (W + gap);
+    requestRender();
+  }, { passive: false });
 
   // ── Drag / swipe ──
   var startX = 0, startP = 0, moved = false, activeId = null;
@@ -359,10 +359,11 @@
     var dx = e.clientX - startX;
     if (Math.abs(dx) > 5) { moved = true; stage.classList.add('is-dragging'); }
     p = startP - dx / (W + gap);
+    requestRender();
   });
   function endDrag(e) {
     if (!dragging || e.pointerId !== activeId) return;
-    dragging = false; activeId = null; currentSpeed = 0;
+    dragging = false; activeId = null;
     stage.classList.remove('is-dragging');
   }
   window.addEventListener('pointerup', endDrag);
@@ -373,9 +374,8 @@
   }, true);
 
   measure();
-  window.addEventListener('resize', measure);
+  window.addEventListener('resize', function () { measure(); requestRender(); });
   render();
-  requestAnimationFrame(frame);
 })();
 </script>
 
