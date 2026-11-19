@@ -32,22 +32,14 @@
       overflow-x: hidden;
     }
 
-    /* ── Header: centred name, X + QR underneath ─────── */
+    /* ── Header: one ~600px row — name · handle + QR · year ── */
     header {
+      width: min(600px, calc(100% - 32px));
+      margin: 0 auto;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
-      gap: 16px 40px;
-      padding: 0 16px;
-    }
-    .kicker {
-      font-family: 'Geist Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: var(--color-grey);
-      margin-bottom: 10px;
+      justify-content: space-between;
+      gap: 16px;
     }
     .name {
       font-family: 'Inter Display', 'Inter', sans-serif;
@@ -55,23 +47,16 @@
       font-size: 24px;
       line-height: 0.95;
       letter-spacing: -0.03em;
+      white-space: nowrap;
     }
     .x {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       color: inherit;
       text-decoration: none;
     }
-    .x-qr { width: 44px; height: 44px; display: block; }
-    .x-text { display: flex; flex-direction: column; gap: 4px; text-align: left; }
-    .x-label {
-      font-family: 'Geist Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: var(--color-grey);
-    }
+    .x-qr { width: 32px; height: 32px; display: block; }
     .x-handle {
       font-weight: 500;
       font-size: 14px;
@@ -80,6 +65,12 @@
       transition: color 0.15s;
     }
     .x:hover .x-handle { color: var(--color-accent); }
+    .year {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      color: var(--color-grey);
+    }
 
     /* ── Drifting row ─────────────────────────────────── */
     .stage {
@@ -182,17 +173,12 @@
 <body>
 
   <header>
-    <div>
-      <div class="kicker">Selected projects · 2026</div>
-      <h1 class="name">ML Howell</h1>
-    </div>
+    <h1 class="name">ML Howell</h1>
     <a class="x" href="https://x.com/marlouiise" target="_blank" rel="noopener">
+      <span class="x-handle">@marlouiise</span>
       <img class="x-qr" src="/gallery/x-qr.svg" alt="QR code linking to x.com/marlouiise">
-      <div class="x-text">
-        <span class="x-label">Find me on X</span>
-        <span class="x-handle">@marlouiise</span>
-      </div>
     </a>
+    <span class="year">2026</span>
   </header>
 
   <main class="stage">
