@@ -6,6 +6,16 @@
 
   var url = bar.dataset.url;
 
+  /* Opened from /gallery: name links back to the gallery instead. */
+  if (document.documentElement.classList.contains('from-gallery')) {
+    var name = document.querySelector('.site-name');
+    if (name) {
+      name.href = '/gallery';
+      name.textContent = '\u2190 ML Howell';
+      name.setAttribute('aria-label', 'Back to gallery');
+    }
+  }
+
   /* Nav is fixed and its padding shrinks on mobile — measure rather
      than hardcode, so the bar always sits flush beneath it. */
   function measureNav() {

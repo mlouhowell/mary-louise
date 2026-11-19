@@ -99,3 +99,9 @@
 
 /* Nav keeps its 24px side gutters on mobile (only its vertical padding
    shrinks), so the bar keeps them too. */
+
+/* ── Opened from /gallery ─────────────────────────────────── */
+/* The gallery page has no site nav so visitors stay on its path.
+   Arriving with ?from=gallery (class set in <head>), the nav links
+   are hidden and the name becomes a "← ML Howell" back link. */
+.from-gallery .nav-links { display: none; }
