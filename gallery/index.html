@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/Icons/ML-Logo.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Howell — Projects</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:opsz,wght@14..32,100..900&family=Inter+Display:wght@100..900&display=swap" rel="stylesheet">
+  <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+    /* Standalone gallery-night page: same type and tokens as the
+       portfolio, but no site nav/footer so nobody wanders off. */
+    :root {
+      --color-text:   #1A1A1A;
+      --color-grey:   #A2A2A2;
+      --color-subtle: rgba(0,0,0,0.13);
+      --color-accent: #C8341A;
+      --gutter: 24px;
+      --gap: 24px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #FFFFFF; color: var(--color-text); }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 32px var(--gutter) var(--gutter);
+      gap: 28px;
+    }
+
+    /* ── Header: name left, X + QR right ─────────────── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--color-subtle);
+    }
+    .name {
+      font-family: 'Inter Display', 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: clamp(40px, 6vw, 88px);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+    .kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--color-grey);
+      margin-bottom: 14px;
+    }
+    .x {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: inherit;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .x-qr {
+      width: 112px;
+      height: 112px;
+      display: block;
+    }
+    .x-text { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+    .x-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--color-grey);
+    }
+    .x-handle {
+      font-family: 'Inter Display', 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+      transition: color 0.15s;
+    }
+    .x:hover .x-handle { color: var(--color-accent); }
+
+    /* ── 2×2 project grid, sized to fill the screen ──── */
+    .grid {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 32px var(--gap);
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      color: inherit;
+      text-decoration: none;
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .card:nth-child(2) { animation-delay: 0.06s; }
+    .card:nth-child(3) { animation-delay: 0.12s; }
+    .card:nth-child(4) { animation-delay: 0.18s; }
+    .thumb {
+      flex: 1;
+      min-height: 220px;
+      background: rgba(0,0,0,0.06);
+      overflow: hidden;
+      position: relative;
+    }
+    .thumb.has-edge { border: 1px solid rgba(0,0,0,0.10); }
+    .thumb img, .thumb video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card:hover .thumb img,
+    .card:hover .thumb video { transform: scale(1.02); }
+    .meta {
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+    }
+    .title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: -0.1px;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    .card:hover .title { color: var(--color-accent); }
+    .desc {
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: -0.2px;
+      color: var(--color-grey);
+      text-align: right;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .card { animation: none; }
+    }
+
+    /* Desktop: lock to one screen so it presents cleanly */
+    @media (min-width: 900px) {
+      html, body { height: 100%; overflow: hidden; }
+    }
+
+    /* Phone: name, then QR card, then projects stacked */
+    @media (max-width: 899px) {
+      body { padding: 24px 16px 32px; gap: 24px; }
+      header { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .x { flex-direction: row-reverse; justify-content: flex-end; }
+      .x-text { text-align: left; }
+      .x-qr { width: 88px; height: 88px; }
+      .grid { grid-template-columns: 1fr; grid-template-rows: none; gap: 28px; }
+      .thumb { flex: none; aspect-ratio: 4 / 3; min-height: 0; }
+      .meta { flex-direction: column; gap: 4px; }
+      .desc { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <div class="kicker">Selected projects · 2026</div>
+      <h1 class="name">ML Howell</h1>
+    </div>
+    <a class="x" href="https://x.com/marlouiise" target="_blank" rel="noopener">
+      <div class="x-text">
+        <span class="x-label">Find me on X</span>
+        <span class="x-handle">@marlouiise</span>
+      </div>
+      <img class="x-qr" src="/gallery/x-qr.svg" alt="QR code linking to x.com/marlouiise">
+    </a>
+  </header>
+
+  <main class="grid">
+    <a class="card" href="https://picknmix.mary-louise.com/" target="_blank" rel="noopener">
+      <div class="thumb has-edge">
+        <img src="/experiments/images/pick-n-mix.webp?v=2" alt="Pick N Mix grid of Swedish candies">
+      </div>
+      <div class="meta">
+        <span class="title">Pick N Mix</span>
+        <span class="desc">A short history of Swedish candy</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://designersthatread.com" target="_blank" rel="noopener">
+      <div class="thumb">
+        <video autoplay muted loop playsinline preload="auto" aria-label="Designers That Read preview">
+          <source src="/experiments/images/designers-that-read.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="meta">
+        <span class="title">Designers That Read</span>
+        <span class="desc">Monthly book club for designers in SF</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://doodle.mary-louise.com" target="_blank" rel="noopener">
+      <div class="thumb">
+        <video autoplay muted loop playsinline preload="auto" aria-label="Doodles preview">
+          <source src="/projects/doodles/thumb.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="meta">
+        <span class="title">Doodles</span>
+        <span class="desc">Line-art doodles on an endless canvas</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://travels.mary-louise.com" target="_blank" rel="noopener">
+      <div class="thumb">
+        <video autoplay muted loop playsinline preload="auto" aria-label="Travels preview">
+          <source src="/projects/Travel/thumb.mp4?v=6" type="video/mp4">
+        </video>
+      </div>
+      <div class="meta">
+        <span class="title">Travels</span>
+        <span class="desc">A deck of cards from photos on my travels</span>
+      </div>
+    </a>
+  </main>
+
+</body>
+</html>
