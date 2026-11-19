@@ -41,12 +41,12 @@
       justify-content: space-between;
       gap: 16px;
     }
-    .name {
-      font-family: 'Inter Display', 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 24px;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
+    /* Name, handle and year all share the project-title style. */
+    .name, .x-handle, .year {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: -0.1px;
       white-space: nowrap;
     }
     .x {
@@ -57,20 +57,8 @@
       text-decoration: none;
     }
     .x-qr { width: 32px; height: 32px; display: block; }
-    .x-handle {
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 16px;
-      letter-spacing: -0.1px;
-      transition: color 0.15s;
-    }
+    .x-handle { transition: color 0.15s; }
     .x:hover .x-handle { color: var(--color-accent); }
-    .year {
-      font-family: 'Geist Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 0.02em;
-      color: var(--color-grey);
-    }
 
     /* ── Drifting row ─────────────────────────────────── */
     .stage {
@@ -127,10 +115,7 @@
       display: block;
       pointer-events: none;
       -webkit-user-drag: none;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .card:hover .thumb img,
-    .card:hover .thumb video { transform: scale(1.02); }
     .meta {
       padding-top: 12px;
       display: flex;
